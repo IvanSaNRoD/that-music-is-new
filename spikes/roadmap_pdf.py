@@ -33,9 +33,9 @@ PHASES = [
         ("4", "Arquitectura", "Revisar", "Diagrama de componentes y flujo", "docs/architecture.md"),
     ]),
     ("Fase B — Planificación", [
-        ("5", "Instalar plugin Notion", "/plugin install + autorizar", "—", "Conexión lista"),
+        ("5", "Repo GitHub + permisos gh", "gh auth refresh -s project + aprobar repo público", "Crear repo y subir commits", "Repo en GitHub"),
         ("6", "Desglose + esfuerzo", "Revisar / ajustar", "Épicas → tareas (horas, riesgo, supuestos)", "Lista revisada"),
-        ("7", "Tablero Notion", "—", "Crear BD y volcar tareas", "Backlog en Notion"),
+        ("7", "Tablero GitHub Projects", "—", "Crear Project (campos, vistas) y volcar tareas como issues", "Backlog en GitHub Projects"),
     ]),
     ("Fase C — Diseño", [
         ("8", "Conectar Penpot", "Crear cuenta, abrir plugin", "Configurar MCP en el proyecto", "Conexión lista"),
@@ -46,7 +46,7 @@ PHASES = [
         ("11", "Scaffold", "—", "Next.js, TS strict, Tailwind, shadcn, carpetas, catálogo de géneros (config/genres.json)", "Proyecto en local"),
         ("12", "Calidad", "—", "ESLint, Prettier, Husky, commitlint, Vitest, Playwright, MSW", "lint / test / e2e OK"),
         ("13", "Configuración de Claude", "Revisar", "CLAUDE.md, subagentes, plantilla PR", "Flujo IA definido"),
-        ("14", "GitHub", "Aprobar creación", "Repo público, main protegida, Actions", "CI en cada PR"),
+        ("14", "GitHub", "Revisar", "main protegida, Actions", "CI en cada PR"),
         ("15", "Spotify + Vercel", "Crear app, secretos, vincular repo", "Guiarte", "Preview deploy"),
         ("16", "Hito walking skeleton", "Comprobar", "—", "Web vacía desplegada con CI verde"),
     ]),
@@ -60,15 +60,15 @@ PHASES = [
 ]
 
 CYCLE = [
-    "Notion: tarea Todo → In progress",
+    "GitHub Projects: issue Todo → In progress",
     "Rama feat/&lt;tarea&gt;",
     "TDD: test que falla → código → test pasa → refactor",
     "Commits convencionales (feat:, fix:, test:…)",
-    "Pull Request con plantilla (enlace Notion, capturas, checklist)",
+    "Pull Request con plantilla (Closes #issue, capturas, checklist)",
     "CI: lint · typecheck · unit · build · e2e",
     "Vercel preview: probar en URL real",
     "Review: subagente code-reviewer + tú",
-    "Squash merge a main → Notion Done",
+    "Squash merge a main → issue cerrada, Done en el Project",
 ]
 EPICS = [
     "<b>Catálogo de géneros</b>: script thesoundsofspotify → config/genres.json",
@@ -103,13 +103,13 @@ story = [
     Paragraph("De las decisiones de arquitectura a producción · Iteración 1 (Randomizer)", sub),
     Spacer(1, 6),
     Paragraph("Stack: Next.js + TypeScript · Spotify Web API (Client Credentials, sin login) · Vercel · Supabase (iteración 2) · "
-              "Notion (tareas) · Penpot (diseño) · GitHub Actions (CI)", body),
+              "GitHub Projects (tareas) · Penpot (diseño) · GitHub Actions (CI)", body),
 ]
 for i, (name, rows) in enumerate(PHASES):
     story.append(KeepTogether([Paragraph(name, h), phase_table(rows)]))
     if i == 3:  # after Fase D -> Fase E
         story.append(KeepTogether(
-            [Paragraph("Fase E — Desarrollo (un ciclo por cada tarea de Notion)", h)]
+            [Paragraph("Fase E — Desarrollo (un ciclo por cada issue)", h)]
             + bullets(CYCLE, numbered=True)
             + [Spacer(1, 6), Paragraph("<b>Orden aproximado de épicas</b>", body)]
             + bullets(EPICS, numbered=True)))
