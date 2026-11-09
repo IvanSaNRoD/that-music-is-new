@@ -1,29 +1,28 @@
-# ADR-0002: Authentication with Spotify OAuth (Authorization Code + PKCE), not Supabase Auth
+# ADR-0002: Authentication — Client Credentials in iteration 1, no user login
 
 - Status: Proposed
-- Date: 2026-11-06
+- Date: 2026-11-09 (supersedes 2026-11-06 version: user login via OAuth PKCE in iteration 1)
 
 ## Context
-- Spotify Development Mode (Feb 2026 migration) removed `email` from `GET /me`.
-  Source: https://developer.spotify.com/documentation/web-api/tutorials/february-2026-migration-guide
-- Supabase Auth OAuth expects an email from the provider ("Error getting user email from external provider",
-  https://github.com/supabase/auth/issues/214). Login via Supabase's Spotify provider is therefore at risk.
-- Iteration 1 needs no database: only a Spotify access token to call Search.
-- Spotify access tokens expire after 1h → refresh must happen server-side.
+- Iteration 1 Randomizer only reads public data: "The Sound of X" playlists (ADR-0003).
+- Spike (2026-11-09, Dev Mode): **Client Credentials** token can call `GET /users/{id}/playlists`, `GET /playlists/{id}/items` and `GET /search` (200). No user token needed.
+- Playback uses the Spotify Embed (ADR-0001): no token needed; the user's own Spotify session in the browser decides preview vs full playback.
+- Iteration 1 needs no database.
 
 ## Decision
-- Implement the OAuth flow in Next.js route handlers using **Arctic** (minimal, typed OAuth client with a Spotify provider) with **PKCE + state**.
-- Store tokens in an **encrypted, httpOnly, Secure, SameSite=Lax cookie** (JWE via `jose`). No tokens in `localStorage` or client JS.
-- Refresh the access token server-side when expired, before calling Spotify.
-- All Spotify API calls happen server-side (`server-only` module); the browser never sees tokens.
-- Supabase is kept for persistence starting iteration 2 (e.g. randomizer history), keyed by Spotify user id.
+- **No user login in iteration 1.** The app is usable anonymously.
+- Server obtains an app token via **Client Credentials** (`POST https://accounts.spotify.com/api/token`, `grant_type=client_credentials`).
+- `SPOTIFY_CLIENT_ID` / `SPOTIFY_CLIENT_SECRET` only in server env (`.env.local`, git-ignored; hosting env vars in prod). Never exposed to the browser.
+- All Spotify API calls happen server-side (`server-only` module). Token cached in memory until shortly before expiry (1h); re-requested on expiry or `401`.
 
 ## Consequences
-- + No dependency on provider email; works with current Dev Mode rules.
-- + Small, auditable auth surface; good showcase of OAuth/PKCE knowledge.
-- − We own session security (encryption key rotation, cookie flags, CSRF via `state`) → covered by tests and `security-guidance`.
-- − Cookie size limit (~4KB) — tokens fit, but keep the session payload minimal.
+- + Zero friction: no login screen, no consent, no session/cookie handling.
+- + Minimal security surface: one server-side secret, no user tokens stored.
+- − All users share the app's rate limit → respect `429 Retry-After` (ADR-0003).
+- − No user-specific features (saving playlists, Web Playback SDK) until user login is added.
 
-## Alternatives considered
-- Supabase Auth (Spotify provider): blocked by missing email.
-- Auth.js / Better Auth: more abstraction and setup than needed for a single provider with no DB in iteration 1.
+## Future (iteration 2+)
+User login only when a feature needs user scopes (e.g. `POST /me/playlists`, Web Playback SDK `streaming`). Planned approach, re-evaluate then:
+- Authorization Code + **PKCE + state** in Next.js route handlers (e.g. Arctic).
+- Tokens in an encrypted, httpOnly, Secure, SameSite=Lax cookie (JWE via `jose`); refresh server-side.
+- Not Supabase Auth: Spotify Dev Mode (Feb 2026) removed `email` from `GET /me`, and Supabase Auth requires a provider email (https://github.com/supabase/auth/issues/214). Supabase may still be used for persistence, keyed by Spotify user id.
