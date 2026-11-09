@@ -27,7 +27,7 @@ cellb = ParagraphStyle("cb", parent=cell, fontName="Arial-Bold", textColor=color
 
 PHASES = [
     ("Fase A — Definición (qué y con qué)", [
-        ("1", "ADR 0001–0003 (reproducción, auth, Randomizer)", "Aceptar / cambiar", "Redactar (hecho)", "docs/adr/"),
+        ("1", "ADR 0001–0003 (reproducción, auth, Randomizer)", "Aceptado (hecho)", "Redactar (hecho)", "docs/adr/ + spikes/"),
         ("2", "PRD", "Brainstorming corto", "Redactar", "docs/prd.md: objetivo, historias, criterios de aceptación, fuera de alcance"),
         ("3", "ADR-0004: stack tecnológico", "Revisar tabla", "Redactar", "Stack cerrado"),
         ("4", "Arquitectura", "Revisar", "Diagrama de componentes y flujo", "docs/architecture.md"),
@@ -40,10 +40,10 @@ PHASES = [
     ("Fase C — Diseño", [
         ("8", "Conectar Penpot", "Crear cuenta, abrir plugin", "Configurar MCP en el proyecto", "Conexión lista"),
         ("9", "Design tokens", "Elegir estilo / aprobar", "Proponer", "Sistema de diseño base"),
-        ("10", "Pantallas (Login, Randomizer, estados, responsive)", "Revisar / iterar", "Diseñar (subagente ui-designer)", "Diseño aprobado"),
+        ("10", "Pantallas (Randomizer, estados, responsive)", "Revisar / iterar", "Diseñar (subagente ui-designer)", "Diseño aprobado"),
     ]),
     ("Fase D — Cimientos técnicos", [
-        ("11", "Scaffold", "—", "Next.js, TS strict, Tailwind, shadcn, carpetas, géneros", "Proyecto en local"),
+        ("11", "Scaffold", "—", "Next.js, TS strict, Tailwind, shadcn, carpetas, catálogo de géneros (config/genres.json)", "Proyecto en local"),
         ("12", "Calidad", "—", "ESLint, Prettier, Husky, commitlint, Vitest, Playwright, MSW", "lint / test / e2e OK"),
         ("13", "Configuración de Claude", "Revisar", "CLAUDE.md, subagentes, plantilla PR", "Flujo IA definido"),
         ("14", "GitHub", "Aprobar creación", "Repo público, main protegida, Actions", "CI en cada PR"),
@@ -52,7 +52,7 @@ PHASES = [
     ]),
     ("Fase F — Puesta en producción", [
         ("17", "Hardening", "—", "CSP, Lighthouse, /security-review", "Checklist en verde"),
-        ("18", "Spotify producción", "Redirect URI + usuarios (máx. 5)", "Guiarte", "Login en producción"),
+        ("18", "Spotify producción", "Secretos de producción en Vercel", "Guiarte", "Randomizer en producción"),
         ("19", "Release v1.0.0", "Aprobar", "Tag, CHANGELOG, GitHub Release", "Versión publicada"),
         ("20", "Portfolio", "Revisar", "README con GIF, diagrama, decisiones", "Listo para enseñar"),
         ("21", "Retrospectiva", "Reflexionar", "Comparar horas estimadas vs reales", "Aprendizaje para iteración 2"),
@@ -71,9 +71,9 @@ CYCLE = [
     "Squash merge a main → Notion Done",
 ]
 EPICS = [
-    "<b>Auth</b>: login/logout PKCE, sesión cifrada, refresh token",
-    "<b>Cliente Spotify</b>: server-only, zod, errores, 429",
-    "<b>Randomizer lógica</b>: query, offset, reintentos (TDD puro)",
+    "<b>Catálogo de géneros</b>: script thesoundsofspotify → config/genres.json",
+    "<b>Cliente Spotify</b>: server-only, token Client Credentials, zod, errores, 429",
+    "<b>Randomizer lógica</b>: género aleatorio, offset, filtrado, shuffle (TDD puro)",
     "<b>Randomizer UI</b>: botón, lista, embed, enlace a Spotify, estados",
     "<b>Pulido</b>: accesibilidad, responsive, SEO, páginas de error",
 ]
@@ -102,7 +102,7 @@ story = [
     Paragraph("That Music Is New — Hoja de ruta", title), Spacer(1, 4),
     Paragraph("De las decisiones de arquitectura a producción · Iteración 1 (Randomizer)", sub),
     Spacer(1, 6),
-    Paragraph("Stack: Next.js + TypeScript · Spotify Web API (OAuth PKCE) · Vercel · Supabase (iteración 2) · "
+    Paragraph("Stack: Next.js + TypeScript · Spotify Web API (Client Credentials, sin login) · Vercel · Supabase (iteración 2) · "
               "Notion (tareas) · Penpot (diseño) · GitHub Actions (CI)", body),
 ]
 for i, (name, rows) in enumerate(PHASES):
@@ -119,7 +119,7 @@ story += [
     *bullets([
         "Las ADR (docs/adr/) muestran que razonas tus decisiones técnicas.",
         "La comparativa estimado vs real (paso 21) demuestra planificación y medición.",
-        "Spotify limita a 5 usuarios en modo desarrollo → el GIF del README es la demo principal.",
+        "Sin login: cualquiera puede probar la demo; el GIF del README sigue siendo la demo principal.",
     ]),
 ]
 
