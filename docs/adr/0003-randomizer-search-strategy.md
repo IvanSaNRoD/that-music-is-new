@@ -1,6 +1,6 @@
 # ADR-0003: Randomizer strategy — "The Sound of X" playlists
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-09 (supersedes 2026-11-06 version based on `genre:` search)
 
 ## Context

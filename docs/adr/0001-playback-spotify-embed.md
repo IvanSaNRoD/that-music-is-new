@@ -1,6 +1,6 @@
 # ADR-0001: Playback via Spotify Embed (iframe)
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-06
 
 ## Context

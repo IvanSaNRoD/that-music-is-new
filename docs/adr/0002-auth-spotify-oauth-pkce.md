@@ -1,6 +1,6 @@
 # ADR-0002: Authentication — Client Credentials in iteration 1, no user login
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-11-09 (supersedes 2026-11-06 version: user login via OAuth PKCE in iteration 1)
 
 ## Context
