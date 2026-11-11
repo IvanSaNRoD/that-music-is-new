@@ -39,7 +39,7 @@ Built in Penpot. **Public link:** https://design.penpot.app/?screen=viewer&file-
 - **Palette**: Seiji–Kinari (traditional Japanese colors): Kinari `#F3EBDA` background, Seiji `#8DB6A5` primary, Matsuba `#6E7B6A` borders, Sumi `#1C1C1C` text. All text pairs pass WCAG AA.
 - **Type**: Space Grotesk (display) + Inter (body), Tailwind type scale.
 - **Tokens**: color, font size/weight, spacing (4 px scale), radius — named like shadcn/ui variables (`background`, `primary`, `muted-foreground`…) so they map 1:1 to code.
-- **Screens** (page *Screens*, desktop 1440 + mobile 390): home (empty history), loading (skeleton), result (genre, Spotify Embed, 10 tracks, history), error (retry), clear-history confirmation.
+- **Screens** (page *Screens*, desktop 1440 + mobile 390): home (genre cloud, prominent Randomize + `Space` shortcut, how-it-works steps, illustrated empty history), loading (skeleton), result (genre, Spotify Embed, 10 tracks, history), error (retry), clear-history confirmation.
 
 ## AI-assisted workflow
 
