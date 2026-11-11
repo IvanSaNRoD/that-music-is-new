@@ -1,10 +1,12 @@
 # That Music Is New
 
-[![Design system on Penpot](https://img.shields.io/badge/Design_system-Penpot-8DB6A5?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19)
-
 A door into rare music genres. One click → a random genre from ~7,000 and a short list of its tracks to listen to, right in the page. If a genre clicks, keep exploring it on Spotify.
 
 > Status: **in design** (iteration 1 — Randomizer). No app code yet.
+
+## Links
+
+[![Design system on Penpot](https://img.shields.io/badge/Design_system-Penpot-8DB6A5?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19)
 
 ## Features (iteration 1)
 
