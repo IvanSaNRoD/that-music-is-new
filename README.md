@@ -1,5 +1,7 @@
 # That Music Is New
 
+[![Design system on Penpot](https://img.shields.io/badge/Design_system-Penpot-8DB6A5?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19)
+
 A door into rare music genres. One click → a random genre from ~7,000 and a short list of its tracks to listen to, right in the page. If a genre clicks, keep exploring it on Spotify.
 
 > Status: **in design** (iteration 1 — Randomizer). No app code yet.
@@ -30,7 +32,7 @@ Why each choice: [ADR-0004](docs/adr/0004-tech-stack.md).
 
 ## Design system
 
-Built in Penpot → **[view the design system](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19)**
+Built in Penpot. **Public link:** https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19
 
 - **Palette**: Seiji–Kinari (traditional Japanese colors): Kinari `#F3EBDA` background, Seiji `#8DB6A5` primary, Matsuba `#6E7B6A` borders, Sumi `#1C1C1C` text. All text pairs pass WCAG AA.
 - **Type**: Space Grotesk (display) + Inter (body), Tailwind type scale.
