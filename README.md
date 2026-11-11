@@ -40,6 +40,24 @@ Built in Penpot. **Public link:** https://design.penpot.app/?screen=viewer&file-
 - **Type**: Space Grotesk (display) + Inter (body), Tailwind type scale.
 - **Tokens**: color, font size/weight, spacing (4 px scale), radius — named like shadcn/ui variables (`background`, `primary`, `muted-foreground`…) so they map 1:1 to code.
 
+## AI-assisted workflow
+
+Built with Claude Code. Decision: **one main agent, no subagents by default.**
+
+Why:
+- **Small, sequential project**: one-page app, 36 issues that mostly depend on each other (scaffold → domain → API → UI → tests). Little truly parallel work.
+- **Cost and context**: each subagent starts cold — it doesn't know prior decisions (ADRs, palette, conventions), re-reads files and risks inconsistencies.
+- **Learning**: a linear flow (issue → code → tests → commit → README) is easier to follow and review than parallel agents and branch merges.
+- **Penpot MCP**: the connection depends on one active browser tab; several agents on it would be fragile.
+
+Where subagents/extra reviews *are* used:
+
+| Case | When | Why |
+|---|---|---|
+| `/code-review` | Before closing logic-heavy issues (E3, E4) | Independent review of code the main agent wrote |
+| `/security-review` | F1 (hardening) | Specialized security pass |
+| Parallel work (optional) | E2 Spotify client ∥ E4 UI with mock data | Independent; only if pace needs it |
+
 ## Docs
 
 - [PRD](docs/prd.md) · [Architecture](docs/architecture.md) · [Backlog](docs/backlog.md)
