@@ -10,6 +10,8 @@ A door into rare music genres. One click → a random genre from ~7,000 and a sh
 
 [![Screens on Penpot](https://img.shields.io/badge/Screens-Penpot-B3412F?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=4aa1a90e-d850-80aa-8008-ee4eb67a2ed2&section=interactions&index=0&share-id=aa919e04-9944-4418-955f-303e4a7de80e)
 
+[![Release v0.1.0](https://img.shields.io/github/v/release/IvanSaNRoD/that-music-is-new?include_prereleases&label=release&color=1C1C1C)](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.1.0)
+
 ## Features (iteration 1)
 
 - **Randomizer**: one button → 1 random genre + up to 10 tracks (no login).
@@ -76,3 +78,4 @@ Where subagents/extra reviews *are* used:
 | 2026-11-11 | [#1](https://github.com/IvanSaNRoD/that-music-is-new/issues/1) | Penpot connected to Claude Code via MCP |
 | 2026-11-11 | [#2](https://github.com/IvanSaNRoD/that-music-is-new/issues/2) | Design tokens in Penpot (Seiji–Kinari palette, type, spacing, radius) |
 | 2026-11-11 | [#3](https://github.com/IvanSaNRoD/that-music-is-new/issues/3) | Screens in Penpot: home, loading, result, error, clear-history dialog — desktop + mobile |
+| 2026-11-11 | [v0.1.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.1.0) | Milestone: definition, planning and design done (phases A–C) |
