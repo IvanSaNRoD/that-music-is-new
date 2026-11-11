@@ -7,7 +7,8 @@ A door into rare music genres. One click → a random genre from ~7,000 and a sh
 ## Links
 
 [![Design system on Penpot](https://img.shields.io/badge/Design_system-Penpot-8DB6A5?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19)
-[![Screens on Penpot](https://img.shields.io/badge/Screens-Penpot-6E7B6A?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=4aa1a90e-d850-80aa-8008-ee4eb67a2ed2&section=interactions&index=0&share-id=aa919e04-9944-4418-955f-303e4a7de80e)
+
+[![Screens on Penpot](https://img.shields.io/badge/Screens-Penpot-B3412F?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=4aa1a90e-d850-80aa-8008-ee4eb67a2ed2&section=interactions&index=0&share-id=aa919e04-9944-4418-955f-303e4a7de80e)
 
 ## Features (iteration 1)
 
