@@ -2,7 +2,7 @@
 
 A door into rare music genres. One click → a random genre from ~7,000 and a short list of its tracks to listen to, right in the page. If a genre clicks, keep exploring it on Spotify.
 
-> Status: **in design** (iteration 1 — Randomizer). No app code yet.
+> Status: **design done** (iteration 1 — Randomizer). Next: technical foundations. No app code yet.
 
 ## Links
 
@@ -39,6 +39,7 @@ Built in Penpot. **Public link:** https://design.penpot.app/?screen=viewer&file-
 - **Palette**: Seiji–Kinari (traditional Japanese colors): Kinari `#F3EBDA` background, Seiji `#8DB6A5` primary, Matsuba `#6E7B6A` borders, Sumi `#1C1C1C` text. All text pairs pass WCAG AA.
 - **Type**: Space Grotesk (display) + Inter (body), Tailwind type scale.
 - **Tokens**: color, font size/weight, spacing (4 px scale), radius — named like shadcn/ui variables (`background`, `primary`, `muted-foreground`…) so they map 1:1 to code.
+- **Screens** (page *Screens*, desktop 1440 + mobile 390): home (empty history), loading (skeleton), result (genre, Spotify Embed, 10 tracks, history), error (retry), clear-history confirmation.
 
 ## AI-assisted workflow
 
@@ -72,3 +73,4 @@ Where subagents/extra reviews *are* used:
 | 2026-11-10 | — | Planning: backlog → 36 issues on GitHub Projects |
 | 2026-11-11 | [#1](https://github.com/IvanSaNRoD/that-music-is-new/issues/1) | Penpot connected to Claude Code via MCP |
 | 2026-11-11 | [#2](https://github.com/IvanSaNRoD/that-music-is-new/issues/2) | Design tokens in Penpot (Seiji–Kinari palette, type, spacing, radius) |
+| 2026-11-11 | [#3](https://github.com/IvanSaNRoD/that-music-is-new/issues/3) | Screens in Penpot: home, loading, result, error, clear-history dialog — desktop + mobile |
