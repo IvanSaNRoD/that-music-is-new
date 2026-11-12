@@ -1,0 +1,85 @@
+/* Crate Flip — spec: docs/claude-design/design_handoff_crate_flip/README.md (Seiji-Kinari tokens). */
+
+.crate-stack {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* sleeves sit at the bottom */
+  padding: 0 14px 54px;
+}
+
+.crate-sleeve {
+  flex: none;
+  height: 26px;
+  margin-top: -4px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0 16px;
+  border-radius: 14px 14px 0 0;
+  background: var(--sleeve-bg);
+  color: var(--sleeve-fg);
+  box-shadow: 0 -2px 6px rgb(28 28 28 / 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: height 0.3s var(--ease-lift);
+}
+.crate-sleeve[aria-expanded="true"] {
+  height: 170px;
+}
+.crate-sleeve:focus-visible {
+  outline: 2px solid var(--primary-ink);
+  outline-offset: 2px;
+}
+
+.crate-tab {
+  flex: none;
+  font: 700 13px/26px var(--font-inter);
+}
+.crate-name {
+  font: 800 40px/1 var(--font-inter-tight);
+  letter-spacing: -0.02em;
+}
+.crate-meta {
+  font: 400 14px var(--font-space-mono);
+}
+.crate-play {
+  margin-top: 8px;
+  align-self: flex-start;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  background: var(--background);
+  color: var(--foreground);
+  font: 700 14px var(--font-inter);
+}
+
+.crate-front {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 50px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 16px;
+  background: var(--muted);
+  box-shadow: 0 1px 2px rgb(28 28 28 / 0.14);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 12px;
+  pointer-events: none;
+}
+.crate-front::after {
+  content: "";
+  width: 90px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crate-sleeve {
+    transition: none;
+  }
+}
