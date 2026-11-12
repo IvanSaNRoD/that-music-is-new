@@ -118,7 +118,7 @@ Paper, ink and one celadon green; everything else is a tint of the paper.
 
 ### Neutral
 - **Kinari Paper** (kinari): page background; text on dark sleeves; the Play pill.
-- **Card Stock** (card): all containers (crate, history, step cards).
+- **Card Stock** (card): all containers (crate, history, step cards). Never a sleeve color.
 - **Sumi Ink** (sumi): all text, every card outline, the header rule, vinyl discs, dark sleeves.
 - **Aged Paper** (muted): selected/hovered history row, crate front, kbd-free tints.
 - **Faded Ink** (muted-ink): secondary text (subtitles, meta, descriptions). 6.10:1 on paper.
@@ -133,7 +133,7 @@ Paper, ink and one celadon green; everything else is a tint of the paper.
 
 **The Ink-Readable Rule.** Any accent that is read as text uses Seiji Ink, never Seiji. Every text pair must pass WCAG AA (4.5:1; 3:1 for ≥24px).
 
-**The Sleeve Palette Rule.** Record sleeves rotate through six AA-safe pairs by catalog index % 6, alternating light and dark: Seiji/Sumi, Sumi/Kinari, Card/Sumi, Seiji Ink/Kinari, Aged Paper/Sumi, Faded Ink/Kinari.
+**The Sleeve Palette Rule.** Record sleeves rotate through five AA-safe pairs by catalog index % 5: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper).
 
 ## Typography
 
@@ -202,7 +202,7 @@ Sumi 1.5px outline, 6px radius, Space Mono 15px, next to "or press".
 Rows separated by Pencil Rule hairlines; vinyl icon (44px), name (Inter 17 bold) over mono meta (13px, Faded Ink), chevron on the right. Hover and selected rows tint to Aged Paper; on hover/focus the chevron is replaced by a ✕ remove pill. Footer: hairline + "Clear all history".
 
 ### Record Crate (signature)
-A card titled "The crate" with a Restock ghost button. Eight sleeves stand bottom-aligned, overlapping by 4px, each a 26px tab showing the genre name. The selected sleeve rises to 170px and shows the genre name (Inter Tight 40), "origin · era" in mono, and a Kinari "Play 10 tracks" pill. Only height animates (0.3s, cubic-bezier(0.3, 0.7, 0.3, 1)); opening and closing run together so the stack flips. Off with `prefers-reduced-motion`. A 50px Aged Paper crate front with a Matsuba handle covers the sleeves' feet.
+A card titled "The crate" with a Restock ghost button. Eight sleeves stand bottom-aligned, overlapping by 4px, each a 26px tab showing the genre name. The selected sleeve rises to 170px, drops its tab label and shows the genre name (Inter Tight 40) and a Kinari "Play 10 tracks" pill, with an 88px die-cut hole centred just above its bottom edge (lower part clipped, 8px spindle dot visible). Playing a sleeve, not opening it, adds the genre to History (last 4). Only height animates (0.3s, cubic-bezier(0.3, 0.7, 0.3, 1)); opening and closing run together so the stack flips. Off with `prefers-reduced-motion`. A 50px Aged Paper crate front with a Matsuba handle covers the sleeves' feet.
 
 ### Step cards
 290×110px cards joined by 1.5px Sumi connectors; a 44px Seiji circle badge with Sumi outline holds the number.

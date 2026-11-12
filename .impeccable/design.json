@@ -306,7 +306,7 @@
       },
       {
         "name": "The Sleeve Palette Rule",
-        "body": "Record sleeves rotate through six AA-safe pairs by catalog index % 6, alternating light and dark: Seiji/Sumi, Sumi/Kinari, Card/Sumi, Seiji Ink/Kinari, Aged Paper/Sumi, Faded Ink/Kinari.",
+        "body": "Record sleeves rotate through five AA-safe pairs by catalog index % 5: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper).",
         "section": "colors"
       },
       {
