@@ -1,0 +1,59 @@
+/* Crate Flip — reference styles. Tokens come from the Organic theme (see README › Design tokens). */
+:root {
+  --color-bg: #f5ead8; --color-surface: #ebddc5; --color-text: #201e1d; --color-accent: #c67139;
+  --color-accent-200: #ffe1d0; --color-accent-900: #402310;
+  --color-accent-2-300: #ccdbb2; --color-accent-2-500: #8fa073; --color-accent-2-900: #272e1b;
+  --color-neutral-200: #eee7db; --color-neutral-400: #c0b6a5; --color-neutral-600: #82796a;
+  --font-heading: "Caprasimo", system-ui, sans-serif; --font-body: "Figtree", system-ui, sans-serif;
+  --radius-md: 16px; --radius-lg: 28px;
+  --shadow-sm: 0 1px 2px color-mix(in srgb, #2e2b25 14%, transparent);
+  --ease-lift: cubic-bezier(.3, .7, .3, 1);
+}
+
+.crate-panel {
+  height: 500px; box-sizing: border-box; overflow: hidden;
+  background: var(--color-surface); border-radius: var(--radius-lg); padding: 26px;
+  display: flex; flex-direction: column; gap: 14px;
+}
+.crate-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+.crate-title { margin: 0; font: 400 24px/1.2 var(--font-heading); white-space: nowrap; }
+.crate-restock {
+  border: 0; background: none; cursor: pointer; border-radius: 999px; padding: 6px 12px;
+  font: 600 14px var(--font-body); color: var(--color-accent);
+}
+.crate-restock:hover { background: color-mix(in srgb, var(--color-accent) 10%, transparent); }
+.crate-restock:active { background: color-mix(in srgb, var(--color-accent) 18%, transparent); }
+
+/* Stack: sleeves sit bottom-aligned; the crate front overlaps the lowest 50px. */
+.crate-stack {
+  position: relative; flex: 1; min-height: 0;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  padding: 0 14px 54px;
+}
+.sleeve {
+  flex: none; height: 26px; margin-top: -4px; overflow: hidden;
+  border: 0; cursor: pointer; text-align: left; padding: 0 16px;
+  border-radius: 14px 14px 0 0;
+  background: var(--sleeve-bg); color: var(--sleeve-fg);
+  box-shadow: 0 -2px 6px color-mix(in srgb, var(--color-text) 14%, transparent);
+  display: flex; flex-direction: column; gap: 6px;
+  transition: height .3s var(--ease-lift);
+}
+.sleeve[aria-expanded="true"] { height: 170px; }
+.sleeve:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 2px; }
+.sleeve-tab { flex: none; font: 700 13px/26px var(--font-body); }
+.sleeve-name { font: 400 40px/1 var(--font-heading); }
+.sleeve-meta { font: 400 14px var(--font-body); }
+.sleeve-play {
+  margin-top: 8px; align-self: flex-start; border-radius: 999px; padding: 8px 16px;
+  background: var(--color-bg); color: var(--color-text); font: 700 14px var(--font-body);
+}
+.crate-front {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 50px; box-sizing: border-box;
+  border-radius: var(--radius-md); background: var(--color-neutral-400); box-shadow: var(--shadow-sm);
+  display: flex; align-items: flex-end; justify-content: center; padding-bottom: 12px;
+  pointer-events: none;
+}
+.crate-front::after { content: ""; width: 90px; height: 14px; border-radius: 999px; background: var(--color-neutral-600); }
+
+@media (prefers-reduced-motion: reduce) { .sleeve { transition: none; } }
