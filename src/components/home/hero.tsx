@@ -3,7 +3,7 @@ import { Sparkle } from "./sparkle";
 
 export function Hero({ onRandomize }: { onRandomize: () => void }) {
   return (
-    <section className="flex flex-col gap-8 lg:w-[480px] lg:shrink-0">
+    <section className="flex flex-col gap-8 lg:w-[36%] lg:flex-none">
       <div className="flex items-center gap-4">
         <span className="font-mono text-[15px] tracking-wide uppercase">~7,000 genres · one click</span>
         <span className="bg-border-strong h-px flex-1" aria-hidden="true" />

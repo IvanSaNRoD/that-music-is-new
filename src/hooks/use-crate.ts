@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { Genre } from "@/domain/genres";
 
 export const CRATE_SIZE = 8;
-const HISTORY_MAX = 8;
+const HISTORY_MAX = 4; // last 4 played; older entries TBD (user decision pending)
 
 export type HistoryItem = { id: string; date: string };
 
@@ -33,6 +33,10 @@ export function useCrate(catalog: Genre[], initialHistory: HistoryItem[] = []) {
     setSelected(id);
     // Not in the crate → replaces the oldest (top) sleeve, so the crate always holds 8.
     setStock((s) => (s.includes(id) ? s : [...s.slice(1), id]));
+  }, []);
+
+  // A genre enters History only when its tracks are played, not when a sleeve is opened.
+  const play = useCallback((id: string) => {
     setHistory((h) =>
       [{ id, date: today() }, ...h.filter((x) => x.id !== id)].slice(0, HISTORY_MAX),
     );
@@ -67,5 +71,5 @@ export function useCrate(catalog: Genre[], initialHistory: HistoryItem[] = []) {
     return () => window.removeEventListener("keydown", onKey);
   }, [randomize]);
 
-  return { stock, selected, history, pick, randomize, restock, removeFromHistory, clearHistory };
+  return { stock, selected, history, pick, play, randomize, restock, removeFromHistory, clearHistory };
 }

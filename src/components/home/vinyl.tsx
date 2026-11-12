@@ -4,12 +4,19 @@ type VinylProps = {
   size: number;
   /** Adds grooves + a light sheen wedge (large decorative record). */
   detailed?: boolean;
+  /** Number of grooves on a simple (non-detailed) vinyl. */
+  rings?: number;
   className?: string;
 };
 
-// Own vinyl mark (replaces the Spotify logo). Sumi disc, Seiji label, Kinari hole.
-export function Vinyl({ size, detailed = false, className }: VinylProps) {
-  const grooves = detailed ? [44, 40, 36, 32, 28] : [36];
+// Own vinyl mark (replaces the Spotify logo). Sumi disc, Seiji label, Sumi hole.
+export function Vinyl({ size, detailed = false, rings = 1, className }: VinylProps) {
+  // Simple vinyl: grooves spread evenly between the label (r20) and the rim (r49).
+  const grooves = detailed
+    ? Array.from({ length: 11 }, (_, i) => 46 - i * 2.4) // r46 → r22
+    : rings === 1
+      ? [36]
+      : Array.from({ length: rings }, (_, i) => 25 + (i * 20) / (rings - 1));
   return (
     <svg
       width={size}
@@ -36,7 +43,7 @@ export function Vinyl({ size, detailed = false, className }: VinylProps) {
         <path d="M50 50 L62 3 A48 48 0 0 1 80 12 Z" fill="#fff" fillOpacity="0.16" />
       )}
       <circle cx="50" cy="50" r={detailed ? 18 : 20} fill="var(--primary)" />
-      <circle cx="50" cy="50" r={detailed ? 2.5 : 4} fill="var(--background)" />
+      <circle cx="50" cy="50" r={detailed ? 2.5 : 4} fill="var(--foreground)" />
     </svg>
   );
 }

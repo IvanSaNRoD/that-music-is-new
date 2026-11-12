@@ -16,7 +16,7 @@ export function HistoryPanel({ catalog, items, selected, onOpen, onRemove, onCle
   return (
     <section
       aria-labelledby="history-title"
-      className="bg-card border-border-strong flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-[1.5px] lg:w-80 lg:shrink-0"
+      className="bg-card border-border-strong flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-[1.5px] lg:w-[27%] lg:flex-none"
     >
       <div className="flex items-center justify-between px-5 pt-5 pb-4">
         <h2 id="history-title" className="font-display text-[30px] font-extrabold tracking-[-0.02em]">
@@ -46,7 +46,7 @@ export function HistoryPanel({ catalog, items, selected, onOpen, onRemove, onCle
                   aria-current={isSelected || undefined}
                   className="focus-visible:outline-primary-ink flex w-full items-center gap-3.5 py-4 pr-4 pl-5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2"
                 >
-                  <Vinyl size={44} />
+                  <Vinyl size={44} rings={4} />
                   <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <span className="truncate text-[17px] font-bold">{g.name}</span>
                     <span className="text-muted-foreground font-mono text-[13px]">10 tracks · {date}</span>

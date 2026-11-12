@@ -7,13 +7,17 @@
   display: flex;
   flex-direction: column;
   justify-content: flex-end; /* sleeves sit at the bottom */
-  padding: 0 14px 54px;
+  padding: 0 14px 36px; /* front is 50px tall → last sleeve tucks 14px behind it, like every other overlap */
 }
 
 .crate-sleeve {
+  /* All sleeves positioned → later sleeves always paint over earlier ones (incl. the open one). */
+  position: relative;
   flex: none;
-  height: 26px;
-  margin-top: -4px;
+  /* Each sleeve overlaps the previous by its corner radius (14px), so the rounded top corners
+     show the sleeve behind instead of the panel. Visible tab = 42 − 14 = 28px. */
+  height: 42px;
+  margin-top: -14px;
   overflow: hidden;
   cursor: pointer;
   text-align: left;
@@ -25,10 +29,10 @@
   display: flex;
   flex-direction: column;
   gap: 6px;
-  transition: height 0.3s var(--ease-lift);
+  transition: height 0.6s var(--ease-lift);
 }
 .crate-sleeve[aria-expanded="true"] {
-  height: 170px;
+  height: 180px; /* visible 166px */
 }
 .crate-sleeve:focus-visible {
   outline: 2px solid var(--primary-ink);
@@ -36,15 +40,30 @@
 }
 
 .crate-tab {
-  flex: none;
+  position: absolute;
+  inset: 0 16px auto;
+  padding: 3px 0;
   font: 700 13px/26px var(--font-inter);
+  transition: opacity 0.2s ease-out;
+}
+/* Open-state content is always rendered and revealed by the growing height (overflow clips it). */
+.crate-name,
+.crate-play {
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
+}
+.crate-sleeve[aria-expanded="true"] .crate-tab {
+  opacity: 0;
+}
+.crate-sleeve[aria-expanded="true"] .crate-name,
+.crate-sleeve[aria-expanded="true"] .crate-play {
+  opacity: 1;
+  transition-delay: 0.1s;
 }
 .crate-name {
+  margin-top: 14px;
   font: 800 40px/1 var(--font-inter-tight);
   letter-spacing: -0.02em;
-}
-.crate-meta {
-  font: 400 14px var(--font-space-mono);
 }
 .crate-play {
   margin-top: 8px;
@@ -54,6 +73,30 @@
   background: var(--background);
   color: var(--foreground);
   font: 700 14px var(--font-inter);
+}
+
+/* Die-cut hole: anchored to the sleeve TOP so it is revealed progressively as the sleeve rises.
+   Centre at 154px = open height 180 − 26 → sits just above the 14px overlap; lower part clipped. */
+.crate-hole {
+  position: absolute;
+  left: 50%;
+  top: 154px;
+  width: 88px;
+  height: 88px;
+  border-radius: 9999px;
+  border: 1px solid var(--foreground);
+  background: var(--sleeve-hole);
+  transform: translate(-50%, -50%);
+}
+.crate-hole::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--foreground); /* spindle hole: always Sumi */
+  transform: translate(-50%, -50%);
 }
 
 .crate-front {
@@ -79,7 +122,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .crate-sleeve {
+  .crate-sleeve,
+  .crate-tab,
+  .crate-name,
+  .crate-play {
     transition: none;
   }
 }

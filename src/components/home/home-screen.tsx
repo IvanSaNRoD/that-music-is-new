@@ -19,7 +19,7 @@ export function HomeScreen() {
   const crate = useCrate(GENRES, SAMPLE_HISTORY);
 
   return (
-    <div className="flex flex-col gap-8 px-6 pt-14 pb-8 lg:flex-row lg:items-stretch lg:px-12">
+    <div className="flex flex-col gap-8 px-6 pt-14 pb-8 lg:flex-row lg:items-stretch lg:px-12 lg:mx-auto lg:w-full lg:max-w-[1440px]">
       <Hero onRandomize={crate.randomize} />
       <CrateFlip
         catalog={GENRES}
@@ -27,6 +27,7 @@ export function HomeScreen() {
         selected={crate.selected}
         onSelect={crate.pick}
         onRestock={crate.restock}
+        onPlay={(g) => crate.play(g.id)}
       />
       <HistoryPanel
         catalog={GENRES}

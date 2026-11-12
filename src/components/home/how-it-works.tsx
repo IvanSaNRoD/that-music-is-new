@@ -7,19 +7,21 @@ const STEPS = [
   { title: "Dig deeper", body: "Liked it? Continue on Spotify." },
 ];
 
+// Tablet: cards + tagline form one centred group.
+// Desktop: same 1440px container as the row above; 3 equal card columns + tagline on the right.
 export function HowItWorks() {
   return (
     <section
       aria-label="How it works"
-      className="flex flex-col gap-8 px-6 pt-6 pb-12 lg:flex-row lg:items-center lg:justify-between lg:pr-12 lg:pl-60"
+      className="flex flex-col gap-8 px-6 pt-6 pb-12 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-x-14 md:gap-y-6 md:px-12 lg:mx-auto lg:grid lg:w-full lg:max-w-[1440px] lg:grid-cols-[1fr_auto]"
     >
-      <ol className="flex flex-col items-stretch lg:flex-row lg:items-center">
+      <ol className="flex flex-col items-stretch md:flex-row md:items-center lg:grid lg:grid-cols-[1fr_32px_1fr_32px_1fr]">
         {STEPS.map((s, i) => (
           <Fragment key={s.title}>
             {i > 0 && (
-              <li aria-hidden="true" className="bg-border-strong mx-auto h-6 w-[1.5px] lg:mx-0 lg:h-[1.5px] lg:w-8" />
+              <li aria-hidden="true" className="bg-border-strong mx-auto h-6 w-[1.5px] md:mx-0 md:h-[1.5px] md:w-8 lg:w-full" />
             )}
-            <li className="bg-card border-border-strong flex items-center gap-4 rounded-[14px] border-[1.5px] px-5 lg:h-[110px] lg:w-[290px] max-lg:py-4">
+            <li className="bg-card border-border-strong flex items-center gap-4 rounded-[14px] border-[1.5px] px-5 max-md:py-4 md:h-[110px] md:w-[290px] md:max-w-[26vw] lg:w-auto lg:max-w-none lg:min-w-0">
               <span className="bg-primary border-border-strong font-display flex size-11 shrink-0 items-center justify-center rounded-full border-[1.5px] text-xl font-extrabold">
                 {i + 1}
               </span>
@@ -34,8 +36,8 @@ export function HowItWorks() {
         ))}
       </ol>
 
-      <div className="flex items-center gap-4 self-end lg:self-auto">
-        <Vinyl size={48} />
+      <div className="flex items-center gap-4 self-end md:self-center">
+        <Vinyl size={48} rings={4} />
         <span className="relative font-mono text-[15px] leading-snug font-bold uppercase">
           Discover
           <br />
