@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-12T18:14:34.090Z",
+  "generatedAt": "2026-11-12T23:12:06.560297+00:00",
   "title": "Design System: That Music Is New",
   "extensions": {
     "colorMeta": {
@@ -181,7 +181,7 @@
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Step card titles."
+        "purpose": "Step card titles (18px, quiet)."
       },
       "body": {
         "displayName": "Body",
@@ -194,6 +194,18 @@
       "mono": {
         "displayName": "Mono",
         "purpose": "Catalog data: origin, era, counts, dates, shortcuts, logo."
+      },
+      "mono-small": {
+        "displayName": "Mono small",
+        "purpose": "Catalog meta (10 tracks · 24 Oct)."
+      },
+      "button-large": {
+        "displayName": "Button large",
+        "purpose": "Randomize primary action."
+      },
+      "display-mobile": {
+        "displayName": "Display (mobile)",
+        "purpose": "Home headline below 640px."
       }
     },
     "shadows": [
@@ -212,7 +224,7 @@
       {
         "name": "ease-lift",
         "value": "cubic-bezier(0.3, 0.7, 0.3, 1)",
-        "purpose": "Sleeve open/close (height, 0.3s). Disabled with prefers-reduced-motion."
+        "purpose": "Sleeve open/close (height, 0.6s); text fades 0.2–0.35s. Disabled with prefers-reduced-motion."
       }
     ],
     "breakpoints": [
@@ -270,22 +282,30 @@
       "name": "History Row",
       "kind": "custom",
       "refersTo": "history-row",
-      "description": "A discovered genre; hover/selected tint to Aged Paper.",
+      "description": "A played genre (last 5); selected = Aged Paper, hover = 50% Aged Paper.",
       "html": "<button class=\"ds-row\"><svg width=\"44\" height=\"44\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"49\" fill=\"#1C1C1C\"/><circle cx=\"50\" cy=\"50\" r=\"36\" fill=\"none\" stroke=\"#F3EBDA\" stroke-opacity=\".22\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#8DB6A5\"/><circle cx=\"50\" cy=\"50\" r=\"4\" fill=\"#F3EBDA\"/></svg><span class=\"ds-row-text\"><span class=\"ds-row-name\">Zeuhl</span><span class=\"ds-row-meta\">10 tracks · 23 Oct</span></span></button>",
-      "css": ".ds-row{display:flex;align-items:center;gap:14px;width:320px;background:#FAF6EE;border:0;border-top:1px solid #D9CDB4;padding:16px 16px 16px 20px;text-align:left;cursor:pointer;transition:background .15s}.ds-row:hover{background:#E6DCC6}.ds-row:focus-visible{outline:2px solid #3B705D;outline-offset:-2px}.ds-row-text{display:flex;flex-direction:column;gap:2px}.ds-row-name{font:700 17px Inter,sans-serif;color:#1C1C1C}.ds-row-meta{font:400 13px 'Space Mono',monospace;color:#4F5A4D}"
+      "css": ".ds-row{display:flex;align-items:center;gap:14px;width:320px;background:#FAF6EE;border:0;border-top:1px solid #D9CDB4;padding:16px 16px 16px 20px;text-align:left;cursor:pointer;transition:background .15s}.ds-row:hover{background:rgb(230 220 198/.5)}.ds-row:focus-visible{outline:2px solid #3B705D;outline-offset:-2px}.ds-row-text{display:flex;flex-direction:column;gap:2px}.ds-row-name{font:700 17px Inter,sans-serif;color:#1C1C1C}.ds-row-meta{font:400 13px 'Space Mono',monospace;color:#4F5A4D}"
     },
     {
       "name": "Record Sleeve",
       "kind": "custom",
       "refersTo": "sleeve-open",
-      "description": "Open sleeve from the crate: genre name, origin · era, Play pill.",
-      "html": "<div class=\"ds-sleeve\"><span class=\"ds-sleeve-tab\">Zeuhl</span><span class=\"ds-sleeve-name\">Zeuhl</span><span class=\"ds-sleeve-meta\">France · 1970s</span><span class=\"ds-sleeve-play\">▶ Play 10 tracks</span></div>",
-      "css": ".ds-sleeve{display:flex;flex-direction:column;gap:6px;width:360px;height:170px;padding:0 16px;border-radius:14px 14px 0 0;background:#8DB6A5;color:#1C1C1C;box-shadow:0 -2px 6px rgb(28 28 28/.14)}.ds-sleeve-tab{font:700 13px/26px Inter,sans-serif}.ds-sleeve-name{font:800 40px/1 'Inter Tight',Inter,sans-serif;letter-spacing:-.02em}.ds-sleeve-meta{font:400 14px 'Space Mono',monospace}.ds-sleeve-play{margin-top:8px;align-self:flex-start;border-radius:9999px;padding:8px 16px;background:#F3EBDA;font:700 14px Inter,sans-serif}"
+      "description": "Open sleeve: genre name, Play pill, die-cut hole with Sumi outline and spindle dot.",
+      "html": "<div class=\"ds-sleeve\"><span class=\"ds-sleeve-name\">Zeuhl</span><span class=\"ds-sleeve-play\">▶ Play 10 tracks</span><span class=\"ds-sleeve-hole\"></span></div>",
+      "css": ".ds-sleeve{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:6px;width:360px;height:166px;padding:0 16px;border-radius:14px 14px 0 0;background:#8DB6A5;color:#1C1C1C;box-shadow:0 -2px 6px rgb(28 28 28/.14)}.ds-sleeve-name{margin-top:14px;font:800 40px/1 'Inter Tight',Inter,sans-serif;letter-spacing:-.02em}.ds-sleeve-play{margin-top:8px;align-self:flex-start;border-radius:9999px;padding:8px 16px;background:#F3EBDA;font:700 14px Inter,sans-serif}.ds-sleeve-hole{position:absolute;left:50%;top:154px;width:88px;height:88px;border-radius:9999px;border:1px solid #1C1C1C;background:#F3EBDA;transform:translate(-50%,-50%)}.ds-sleeve-hole::after{content:'';position:absolute;left:50%;top:50%;width:8px;height:8px;border-radius:9999px;background:#1C1C1C;transform:translate(-50%,-50%)}"
+    },
+    {
+      "name": "Step Card",
+      "kind": "card",
+      "refersTo": "step-card",
+      "description": "Quiet secondary card in the how-it-works row: tonal, no outline.",
+      "html": "<div class=\"ds-step\"><span class=\"ds-step-badge\">1</span><span><span class=\"ds-step-title\">Roll</span><span class=\"ds-step-body\">Get a random genre from the catalog.</span></span></div>",
+      "css": ".ds-step{display:flex;align-items:center;gap:16px;width:290px;height:96px;padding:0 20px;border-radius:14px;background:#FAF6EE}.ds-step-badge{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;border-radius:9999px;background:#8DB6A5;font:800 18px 'Inter Tight',Inter,sans-serif}.ds-step-title{display:block;font:800 18px/1.2 'Inter Tight',Inter,sans-serif;letter-spacing:-.02em}.ds-step-body{display:block;font:400 14px/1.4 Inter,sans-serif;color:#4F5A4D}"
     }
   ],
   "narrative": {
     "northStar": "The Record Crate",
-    "overview": "A second-hand record shop on warm paper. The page is kinari stock, every container is outlined in sumi ink like a printed object, and the music lives in things you can pull out: sleeves standing in a crate, vinyl discs, a stack of finds. Discovery should feel physical and a little analog, never like a streaming dashboard.\n\nDensity is calm: three columns on desktop (pitch, crate, history), generous gutters, one loud headline. Color is restrained: paper neutrals carry the page, Seiji green is the single accent, and the record sleeves are the one place where the full palette shows at once. Type pairs a heavy, tight grotesk for voice with a monospace for catalog data (origins, eras, dates, counts), the way a shop labels its bins.",
+    "overview": "A second-hand record shop on warm paper. The page is kinari stock, every container is outlined in sumi ink like a printed object, and the music lives in things you can pull out: sleeves standing in a crate, vinyl discs, a stack of finds. Discovery should feel physical and a little analog, never like a streaming dashboard.\n\nDensity is calm: three columns on desktop (pitch, crate, history) inside a 1440px container, generous gutters, one loud headline. Color is restrained: paper neutrals carry the page, Seiji green is the single accent, and the record sleeves are the one place where the full palette shows at once. Type pairs a heavy, tight grotesk for voice with a monospace for catalog data (origins, eras, dates, counts), the way a shop labels its bins.",
     "keyCharacteristics": [
       "Warm paper background with a fine paper grain, ink outlines (1.5px Sumi) instead of shadows.",
       "One accent (Seiji) for the primary action; Seiji Ink for text-level links and focus.",
@@ -306,7 +326,7 @@
       },
       {
         "name": "The Sleeve Palette Rule",
-        "body": "Record sleeves rotate through five AA-safe pairs by catalog index % 5: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper).",
+        "body": "Record sleeves rotate through five AA-safe pairs by catalog index % 5: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper), outlined 1px Sumi, with a Sumi spindle dot.",
         "section": "colors"
       },
       {
@@ -316,12 +336,12 @@
       },
       {
         "name": "The Ink-Outline Rule",
-        "body": "Containers are defined by a 1.5px Sumi border, never by a shadow. Never both on the same element.",
+        "body": "Primary containers (crate, History) are defined by a 1.5px Sumi border, never by a shadow; never both on the same element. Secondary containers (step cards) drop the outline and sit as tonal Card Stock so they never compete with the crate.",
         "section": "elevation"
       }
     ],
     "dos": [
-      "Do outline every container with 1.5px Sumi and keep it flat.",
+      "Do outline primary containers with 1.5px Sumi and keep them flat; let secondary ones sit as tonal Card Stock.",
       "Do use Seiji as a fill and Seiji Ink whenever the accent must be read.",
       "Do set catalog data (origin, era, counts, dates, shortcuts) in Space Mono.",
       "Do draw music objects (vinyl, sleeves, crate) as exact vector geometry.",
