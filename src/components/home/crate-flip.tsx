@@ -1,6 +1,7 @@
 import type { CSSProperties } from "react";
 import { Play } from "lucide-react";
 import type { Genre } from "@/domain/genres";
+import { blurIfPointer } from "@/lib/utils";
 import "./crate-flip.css";
 
 // Sleeve [bg, text, hole] by catalog index % 5 — text pairs WCAG AA; no white/card sleeve (blends into the panel).
@@ -29,12 +30,15 @@ export function CrateFlip({ catalog, stock, selected, onSelect, onRestock, onPla
       className="bg-card border-border-strong flex min-h-[500px] min-w-0 flex-1 flex-col gap-3.5 lg:ml-[3%] overflow-hidden rounded-2xl border-[1.5px] p-[26px]"
     >
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-display text-2xl font-extrabold tracking-[-0.02em] whitespace-nowrap">
+        <h2 className="font-display text-[30px] font-extrabold tracking-[-0.02em] whitespace-nowrap">
           The crate
         </h2>
         <button
           type="button"
-          onClick={onRestock}
+          onClick={(e) => {
+            blurIfPointer(e);
+            onRestock();
+          }}
           className="text-primary-ink hover:bg-primary-ink/10 active:bg-primary-ink/[0.18] focus-visible:outline-primary-ink rounded-full px-3 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           Restock
@@ -55,7 +59,11 @@ export function CrateFlip({ catalog, stock, selected, onSelect, onRestock, onPla
               aria-expanded={open}
               aria-label={open ? `Play 10 tracks of ${g.name}` : g.name}
               style={{ "--sleeve-bg": bg, "--sleeve-fg": fg, "--sleeve-hole": hole } as CSSProperties}
-              onClick={() => (open ? onPlay?.(g) : onSelect(id))}
+              onClick={(e) => {
+                blurIfPointer(e);
+                if (open) onPlay?.(g);
+                else onSelect(id);
+              }}
             >
               {/* All parts always rendered: CSS reveals them as the sleeve rises (smooth open/close). */}
               <span className="crate-tab" aria-hidden={open}>

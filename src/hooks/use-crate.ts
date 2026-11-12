@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from "react";
 import type { Genre } from "@/domain/genres";
 
 export const CRATE_SIZE = 8;
-const HISTORY_MAX = 4; // last 4 played; older entries TBD (user decision pending)
+const HISTORY_MAX = 5; // last 5 played; older entries TBD (docs/prd.md › Open questions)
 
 export type HistoryItem = { id: string; date: string };
 
@@ -53,17 +53,37 @@ export function useCrate(catalog: Genre[], initialHistory: HistoryItem[] = []) {
     pick(next[0]);
   }, [catalog, pick]);
 
-  const removeFromHistory = useCallback(
-    (id: string) => setHistory((h) => h.filter((x) => x.id !== id)),
-    [],
-  );
-  const clearHistory = useCallback(() => setHistory([]), []);
+  // Last removed entry + its position, so a single ✕ can be undone.
+  const [lastRemoved, setLastRemoved] = useState<{ item: HistoryItem; index: number } | null>(null);
 
-  // Space = Randomize, except while typing or when a control has focus.
+  const removeFromHistory = useCallback((id: string) => {
+    setHistory((h) => {
+      const index = h.findIndex((x) => x.id === id);
+      if (index !== -1) setLastRemoved({ item: h[index], index });
+      return h.filter((x) => x.id !== id);
+    });
+  }, []);
+
+  const undoRemove = useCallback(() => {
+    setLastRemoved((r) => {
+      if (r) setHistory((h) => [...h.slice(0, r.index), r.item, ...h.slice(r.index)].slice(0, HISTORY_MAX));
+      return null;
+    });
+  }, []);
+
+  const dismissUndo = useCallback(() => setLastRemoved(null), []);
+  const clearHistory = useCallback(() => {
+    setHistory([]);
+    setLastRemoved(null);
+  }, []);
+
+  // Space = Randomize on pointer devices with hover (desktop), except while typing or when a
+  // control has keyboard focus (native Space activation wins). Mouse clicks drop focus (blurIfPointer).
   useEffect(() => {
+    if (window.matchMedia("(hover: none)").matches) return;
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
-      if (e.code !== "Space" || /INPUT|TEXTAREA|BUTTON|SELECT/.test(tag)) return;
+      if (e.code !== "Space" || /INPUT|TEXTAREA|BUTTON|SELECT|A/.test(tag)) return;
       e.preventDefault();
       randomize();
     };
@@ -71,5 +91,18 @@ export function useCrate(catalog: Genre[], initialHistory: HistoryItem[] = []) {
     return () => window.removeEventListener("keydown", onKey);
   }, [randomize]);
 
-  return { stock, selected, history, pick, play, randomize, restock, removeFromHistory, clearHistory };
+  return {
+    stock,
+    selected,
+    history,
+    lastRemoved: lastRemoved?.item ?? null,
+    pick,
+    play,
+    randomize,
+    restock,
+    removeFromHistory,
+    undoRemove,
+    dismissUndo,
+    clearHistory,
+  };
 }

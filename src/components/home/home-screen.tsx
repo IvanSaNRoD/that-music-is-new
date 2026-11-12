@@ -12,6 +12,7 @@ const SAMPLE_HISTORY: HistoryItem[] = [
   { id: "zeuhl", date: "23 Oct" },
   { id: "bossa-nova", date: "21 Oct" },
   { id: "krautrock", date: "19 Oct" },
+  { id: "afrobeat", date: "17 Oct" },
 ];
 
 // Client island: Randomize, Space, the crate and History all share one selection.
@@ -36,6 +37,9 @@ export function HomeScreen() {
         onOpen={crate.pick}
         onRemove={crate.removeFromHistory}
         onClear={crate.clearHistory}
+        lastRemoved={crate.lastRemoved}
+        onUndo={crate.undoRemove}
+        onDismissUndo={crate.dismissUndo}
       />
     </div>
   );

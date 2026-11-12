@@ -32,12 +32,15 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
           <Shuffle size={28} strokeWidth={2.5} aria-hidden="true" />
           Randomize
         </button>
-        <span className="bg-border-strong h-12 w-px" aria-hidden="true" />
-        <span className="text-muted-foreground flex items-center gap-2 text-[15px]">
-          or press
-          <kbd className="border-border-strong text-foreground rounded-md border-[1.5px] px-2.5 py-1 font-mono text-[15px]">
-            Space
-          </kbd>
+        {/* Keyboard hint: desktop only (shortcut is disabled on touch devices). */}
+        <span className="hidden items-center gap-6 lg:flex">
+          <span className="bg-border-strong h-12 w-px" aria-hidden="true" />
+          <span className="text-muted-foreground flex items-center gap-2 text-[15px]">
+            or press
+            <kbd className="border-border-strong text-foreground rounded-md border-[1.5px] px-2.5 py-1 font-mono text-[15px]">
+              Space
+            </kbd>
+          </span>
         </span>
       </div>
     </section>

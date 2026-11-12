@@ -7,7 +7,7 @@ export default function Home() {
   return (
     <div className="relative isolate flex flex-1 flex-col overflow-clip">
       <SiteHeader />
-      <main className="flex flex-1 flex-col">
+      <main className="flex flex-1 flex-col lg:justify-center">
         <HomeScreen />
         <HowItWorks />
       </main>

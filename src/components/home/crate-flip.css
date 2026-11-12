@@ -4,6 +4,7 @@
   position: relative;
   flex: 1;
   min-height: 0;
+  margin-top: 26px; /* breathing room under the heading (≈40px with the panel gap) */
   display: flex;
   flex-direction: column;
   justify-content: flex-end; /* sleeves sit at the bottom */

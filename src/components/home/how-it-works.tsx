@@ -19,14 +19,15 @@ export function HowItWorks() {
         {STEPS.map((s, i) => (
           <Fragment key={s.title}>
             {i > 0 && (
-              <li aria-hidden="true" className="bg-border-strong mx-auto h-6 w-[1.5px] md:mx-0 md:h-[1.5px] md:w-8 lg:w-full" />
+              <li aria-hidden="true" className="bg-border mx-auto h-6 w-px md:mx-0 md:h-px md:w-8 lg:w-full" />
             )}
-            <li className="bg-card border-border-strong flex items-center gap-4 rounded-[14px] border-[1.5px] px-5 max-md:py-4 md:h-[110px] md:w-[290px] md:max-w-[26vw] lg:w-auto lg:max-w-none lg:min-w-0">
-              <span className="bg-primary border-border-strong font-display flex size-11 shrink-0 items-center justify-center rounded-full border-[1.5px] text-xl font-extrabold">
+            {/* Lighter than the main panels: tonal card, no ink outline, so the crate stays the focus. */}
+            <li className="bg-card flex items-center gap-4 rounded-[14px] px-5 max-md:py-4 md:h-[96px] md:w-[290px] md:max-w-[26vw] lg:w-auto lg:max-w-none lg:min-w-0">
+              <span className="bg-primary font-display flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold">
                 {i + 1}
               </span>
               <span className="flex flex-col gap-1">
-                <span className="font-display text-[22px] leading-tight font-extrabold tracking-[-0.02em]">
+                <span className="font-display text-lg leading-tight font-extrabold tracking-[-0.02em]">
                   {s.title}
                 </span>
                 <span className="text-muted-foreground text-sm leading-snug">{s.body}</span>

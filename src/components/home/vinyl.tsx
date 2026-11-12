@@ -39,8 +39,8 @@ export function Vinyl({ size, detailed = false, rings = 1, className }: VinylPro
         />
       ))}
       {detailed && (
-        // Single sheen wedge around 1 o'clock.
-        <path d="M50 50 L62 3 A48 48 0 0 1 80 12 Z" fill="#fff" fillOpacity="0.16" />
+        // Single sheen wedge centred just above 2 o'clock (38°→62° clockwise from 12, r48).
+        <path d="M50 50 L79.55 12.18 A48 48 0 0 1 92.38 27.47 Z" fill="#fff" fillOpacity="0.16" />
       )}
       <circle cx="50" cy="50" r={detailed ? 18 : 20} fill="var(--primary)" />
       <circle cx="50" cy="50" r={detailed ? 2.5 : 4} fill="var(--foreground)" />

@@ -1,7 +1,13 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import { ChevronRight, History, X } from "lucide-react";
 import type { Genre } from "@/domain/genres";
 import type { HistoryItem } from "@/hooks/use-crate";
+import { blurIfPointer } from "@/lib/utils";
 import { Vinyl } from "./vinyl";
+
+const UNDO_MS = 6000;
 
 type HistoryPanelProps = {
   catalog: Genre[];
@@ -10,9 +16,36 @@ type HistoryPanelProps = {
   onOpen: (id: string) => void;
   onRemove: (id: string) => void;
   onClear: () => void;
+  lastRemoved: HistoryItem | null;
+  onUndo: () => void;
+  onDismissUndo: () => void;
 };
 
-export function HistoryPanel({ catalog, items, selected, onOpen, onRemove, onClear }: HistoryPanelProps) {
+const linkButton =
+  "text-primary-ink focus-visible:outline-primary-ink rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2";
+
+export function HistoryPanel({
+  catalog,
+  items,
+  selected,
+  onOpen,
+  onRemove,
+  onClear,
+  lastRemoved,
+  onUndo,
+  onDismissUndo,
+}: HistoryPanelProps) {
+  // Inline confirmation for the destructive "Clear all" (PRD: clear all needs confirmation).
+  const [confirming, setConfirming] = useState(false);
+  const nameOf = (id: string) => catalog.find((x) => x.id === id)?.name ?? id;
+
+  // The undo offer for a single ✕ expires after a few seconds.
+  useEffect(() => {
+    if (!lastRemoved) return;
+    const t = setTimeout(onDismissUndo, UNDO_MS);
+    return () => clearTimeout(t);
+  }, [lastRemoved, onDismissUndo]);
+
   return (
     <section
       aria-labelledby="history-title"
@@ -27,7 +60,7 @@ export function HistoryPanel({ catalog, items, selected, onOpen, onRemove, onCle
 
       {items.length === 0 ? (
         <p className="border-divider text-muted-foreground flex-1 border-t px-5 py-6 text-sm">
-          Nothing here yet. Randomize a genre and it shows up here.
+          Nothing here yet. Play a genre and it lands here.
         </p>
       ) : (
         <ul className="flex-1">
@@ -38,11 +71,15 @@ export function HistoryPanel({ catalog, items, selected, onOpen, onRemove, onCle
             return (
               <li
                 key={id}
-                className={`group border-divider relative border-t transition-colors hover:bg-muted ${isSelected ? "bg-muted" : ""}`}
+                // Hover is a lighter tint than "selected", so the two states stay distinguishable.
+                className={`group border-divider relative border-t transition-colors ${isSelected ? "bg-muted" : "hover:bg-muted/50"}`}
               >
                 <button
                   type="button"
-                  onClick={() => onOpen(id)}
+                  onClick={(e) => {
+                    blurIfPointer(e);
+                    onOpen(id);
+                  }}
                   aria-current={isSelected || undefined}
                   className="focus-visible:outline-primary-ink flex w-full items-center gap-3.5 py-4 pr-4 pl-5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2"
                 >
@@ -72,15 +109,49 @@ export function HistoryPanel({ catalog, items, selected, onOpen, onRemove, onCle
         </ul>
       )}
 
-      <div className="border-divider border-t px-5 py-4">
-        <button
-          type="button"
-          onClick={onClear}
-          disabled={items.length === 0}
-          className="text-primary-ink focus-visible:outline-primary-ink rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50 disabled:no-underline"
-        >
-          Clear all history
-        </button>
+      <div className="border-divider border-t px-5 py-4" aria-live="polite">
+        {lastRemoved ? (
+          <p className="flex items-center justify-between gap-3 text-sm">
+            <span className="text-muted-foreground truncate">
+              Removed <span className="text-foreground font-semibold">{nameOf(lastRemoved.id)}</span>
+            </span>
+            <button type="button" onClick={onUndo} className={linkButton}>
+              Undo
+            </button>
+          </p>
+        ) : confirming ? (
+          <p className="flex items-center justify-between gap-3 text-sm">
+            <span className="text-foreground font-semibold">Clear all history?</span>
+            <span className="flex items-center gap-4">
+              <button
+                type="button"
+                onClick={() => setConfirming(false)}
+                className="text-muted-foreground hover:text-foreground focus-visible:outline-primary-ink rounded text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  onClear();
+                  setConfirming(false);
+                }}
+                className="text-destructive focus-visible:outline-primary-ink rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+              >
+                Clear
+              </button>
+            </span>
+          </p>
+        ) : (
+          <button
+            type="button"
+            onClick={() => setConfirming(true)}
+            disabled={items.length === 0}
+            className={`${linkButton} disabled:cursor-not-allowed disabled:no-underline disabled:opacity-50`}
+          >
+            Clear all history
+          </button>
+        )}
       </div>
     </section>
   );
