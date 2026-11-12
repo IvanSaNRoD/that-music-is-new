@@ -30,7 +30,7 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - A loading state is shown while fetching; an error state with retry is shown if Spotify fails (incl. `429`).
 - A genre is saved to `localStorage` (genre name, playlist id, date) **when its tracks are played**, not when it is merely selected or randomized; it persists after reload.
 - Clicking a history entry loads a new sample of up to 10 tracks from that genre's playlist (same view as a Randomizer result); it does not duplicate the history entry.
-- History shows the **last 4 played** genres, most recent first (no duplicates; replaying moves an entry to the top); each entry has a delete action; a "clear all" action empties the list (with confirmation).
+- History shows the **last 5 played** genres, most recent first (no duplicates; replaying moves an entry to the top); each entry has a delete action; a "clear all" action empties the list (with confirmation).
 - If `localStorage` is unavailable, the Randomizer still works (history simply not persisted).
 - Responsive (mobile and desktop) and keyboard accessible.
 
@@ -42,7 +42,7 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - Server-side persistence (no database).
 
 ## Open questions
-- **History beyond the last 4** (decided 2026-11-12): the home History card shows only the last 4 played genres because an unbounded list breaks the layout. Long-term we do NOT want history limited to the last 4: decide how older entries are kept and reached (e.g. separate "full history" view, pagination, scroll inside the card) without breaking the home design.
+- **History beyond the last 5** (decided 2026-11-12): the home History card shows only the last 5 played genres because an unbounded list breaks the layout. Long-term we do NOT want history limited to the last 5: decide how older entries are kept and reached (e.g. separate "full history" view, pagination, scroll inside the card) without breaking the home design.
 
 ## Future ideas
 - Avoid randomizing genres already in the history.
