@@ -2,7 +2,7 @@
 
 A door into rare music genres. One click → a random genre from ~7,000 and a short list of its tracks to listen to, right in the page. If a genre clicks, keep exploring it on Spotify.
 
-> Status: **design done** (iteration 1 — Randomizer). Next: technical foundations. No app code yet.
+> Status: **technical foundations** (iteration 1 — Randomizer). Next.js app scaffolded; Randomizer not built yet.
 
 ## Links
 
@@ -63,6 +63,17 @@ Where subagents/extra reviews *are* used:
 | `/security-review` | F1 (hardening) | Specialized security pass |
 | Parallel work (optional) | E2 Spotify client ∥ E4 UI with mock data | Independent; only if pace needs it |
 
+## Getting started
+
+```bash
+npm install
+npm run dev     # http://localhost:3000
+npm run build   # production build
+npm run lint
+```
+
+Design tokens live in [`src/app/globals.css`](src/app/globals.css) (mapped 1:1 from Penpot).
+
 ## Docs
 
 - [PRD](docs/prd.md) · [Architecture](docs/architecture.md) · [Backlog](docs/backlog.md)
@@ -79,3 +90,4 @@ Where subagents/extra reviews *are* used:
 | 2026-11-11 | [#2](https://github.com/IvanSaNRoD/that-music-is-new/issues/2) | Design tokens in Penpot (Seiji–Kinari palette, type, spacing, radius) |
 | 2026-11-11 | [#3](https://github.com/IvanSaNRoD/that-music-is-new/issues/3) | Screens in Penpot: home, loading, result, error, clear-history dialog — desktop + mobile |
 | 2026-11-11 | [v0.1.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.1.0) | Milestone: definition, planning and design done (phases A–C) |
+| 2026-11-12 | [#4](https://github.com/IvanSaNRoD/that-music-is-new/issues/4) | Scaffold: Next.js 16 (App Router, TS strict), Tailwind v4, shadcn/ui (Radix); Penpot tokens → CSS variables; architecture folders |

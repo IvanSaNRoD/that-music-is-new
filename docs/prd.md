@@ -18,7 +18,7 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 3. As a user, I see the **genre context**: name, number of tracks in its playlist, link to the playlist on Spotify.
 4. As a user, I can **play a track** in the page (Spotify Embed).
 5. As a user, I can **roll again** to get another genre.
-6. As a user, I see the **history of genres** I've already discovered, kept between visits.
+6. As a user, I see the **history of genres** I've played, kept between visits.
 7. As a user, I can **delete history entries one by one or all at once**.
 8. As a user, I can **click a history entry to reload that genre's tracks**, so I can go back to a genre I liked.
 
@@ -28,9 +28,9 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - Selecting a track loads it in a single Spotify Embed player (one player, not one per row).
 - "Roll again" replaces the current genre and tracks with a new random genre.
 - A loading state is shown while fetching; an error state with retry is shown if Spotify fails (incl. `429`).
-- Every discovered genre is saved to `localStorage` (genre name, playlist id, discovery date) and persists after reload.
+- A genre is saved to `localStorage` (genre name, playlist id, date) **when its tracks are played**, not when it is merely selected or randomized; it persists after reload.
 - Clicking a history entry loads a new sample of up to 10 tracks from that genre's playlist (same view as a Randomizer result); it does not duplicate the history entry.
-- History list shows entries most recent first; each entry has a delete action; a "clear all" action empties the list (with confirmation).
+- History shows the **last 5 played** genres, most recent first (no duplicates; replaying moves an entry to the top); each entry has a delete action; a "clear all" action empties the list (with confirmation).
 - If `localStorage` is unavailable, the Randomizer still works (history simply not persisted).
 - Responsive (mobile and desktop) and keyboard accessible.
 
@@ -40,6 +40,9 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - Choosing genre subgroups / filters.
 - Up-to-date lists (source playlists are a frozen snapshot, ADR-0003).
 - Server-side persistence (no database).
+
+## Open questions
+- **History beyond the last 5** (decided 2026-11-12): the home History card shows only the last 5 played genres because an unbounded list breaks the layout. Long-term we do NOT want history limited to the last 5: decide how older entries are kept and reached (e.g. separate "full history" view, pagination, scroll inside the card) without breaking the home design.
 
 ## Future ideas
 - Avoid randomizing genres already in the history.

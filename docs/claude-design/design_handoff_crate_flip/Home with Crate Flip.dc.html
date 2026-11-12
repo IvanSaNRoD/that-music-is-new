@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="_ds/organic-2ff1e123-2843-4a80-9bd1-e39aa3ff36dc/styles.css">
+<script src="_ds/organic-2ff1e123-2843-4a80-9bd1-e39aa3ff36dc/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}</style>
+</helmet>
+<div data-screen-label="Home" style="position:relative;overflow:hidden;min-height:100vh;box-sizing:border-box;padding:28px 44px 48px;display:flex;flex-direction:column;gap:40px">
+  <div style="position:absolute;left:-190px;bottom:-190px;width:360px;height:360px;border-radius:50%;background:radial-gradient(circle, var(--color-text) 0 4%, var(--color-accent-2-300) 5% 30%, var(--color-text) 31%);pointer-events:none"></div>
+
+  <header style="display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;position:relative">
+    <span style="font-family:var(--font-heading);font-size:26px">That Music Is New</span>
+    <a href="#" style="display:flex;align-items:center;gap:10px;font-size:15px;font-weight:600;color:var(--color-text);text-decoration:none">Discover rare genres
+      <span style="width:30px;height:30px;border-radius:50%;background:radial-gradient(circle, var(--color-accent-2-300) 0 22%, var(--color-text) 24%)"></span>
+    </a>
+  </header>
+
+  <main style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:28px;align-items:stretch;position:relative;max-width:1320px;width:100%;margin:0 auto">
+    <section style="display:flex;flex-direction:column;gap:22px;justify-content:center">
+      <span class="tag tag-accent-2" style="align-self:flex-start">~7,000 genres · one click</span>
+      <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:clamp(44px,5vw,64px);line-height:1.02;text-wrap:balance">Hear a genre you’ve never heard of.</h1>
+      <p style="margin:0;font-size:17px;line-height:1.5;max-width:30em;text-wrap:pretty">Discover a random genre. Listen to 10 tracks. Find your next obsession.</p>
+      <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+        <button class="btn btn-primary" style="font-size:18px;padding:16px 28px;display:flex;align-items:center;gap:10px" onClick="{{ randomize }}">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="m18 14 4 4-4 4"></path><path d="m18 2 4 4-4 4"></path><path d="M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-7.6a4 4 0 0 1 3.3-1.7H22"></path><path d="M2 6h1.972a4 4 0 0 1 3.6 2.2"></path><path d="M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45"></path></svg>
+          Randomize
+        </button>
+        <span style="font-size:14px;color:var(--color-neutral-700);display:flex;align-items:center;gap:8px">or press <kbd style="font:600 13px var(--font-body);background:var(--color-surface);border-radius:var(--radius-sm);padding:4px 10px">Space</kbd></span>
+      </div>
+    </section>
+
+    <section style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px;white-space:nowrap">The crate</h3>
+        <button class="btn btn-ghost" style="font-size:14px;padding:6px 12px" onClick="{{ restock }}">Restock</button>
+      </div>
+      <div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;padding:0 14px 54px">
+        <sc-for list="{{ crate }}" as="c" hint-placeholder-count="8">
+          <button onClick="{{ c.onClick }}" style="height:{{ c.h }};flex:none;border:none;cursor:pointer;margin-top:-4px;border-radius:14px 14px 0 0;background:{{ c.bg }};color:{{ c.fg }};box-shadow:0 -2px 6px color-mix(in srgb, var(--color-text) 14%, transparent);transition:height .3s cubic-bezier(.3,.7,.3,1);overflow:hidden;text-align:left;padding:0 16px;display:flex;flex-direction:column;gap:6px">
+            <span style="font:700 13px var(--font-body);line-height:26px;flex:none">{{ c.name }}</span>
+            <sc-if value="{{ c.on }}" hint-placeholder-val="{{ false }}">
+              <span style="font-family:var(--font-heading);font-size:40px;line-height:1">{{ c.name }}</span>
+              <span style="font-size:14px">{{ c.meta }}</span>
+              <span style="margin-top:8px;align-self:flex-start;background:var(--color-bg);color:var(--color-text);border-radius:999px;padding:8px 16px;font:700 14px var(--font-body)">▶ Play 10 tracks</span>
+            </sc-if>
+          </button>
+        </sc-for>
+        <div style="position:absolute;left:0;right:0;bottom:0;height:50px;border-radius:var(--radius-md);background:var(--color-neutral-400);display:flex;align-items:flex-end;justify-content:center;padding-bottom:12px;box-sizing:border-box;box-shadow:var(--shadow-sm)"><span style="width:90px;height:14px;border-radius:999px;background:var(--color-neutral-600)"></span></div>
+      </div>
+    </section>
+
+    <section style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px 18px 18px;display:flex;flex-direction:column;gap:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:0 8px">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">History</h3>
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path><path d="M3 3v5h5"></path><path d="M12 7v5l4 2"></path></svg>
+      </div>
+      <div style="flex:1;overflow:auto;display:flex;flex-direction:column;gap:4px">
+        <sc-for list="{{ history }}" as="h" hint-placeholder-count="4">
+          <div style="display:flex;align-items:center;gap:12px;padding:8px 10px 8px 8px;border-radius:999px;background:{{ h.bg }}">
+            <span style="width:36px;height:36px;border-radius:50%;flex:none;background:radial-gradient(circle, var(--color-accent-2-300) 0 28%, var(--color-text) 30%)"></span>
+            <button onClick="{{ h.onOpen }}" style="flex:1;border:none;background:none;cursor:pointer;text-align:left;padding:0;display:flex;flex-direction:column"><span style="font:700 15px var(--font-body);color:var(--color-text)">{{ h.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ h.meta }}</span></button>
+            <button class="btn btn-ghost btn-icon" aria-label="Remove" onClick="{{ h.onRemove }}" style="padding:6px">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.75" stroke-linecap="round"><path d="M18 6 6 18"></path><path d="m6 6 12 12"></path></svg>
+            </button>
+          </div>
+        </sc-for>
+        <sc-if value="{{ historyEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:24px 10px;font-size:14px;color:var(--color-neutral-700)">Your rolls will show up here.</div></sc-if>
+      </div>
+      <button class="btn btn-ghost" style="font-size:14px" onClick="{{ clearHistory }}">Clear all history</button>
+    </section>
+  </main>
+
+  <footer style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;position:relative;max-width:1100px;width:100%;margin:0 auto;padding-left:clamp(0px,10vw,140px);box-sizing:border-box">
+    <div style="flex:1;min-width:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px">
+      <sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+        <div style="display:flex;gap:14px;align-items:flex-start;background:var(--color-surface);border-radius:var(--radius-lg);padding:18px 20px">
+          <span style="width:38px;height:38px;flex:none;border-radius:50%;background:var(--color-accent-2-300);color:var(--color-accent-2-900);display:flex;align-items:center;justify-content:center;font-family:var(--font-heading);font-size:18px">{{ s.n }}</span>
+          <span style="display:flex;flex-direction:column;gap:2px"><span style="font-family:var(--font-heading);font-size:19px">{{ s.title }}</span><span style="font-size:14px;line-height:1.4;color:var(--color-neutral-700)">{{ s.body }}</span></span>
+        </div>
+      </sc-for>
+    </div>
+  </footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const G = [
+  ['Indie Folk','US','2000s'],['Psychedelic','UK','1960s'],['Afrobeat','Nigeria','1970s'],['Post-rock','UK','1990s'],
+  ['Bossa Nova','Brazil','1950s'],['Zamrock','Zambia','1970s'],['Chillwave','US','2009'],['Synthwave','US','2000s'],
+  ['Trip hop','Bristol','1990s'],['Krautrock','Germany','1970s'],['Dream Pop','UK','1980s'],['Noise','Japan','1980s'],
+  ['Shoegaze','UK','1990s'],['Math Rock','US','1990s'],['Zeuhl','France','1970s'],['Post-punk','UK','1978'],
+  ['New Wave','UK','1980s'],['Funk','US','1960s'],['Ambient','UK','1970s'],
+].map(([name,origin,era]) => ({ name, origin, era }));
+const today = () => new Date().toLocaleDateString('en-GB', { day:'numeric', month:'short' });
+
+class Component extends DCLogic {
+  state = { stock:['Ambient','Zamrock','Krautrock','Afrobeat','Shoegaze','Bossa Nova','Trip hop','Zeuhl'], sel:'Ambient', history:[
+    { name:'Ambient', date:'24 Oct' }, { name:'Zamrock', date:'22 Oct' }, { name:'Chillwave', date:'20 Oct' }, { name:'Post-punk', date:'18 Oct' },
+  ]};
+  componentDidMount() {
+    this.onKey = e => {
+      if (e.code !== 'Space' || /INPUT|TEXTAREA|BUTTON/.test(e.target.tagName)) return;
+      e.preventDefault(); this.roll();
+    };
+    window.addEventListener('keydown', this.onKey);
+  }
+  componentWillUnmount() { window.removeEventListener('keydown', this.onKey); }
+  pick(name) {
+    this.setState(s => ({ sel:name, stock: s.stock.includes(name) ? s.stock : [...s.stock.slice(1), name], history:[{ name, date:today() }, ...s.history.filter(h => h.name !== name)].slice(0, 8) }));
+  }
+  roll() {
+    const pool = G.filter(g => g.name !== this.state.sel);
+    this.pick(pool[Math.floor(Math.random() * pool.length)].name);
+  }
+  renderVals() {
+    const s = this.state;
+    const T = [['var(--color-accent-2-300)','var(--color-accent-2-900)'],['var(--color-accent-200)','var(--color-accent-900)'],['var(--color-text)','var(--color-bg)'],['var(--color-accent-2-500)','var(--color-bg)'],['var(--color-accent)','var(--color-bg)'],['var(--color-neutral-200)','var(--color-text)']];
+    const crate = s.stock.map((n, i) => {
+      const g = G.find(x => x.name === n) || { name:n, origin:'', era:'' }, on = s.sel === n, t = T[G.indexOf(g) % 6] || T[0];
+      return { name:n, meta:`${g.origin} · ${g.era}`, on, h: on ? '170px' : '26px', bg:t[0], fg:t[1], onClick: () => this.pick(n) };
+    });
+    const history = s.history.map(h => ({
+      name:h.name, meta:`10 tracks · ${h.date}`, bg: h.name === s.sel ? 'var(--color-accent-200)' : 'transparent',
+      onOpen: () => this.pick(h.name),
+      onRemove: () => this.setState(p => ({ history:p.history.filter(x => x.name !== h.name) })),
+    }));
+    return {
+      crate, restock: () => { const st = [...G].sort(() => Math.random() - .5).slice(0, 8).map(g => g.name); this.setState({ stock:st }); this.pick(st[0]); },
+      history, historyEmpty: history.length === 0, clearHistory: () => this.setState({ history:[] }),
+      randomize: () => this.roll(),
+      steps: [
+        { n:'1', title:'Roll', body:'Get a random genre from the catalog.' },
+        { n:'2', title:'Listen', body:'Play its tracks right here.' },
+        { n:'3', title:'Dig deeper', body:'Liked it? Continue on Spotify.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

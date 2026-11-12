@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/organic-2ff1e123-2843-4a80-9bd1-e39aa3ff36dc/styles.css">
+<script src="_ds/organic-2ff1e123-2843-4a80-9bd1-e39aa3ff36dc/_ds_bundle.js"></script>
+<style>@keyframes reelspin{to{transform:rotate(360deg)}}body{margin:0;background:var(--color-bg);color:var(--color-text);font-family:var(--font-body)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}</style>
+</helmet>
+<section style="padding:56px 64px 40px;display:flex;flex-direction:column;gap:36px">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:640px">
+    <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">Turn 3 · Riffs on <a href="#2e">2e</a></div>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:40px;line-height:1.1">Crates, sleeves, tapes and shelves</h1>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start">
+
+    <div id="3a" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">3a</span><span style="font-weight:600">Crate flip</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Flip through the crate</h3>
+        <div style="position:relative;flex:1;display:flex;flex-direction:column;justify-content:flex-end;padding:0 14px 54px">
+          <sc-for list="{{ crate3 }}" as="c" hint-placeholder-count="8">
+            <button onClick="{{ c.onClick }}" style="height:{{ c.h }};flex:none;border:none;cursor:pointer;margin-top:-4px;border-radius:14px 14px 0 0;background:{{ c.bg }};color:{{ c.fg }};box-shadow:0 -2px 6px color-mix(in srgb, var(--color-text) 14%, transparent);transition:height .3s cubic-bezier(.3,.7,.3,1);overflow:hidden;text-align:left;padding:0 16px;display:flex;flex-direction:column;gap:6px">
+              <span style="font:700 13px var(--font-body);line-height:26px;flex:none">{{ c.name }}</span>
+              <sc-if value="{{ c.showCover }}" hint-placeholder-val="{{ false }}">
+                <span style="font-family:var(--font-heading);font-size:40px;line-height:1">{{ c.name }}</span>
+                <span style="font-size:14px">{{ c.meta }}</span>
+                <span style="margin-top:8px;align-self:flex-start;background:var(--color-bg);color:var(--color-text);border-radius:999px;padding:8px 16px;font:700 14px var(--font-body)">▶ Play 10 tracks</span>
+              </sc-if>
+            </button>
+          </sc-for>
+          <div style="position:absolute;left:0;right:0;bottom:0;height:50px;border-radius:var(--radius-md);background:var(--color-neutral-400);display:flex;align-items:flex-end;justify-content:center;padding-bottom:12px;box-sizing:border-box;box-shadow:var(--shadow-sm)"><span style="width:90px;height:14px;border-radius:999px;background:var(--color-neutral-600)"></span></div>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Sleeves stand in a crate; tapping one lifts it to show the cover. The closest feel to a shop bin.</p>
+    </div>
+
+    <div id="3b" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">3b</span><span style="font-weight:600">Sleeve &amp; record</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:18px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Slide it out</h3>
+        <div style="position:relative;height:220px">
+          <div style="position:absolute;top:12px;left:{{ bRecX }};width:196px;height:196px;border-radius:50%;background:radial-gradient(circle, var(--color-bg) 0 3%, {{ bSel.bg }} 4% 26%, var(--color-text) 27% 100%);transition:left .45s cubic-bezier(.3,.7,.3,1);box-shadow:var(--shadow-md)"></div>
+          <div style="position:absolute;left:0;top:0;width:220px;height:220px;border-radius:var(--radius-md);background:{{ bSel.bg }};color:{{ bSel.fg }};box-shadow:var(--shadow-md);padding:20px;box-sizing:border-box;display:flex;flex-direction:column;justify-content:flex-end;gap:4px">
+            <span style="font-family:var(--font-heading);font-size:34px;line-height:1">{{ bSel.name }}</span>
+            <span style="font-size:13px">{{ bSel.meta }}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-primary" style="flex:1.4;font-size:14px">Play 10 tracks</button>
+          <button class="btn btn-secondary" style="flex:1;font-size:14px" onClick="{{ bToggle }}">{{ bLabel }}</button>
+        </div>
+        <div style="display:flex;gap:6px;margin-top:auto">
+          <sc-for list="{{ thumbs }}" as="t" hint-placeholder-count="8">
+            <button onClick="{{ t.onClick }}" title="{{ t.name }}" style="flex:1;aspect-ratio:1;border:none;cursor:pointer;border-radius:10px;background:{{ t.bg }};color:{{ t.fg }};box-shadow:{{ t.ring }};font:700 9px var(--font-body);display:flex;align-items:flex-end;padding:5px;overflow:hidden;text-align:left;line-height:1.1">{{ t.name }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">One sleeve at a time with the record peeking out — slides further when playing. Thumbs below to switch.</p>
+    </div>
+
+    <div id="3c" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">3c</span><span style="font-weight:600">Cassette tower</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Pick a tape</h3>
+        <div style="flex:1;background:var(--color-neutral-400);border-radius:var(--radius-md);padding:10px 40px 10px 10px;display:flex;flex-direction:column;gap:5px">
+          <sc-for list="{{ tapes }}" as="t" hint-placeholder-count="10">
+            <button onClick="{{ t.onClick }}" style="flex:1;border:none;cursor:pointer;border-radius:6px;background:{{ t.bg }};transform:translateX({{ t.x }});transition:transform .25s;padding:4px 10px;display:flex;align-items:center;gap:10px">
+              <span style="flex:1;align-self:stretch;background:var(--color-bg);border-radius:3px;display:flex;align-items:center;justify-content:space-between;padding:0 10px;gap:8px"><span style="font:700 12px var(--font-body);color:var(--color-text)">{{ t.name }}</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ t.sub }}</span></span>
+              <span style="width:8px;height:8px;border-radius:50%;background:var(--color-bg);opacity:.6"></span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:20px">{{ tapeSel.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ tapeSel.meta }}</span></span>
+          <button class="btn btn-primary" style="font-size:14px">Play tape</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Tape spines in a rack; the chosen one slides out. Horizontal labels are easier to read than vertical spines.</p>
+    </div>
+
+    <div id="3d" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">3d</span><span style="font-weight:600">Cassette player</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:18px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Side A</h3><span style="font-size:13px;font-weight:700;color:var(--color-neutral-700)">{{ dPos }}</span></div>
+        <div style="flex:1;border-radius:var(--radius-lg);background:{{ dSel.bg }};padding:18px;display:flex;flex-direction:column;gap:14px;box-shadow:var(--shadow-md);transition:background .3s">
+          <div style="background:var(--color-bg);border-radius:var(--radius-md);padding:14px 18px;display:flex;flex-direction:column;gap:2px">
+            <span style="font-family:var(--font-heading);font-size:32px;line-height:1.05">{{ dSel.name }}</span>
+            <span style="font-size:13px;color:var(--color-neutral-700)">{{ dSel.meta }} · 10 tracks</span>
+          </div>
+          <div style="flex:1;background:var(--color-neutral-200);border-radius:999px;display:flex;align-items:center;justify-content:space-around;padding:0 20px">
+            <span>{{ reelL }}</span>
+            <span style="flex:1;max-width:80px;height:40px;margin:0 8px;border-radius:8px;background:var(--color-neutral-400)"></span>
+            <span>{{ reelR }}</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-secondary" style="flex:1" onClick="{{ dPrev }}">⏮</button>
+          <button class="btn btn-primary" style="flex:2" onClick="{{ dToggle }}">{{ dPlayLabel }}</button>
+          <button class="btn btn-secondary" style="flex:1" onClick="{{ dNext }}">⏭</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">A single tape you swap with ⏮ ⏭; the reels spin while playing. Pairs with Randomize = "eject & insert".</p>
+    </div>
+
+    <div id="3e" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">3e</span><span style="font-weight:600">Record wall</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Choose a record</h3>
+        <div style="flex:1;min-height:0;display:grid;grid-template-columns:repeat(3,1fr);gap:2px 14px;align-content:center">
+          <sc-for list="{{ records }}" as="r" hint-placeholder-count="9">
+            <button onClick="{{ r.onClick }}" style="border:none;background:none;cursor:pointer;padding:0;display:flex;flex-direction:column;align-items:center;gap:6px">
+              <span style="width:82px;height:82px;border-radius:50%;background:radial-gradient(circle, var(--color-bg) 0 4%, {{ r.bg }} 5% 32%, var(--color-text) 33% 60%, var(--color-neutral-800) 61% 63%, var(--color-text) 64%);box-shadow:{{ r.ring }};transform:{{ r.rot }};transition:transform .4s"></span>
+              <span style="font:{{ r.weight }} 13px var(--font-body);color:var(--color-text)">{{ r.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--color-bg);border-radius:999px;padding:8px 8px 8px 20px">
+          <span style="display:flex;flex-direction:column"><span style="font:700 15px var(--font-body)">{{ recSel.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ recSel.meta }}</span></span>
+          <button class="btn btn-primary" style="font-size:14px">Drop the needle</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Naked records on a wall, label color per genre. Echoes the vinyl motif already on your page.</p>
+    </div>
+
+    <div id="3f" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">3f</span><span style="font-weight:600">Two-tier shelf</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:12px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">The back shelf</h3>
+        <div style="height:166px;display:flex;align-items:flex-end;gap:4px;padding:0 10px;border-bottom:8px solid var(--color-neutral-400);border-radius:0 0 4px 4px">
+          <sc-for list="{{ shelfTop }}" as="sp" hint-placeholder-count="6">
+            <button onClick="{{ sp.onClick }}" style="width:{{ sp.w }};height:{{ sp.h }};flex:none;border:none;cursor:pointer;border-radius:6px 6px 0 0;background:{{ sp.bg }};color:{{ sp.fg }};transform:{{ sp.lift }};transform-origin:bottom left;transition:transform .25s;display:flex;align-items:flex-end;justify-content:center;padding:10px 0">
+              <span style="writing-mode:vertical-rl;transform:rotate(180deg);font:700 12px var(--font-body);white-space:nowrap">{{ sp.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="height:166px;display:flex;align-items:flex-end;justify-content:flex-end;gap:4px;padding:0 10px;border-bottom:8px solid var(--color-neutral-400);border-radius:0 0 4px 4px">
+          <sc-for list="{{ shelfBot }}" as="sp" hint-placeholder-count="5">
+            <button onClick="{{ sp.onClick }}" style="width:{{ sp.w }};height:{{ sp.h }};flex:none;border:none;cursor:pointer;border-radius:6px 6px 0 0;background:{{ sp.bg }};color:{{ sp.fg }};transform:{{ sp.lift }};transform-origin:bottom left;transition:transform .25s;display:flex;align-items:flex-end;justify-content:center;padding:10px 0">
+              <span style="writing-mode:vertical-rl;transform:rotate(180deg);font:700 12px var(--font-body);white-space:nowrap">{{ sp.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:auto">
+          <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:20px">{{ fSel.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ fSel.meta }}</span></span>
+          <button class="btn btn-primary" style="font-size:14px">Play 10 tracks</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Two shelves with mixed widths and one leaning record — a lived-in shop. More genres, same footprint.</p>
+    </div>
+
+  </div>
+</section>
+<section style="padding:40px 64px 40px;display:flex;flex-direction:column;gap:36px">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:640px">
+    <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">Turn 2 · Six more directions</div>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:40px;line-height:1.1">New ways in: by letter, place, time, sound</h1>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start">
+
+    <div id="2a" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2a</span><span style="font-weight:600">A–Z index</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:16px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Browse by letter</h3>
+        <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:6px">
+          <sc-for list="{{ letters }}" as="l" hint-placeholder-count="26">
+            <button onClick="{{ l.onClick }}" style="aspect-ratio:1;border:none;border-radius:50%;cursor:{{ l.cursor }};font:700 14px var(--font-body);background:{{ l.bg }};color:{{ l.fg }}">{{ l.L }}</button>
+          </sc-for>
+        </div>
+        <div style="flex:1;overflow:auto;display:flex;flex-direction:column;gap:2px">
+          <sc-for list="{{ azList }}" as="g" hint-placeholder-count="3">
+            <button style="border:none;background:none;cursor:pointer;text-align:left;padding:10px 12px;border-radius:999px;display:flex;justify-content:space-between;align-items:baseline;gap:12px" style-hover="background:var(--color-accent-2-200)">
+              <span style="font-family:var(--font-heading);font-size:22px;color:var(--color-text)">{{ g.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ g.meta }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">A record-store divider feel. Scales to 7,000 genres without looking crowded.</p>
+    </div>
+
+    <div id="2b" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2b</span><span style="font-weight:600">Around the world</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:16px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Where should we go?</h3>
+        <div style="display:flex;gap:6px;background:var(--color-bg);border-radius:999px;padding:5px">
+          <sc-for list="{{ regions }}" as="r" hint-placeholder-count="4">
+            <button onClick="{{ r.onClick }}" style="flex:1;border:none;cursor:pointer;border-radius:999px;padding:9px 0;font:600 14px var(--font-body);background:{{ r.bg }};color:{{ r.fg }}">{{ r.name }}</button>
+          </sc-for>
+        </div>
+        <div style="flex:1;display:flex;flex-direction:column;gap:8px">
+          <sc-for list="{{ regList }}" as="g" hint-placeholder-count="4">
+            <button style="border:none;cursor:pointer;text-align:left;background:var(--color-bg);border-radius:var(--radius-md);padding:12px 16px;display:flex;justify-content:space-between;align-items:center;gap:12px" style-hover="background:var(--color-accent-2-200)">
+              <span style="display:flex;flex-direction:column"><span style="font:700 16px var(--font-body);color:var(--color-text)">{{ g.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ g.meta }}</span></span>
+              <span style="width:30px;height:30px;border-radius:50%;background:var(--color-accent-2-300);color:var(--color-accent-2-900);display:flex;align-items:center;justify-content:center;font-size:11px">▶</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Origin as the hook — "music from Zambia" is easier to want than a genre name.</p>
+    </div>
+
+    <div id="2c" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2c</span><span style="font-weight:600">Time machine</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:18px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Pick a decade</h3>
+        <div style="position:relative;display:flex;justify-content:space-between;padding:0 4px">
+          <div style="position:absolute;left:16px;right:16px;top:15px;height:4px;border-radius:4px;background:var(--color-accent-2-300)"></div>
+          <sc-for list="{{ decades }}" as="d" hint-placeholder-count="6">
+            <button onClick="{{ d.onClick }}" style="position:relative;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;width:34px;padding:0">
+              <span style="height:34px;display:flex;align-items:center"><span style="width:{{ d.dot }};height:{{ d.dot }};border-radius:50%;background:{{ d.bg }};box-shadow:0 0 0 4px var(--color-surface)"></span></span>
+              <span style="font:700 14px var(--font-body);color:{{ d.fg }}">’{{ d.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <span style="font-family:var(--font-heading);font-size:56px;line-height:1;color:var(--color-accent-700)">{{ decLabel }}</span>
+        <div style="flex:1;display:flex;flex-wrap:wrap;align-content:flex-start;gap:8px">
+          <sc-for list="{{ decList }}" as="g" hint-placeholder-count="4">
+            <button style="border:none;cursor:pointer;background:var(--color-bg);border-radius:999px;padding:8px 16px 8px 8px;display:flex;align-items:center;gap:10px" style-hover="background:var(--color-accent-2-200)">
+              <span style="width:26px;height:26px;border-radius:50%;background:radial-gradient(circle, var(--color-accent-2-300) 0 26%, var(--color-text) 28%)"></span>
+              <span style="display:flex;flex-direction:column;text-align:left"><span style="font:700 14px var(--font-body);color:var(--color-text)">{{ g.name }}</span><span style="font-size:11px;color:var(--color-neutral-700)">{{ g.meta }}</span></span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">A decade rail. Nostalgia does the selling; good for "what did the 70s sound like in Ghana?"</p>
+    </div>
+
+    <div id="2d" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2d</span><span style="font-weight:600">Type wall</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:16px;overflow:hidden">
+        <div style="flex:1;display:flex;flex-wrap:wrap;align-content:flex-start;column-gap:14px;row-gap:2px">
+          <sc-for list="{{ wall }}" as="w" hint-placeholder-count="18">
+            <button onClick="{{ w.onClick }}" style="border:none;background:none;padding:0;cursor:pointer;font-family:var(--font-heading);font-size:27px;line-height:1.3;color:{{ w.fg }};text-decoration:{{ w.deco }};text-decoration-thickness:3px;text-underline-offset:5px" style-hover="color:var(--color-accent-700)">{{ w.name }}</button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--color-bg);border-radius:999px;padding:8px 8px 8px 20px">
+          <span style="display:flex;flex-direction:column"><span style="font:700 15px var(--font-body)">{{ wallSel.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ wallSel.meta }}</span></span>
+          <button class="btn btn-primary" style="font-size:14px">Listen</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">No chips at all — just the names set big, like a festival poster. Pure typographic.</p>
+    </div>
+
+    <div id="2e" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2e</span><span style="font-weight:600">Record shelf</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Pull one out</h3>
+        <div style="flex:1;display:flex;align-items:flex-end;gap:4px;padding-top:30px;border-bottom:6px solid var(--color-neutral-400);border-radius:0 0 4px 4px">
+          <sc-for list="{{ spines }}" as="sp" hint-placeholder-count="10">
+            <button onClick="{{ sp.onClick }}" style="flex:1;height:{{ sp.h }};border:none;cursor:pointer;border-radius:8px 8px 0 0;background:{{ sp.bg }};color:{{ sp.fg }};box-shadow:{{ sp.shadow }};transform:translateY({{ sp.lift }});transition:transform .25s;display:flex;align-items:flex-end;justify-content:center;padding:12px 0" style-hover="filter:brightness(1.05)">
+              <span style="writing-mode:vertical-rl;transform:rotate(180deg);font:700 13px var(--font-body);letter-spacing:.04em;white-space:nowrap">{{ sp.name }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <span style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:20px">{{ shelfSel.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ shelfSel.meta }}</span></span>
+          <button class="btn btn-primary" style="font-size:14px">Play 10 tracks</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Genres as record spines on a shelf. Tactile and fun; works best with ~10 curated picks.</p>
+    </div>
+
+    <div id="2f" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2f</span><span style="font-weight:600">Two questions</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:20px;overflow:hidden">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:var(--font-heading);font-size:22px">How are you feeling?</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ q1 }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="border:none;cursor:pointer;border-radius:999px;padding:9px 18px;font:600 15px var(--font-body);background:{{ o.bg }};color:{{ o.fg }}">{{ o.name }}</button></sc-for>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <span style="font-family:var(--font-heading);font-size:22px">What do you want to hear?</span>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <sc-for list="{{ q2 }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.onClick }}" style="border:none;cursor:pointer;border-radius:999px;padding:9px 18px;font:600 15px var(--font-body);background:{{ o.bg }};color:{{ o.fg }}">{{ o.name }}</button></sc-for>
+          </div>
+        </div>
+        <div style="flex:1;background:var(--color-accent-2-300);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;justify-content:flex-end;gap:6px">
+          <sc-if value="{{ quizWaiting }}" hint-placeholder-val="{{ true }}"><span style="font-size:15px;color:var(--color-accent-2-900)">Answer both and we'll pick a genre for you.</span></sc-if>
+          <sc-if value="{{ quizReady }}" hint-placeholder-val="{{ false }}">
+            <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--color-accent-2-900)">Try this</span>
+            <span style="font-family:var(--font-heading);font-size:40px;line-height:1;color:var(--color-text)">{{ quizResult.name }}</span>
+            <span style="font-size:14px;color:var(--color-accent-2-900)">{{ quizResult.meta }}</span>
+            <div style="display:flex;gap:8px;margin-top:10px"><button class="btn btn-primary" style="font-size:14px">Listen</button><button class="btn btn-ghost" style="font-size:14px" onClick="{{ quizReset }}">Start over</button></div>
+          </sc-if>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Guided: two taps lead to a recommendation. Lowest effort for someone who knows nothing.</p>
+    </div>
+
+  </div>
+</section>
+<section style="padding:40px 64px 80px;display:flex;flex-direction:column;gap:36px">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:640px">
+    <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">Turn 1 · Genre panel alternatives</div>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:40px;line-height:1.1">Six ways to replace the chip grid</h1>
+    <p style="margin:0;font-size:16px;line-height:1.5;text-wrap:pretty">Each panel fits the same slot (≈440×500) next to the hero. All are clickable.</p>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:40px;align-items:flex-start">
+
+    <!-- 1a Families -->
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1a</span><span style="font-weight:600">Grouped by family</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:24px 26px;display:flex;flex-direction:column;gap:12px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Start somewhere</h3>
+          <button class="btn btn-ghost" style="font-size:14px;padding:6px 12px" onClick="{{ famShuffle }}">Shuffle</button>
+        </div>
+        <sc-for list="{{ families }}" as="f" hint-placeholder-count="4">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--color-accent-2-800)">{{ f.label }}</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px">
+              <sc-for list="{{ f.chips }}" as="c" hint-placeholder-count="4">
+                <button onClick="{{ c.onClick }}" style="border:none;cursor:pointer;border-radius:999px;padding:6px 13px;font:600 14px var(--font-body);background:{{ c.bg }};color:{{ c.fg }}" style-hover="filter:brightness(0.96)">{{ c.name }}</button>
+              </sc-for>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Same chips, but grouped — gives a first-timer a sense of where each genre lives.</p>
+    </div>
+
+    <!-- 1b Bubbles -->
+    <div id="1b" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1b</span><span style="font-weight:600">Bubble cloud</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:12px;overflow:hidden">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Bigger = rarer</h3>
+        <div style="flex:1;display:flex;flex-wrap:wrap;justify-content:center;align-content:center;align-items:center;gap:6px">
+          <sc-for list="{{ bubbles }}" as="b" hint-placeholder-count="12">
+            <button onClick="{{ b.onClick }}" style="width:{{ b.size }};height:{{ b.size }};border-radius:50%;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;text-align:center;padding:6px;font:600 {{ b.fs }} var(--font-body);line-height:1.1;background:{{ b.bg }};color:{{ b.fg }};transition:transform .2s" style-hover="transform:scale(1.07)">{{ b.name }}</button>
+          </sc-for>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Soft circles sized by obscurity — leans into the round shapes and makes rarity visible.</p>
+    </div>
+
+    <!-- 1c Mood map -->
+    <div id="1c" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1c</span><span style="font-weight:600">Mood map</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:12px">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Pick a feeling</h3>
+        <div style="position:relative;flex:1;background:var(--color-bg);border-radius:var(--radius-md);margin:0 0 4px">
+          <div style="position:absolute;left:50%;top:14px;bottom:14px;border-left:2px dashed var(--color-neutral-300)"></div>
+          <div style="position:absolute;top:50%;left:14px;right:14px;border-top:2px dashed var(--color-neutral-300)"></div>
+          <span style="position:absolute;top:6px;left:50%;transform:translateX(-50%);background:var(--color-bg);padding:0 6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Electronic</span>
+          <span style="position:absolute;bottom:6px;left:50%;transform:translateX(-50%);background:var(--color-bg);padding:0 6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Acoustic</span>
+          <span style="position:absolute;left:4px;top:50%;transform:translateY(-50%) rotate(-90deg);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Calm</span>
+          <span style="position:absolute;right:-4px;top:50%;transform:translateY(-50%) rotate(90deg);font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--color-neutral-700)">Wild</span>
+          <div style="position:absolute;inset:26px 30px">
+            <sc-for list="{{ dots }}" as="d" hint-placeholder-count="0">
+              <button onClick="{{ d.onClick }}" style="position:absolute;left:{{ d.x }};top:{{ d.y }};transform:translate(-50%,-50%);border:none;background:none;padding:0;cursor:pointer;display:flex;align-items:center;gap:4px;flex-direction:{{ d.dir }}">
+                <span style="width:{{ d.dot }};height:{{ d.dot }};border-radius:50%;background:{{ d.bg }};flex:none"></span>
+                <span style="font:{{ d.weight }} 12px var(--font-body);white-space:nowrap;color:var(--color-text)">{{ d.name }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+          <div style="display:flex;flex-direction:column"><span style="font-family:var(--font-heading);font-size:20px">{{ moodSel.name }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ moodSel.meta }}</span></div>
+          <button class="btn btn-primary" style="font-size:14px">Listen</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">Genres plotted by energy and texture. Users choose a vibe, not a name they don't know yet.</p>
+    </div>
+
+    <!-- 1d Tuner -->
+    <div id="1d" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1d</span><span style="font-weight:600">Radio tuner</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:20px">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Tune in</h3>
+        <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:6px">
+          <span style="font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;color:var(--color-accent-700)">Now on {{ tuneFreq }}</span>
+          <span style="font-family:var(--font-heading);font-size:48px;line-height:1">{{ tuneSel.name }}</span>
+          <span style="font-size:15px;color:var(--color-neutral-700)">{{ tuneSel.meta }}</span>
+        </div>
+        <div style="position:relative;height:96px;overflow:hidden;border-radius:var(--radius-md);background:var(--color-bg)">
+          <div style="position:absolute;left:0;top:0;bottom:0;display:flex;transition:transform .35s cubic-bezier(.3,.7,.3,1);transform:translateX({{ tuneOffset }})">
+            <sc-for list="{{ stations }}" as="s" hint-placeholder-count="0">
+              <button onClick="{{ s.onClick }}" style="width:110px;flex:none;border:none;background:none;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:8px;padding:0 0 14px">
+                <span style="font:600 12px var(--font-body);color:{{ s.fg }};white-space:nowrap">{{ s.name }}</span>
+                <span style="display:flex;gap:9px;align-items:flex-end;height:26px"><span style="width:2px;height:10px;background:var(--color-neutral-400);border-radius:2px"></span><span style="width:2px;height:10px;background:var(--color-neutral-400);border-radius:2px"></span><span style="width:3px;height:24px;background:var(--color-neutral-600);border-radius:2px"></span><span style="width:2px;height:10px;background:var(--color-neutral-400);border-radius:2px"></span><span style="width:2px;height:10px;background:var(--color-neutral-400);border-radius:2px"></span></span>
+              </button>
+            </sc-for>
+          </div>
+          <div style="position:absolute;left:50%;top:54px;bottom:8px;width:4px;margin-left:-2px;background:var(--color-accent);border-radius:4px"></div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-secondary" style="flex:1" onClick="{{ tunePrev }}">← Prev</button>
+          <button class="btn btn-secondary" style="flex:1" onClick="{{ tuneNext }}">Next →</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">One genre at a time on a dial. Playful, music-native, and pairs well with the Space shortcut.</p>
+    </div>
+
+    <!-- 1e Crate -->
+    <div id="1e" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1e</span><span style="font-weight:600">Record crate + search</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:14px">
+        <h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Dig the crate</h3>
+        <input class="input" placeholder="Search 7,000 genres…" value="{{ q }}" onChange="{{ onQ }}" style="width:100%;box-sizing:border-box">
+        <div style="flex:1;overflow:auto;display:flex;flex-direction:column;gap:4px;margin:0 -8px;padding:0 8px">
+          <sc-for list="{{ crate }}" as="r" hint-placeholder-count="6">
+            <button onClick="{{ r.onClick }}" style="border:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:8px 12px 8px 8px;border-radius:999px;text-align:left;background:{{ r.bg }}" style-hover="background:var(--color-accent-2-200)">
+              <span style="width:36px;height:36px;border-radius:50%;flex:none;background:radial-gradient(circle, {{ r.disc }} 0 28%, var(--color-text) 30%);"></span>
+              <span style="flex:1;display:flex;flex-direction:column"><span style="font:700 15px var(--font-body);color:var(--color-text)">{{ r.name }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ r.meta }}</span></span>
+              <span style="font-size:13px;font-weight:700;color:var(--color-accent-700)">{{ r.cta }}</span>
+            </button>
+          </sc-for>
+          <sc-if value="{{ crateEmpty }}" hint-placeholder-val="{{ false }}"><div style="padding:24px 8px;font-size:14px;color:var(--color-neutral-700)">Nothing here yet — try Randomize.</div></sc-if>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">A scannable list with origin and era, plus search for people who already know what they want.</p>
+    </div>
+
+    <!-- 1f Deck -->
+    <div id="1f" style="display:flex;flex-direction:column;gap:12px;width:440px">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1f</span><span style="font-weight:600">Shuffle deck</span></div>
+      <div style="height:500px;box-sizing:border-box;background:var(--color-surface);border-radius:var(--radius-lg);padding:26px;display:flex;flex-direction:column;gap:18px">
+        <div style="display:flex;justify-content:space-between;align-items:center"><h3 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:24px">Today's picks</h3><span style="font-size:13px;font-weight:700;color:var(--color-neutral-700)">{{ deckPos }}</span></div>
+        <div style="position:relative;flex:1">
+          <div style="position:absolute;inset:14px 10px 0;background:var(--color-accent-2-300);border-radius:var(--radius-lg);transform:rotate(4deg)"></div>
+          <div style="position:absolute;inset:7px 5px 0;background:var(--color-accent-200);border-radius:var(--radius-lg);transform:rotate(-3deg)"></div>
+          <div style="position:absolute;inset:0;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:26px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;gap:6px;flex-wrap:wrap"><span class="tag tag-accent-2">{{ deckCard.origin }}</span><span class="tag tag-neutral">{{ deckCard.era }}</span></div>
+            <span style="font-family:var(--font-heading);font-size:44px;line-height:1;margin-top:auto">{{ deckCard.name }}</span>
+            <p style="margin:0;font-size:15px;line-height:1.5;text-wrap:pretty">{{ deckCard.desc }}</p>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px">
+          <button class="btn btn-secondary" style="flex:1" onClick="{{ deckNext }}">Skip</button>
+          <button class="btn btn-primary" style="flex:1.4">Play 10 tracks</button>
+        </div>
+      </div>
+      <p style="margin:0;font-size:14px;line-height:1.45;color:var(--color-neutral-700)">One card with context instead of 18 names. Strongest for "never heard of" — it explains each genre.</p>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const G = [
+  ['Indie Folk','Folk & roots','US','2000s',2,22,72,.2],
+  ['Psychedelic','Rock & guitar','UK','1960s',1,60,66,.3],
+  ['Afrobeat','Global grooves','Nigeria','1970s',2,82,80,.2],
+  ['Post-rock','Rock & guitar','UK','1990s',2,46,56,.4],
+  ['Bossa Nova','Global grooves','Brazil','1950s',1,10,88,0],
+  ['Zamrock','Global grooves','Zambia','1970s',3,70,90,.2],
+  ['Chillwave','Electronic','US','2009',2,16,22,.8],
+  ['Synthwave','Electronic','US','2000s',1,60,8,.9],
+  ['Trip hop','Electronic','Bristol','1990s',1,38,34,.7],
+  ['Krautrock','Rock & guitar','Germany','1970s',2,56,42,.6],
+  ['Dream Pop','Rock & guitar','UK','1980s',1,22,50,.5],
+  ['Noise','Outer edges','Japan','1980s',3,90,36,.7],
+  ['Shoegaze','Rock & guitar','UK','1990s',2,34,64,.5],
+  ['Math Rock','Rock & guitar','US','1990s',2,86,58,.2],
+  ['Zeuhl','Outer edges','France','1970s',3,74,74,.3],
+  ['Post-punk','Rock & guitar','UK','1978',1,66,52,.4],
+  ['New Wave','Electronic','UK','1980s',1,74,22,.7],
+  ['Funk','Global grooves','US','1960s',1,50,82,.1],
+].map(([name,family,origin,era,rare,x,y]) => ({name,family,origin,era,rare,x,y}));
+const EXTRA = [['City Pop','Japan','1980s'],['Ethio-jazz','Ethiopia','1960s'],['Highlife','Ghana','1950s'],['Cumbia','Colombia','1950s'],['Tropicália','Brazil','1960s'],['Dangdut','Indonesia','1970s'],['Qawwali','Pakistan','1950s'],['Kosmische','Germany','1970s']].map(([name,origin,era]) => ({name,origin,era}));
+const REG = { US:'Americas', Brazil:'Americas', Colombia:'Americas', UK:'Europe', Bristol:'Europe', Germany:'Europe', France:'Europe', Nigeria:'Africa', Zambia:'Africa', Ethiopia:'Africa', Ghana:'Africa', Japan:'Asia', Indonesia:'Asia', Pakistan:'Asia' };
+const G2 = G.concat(EXTRA).map(g => ({ ...g, region: REG[g.origin], decade: g.era.slice(0,3) + '0s' }));
+const QUIZ = { 'Calm|Guitars':'Dream Pop','Calm|Synths':'Chillwave','Calm|Drums & horns':'Bossa Nova','Groovy|Guitars':'Krautrock','Groovy|Synths':'Trip hop','Groovy|Drums & horns':'Ethio-jazz','Wild|Guitars':'Zamrock','Wild|Synths':'Noise','Wild|Drums & horns':'Afrobeat' };
+const DESC = {
+  'Zamrock':'Zambian rock from the 70s — fuzzed guitars, James Brown swagger and psychedelic haze, born in Lusaka clubs.',
+  'Zeuhl':'A French prog offshoot built on chanting choirs, hammering bass and an invented language. Intense and ritualistic.',
+  'Krautrock':'German experiments with hypnotic motorik beats, analog synths and long repetitive grooves.',
+  'Afrobeat':'Fela Kuti\'s fusion of highlife, jazz and funk — big horn sections, long jams, political edge.',
+  'Shoegaze':'Walls of distorted, swirling guitar with vocals buried in the mix. Loud and dreamy at once.',
+  'Chillwave':'Hazy, lo-fi synth pop that sounds like a faded summer VHS tape.',
+};
+const FAM = ['Rock & guitar','Electronic','Global grooves','Outer edges'];
+const famMap = { 'Folk & roots':'Global grooves' };
+
+class Component extends DCLogic {
+  rv3() {
+    const s = this.state, set = o => () => this.setState(o), m = g => `${g.origin} · ${g.era}`;
+    const T = [['var(--color-accent-2-300)','var(--color-accent-2-900)'],['var(--color-accent-200)','var(--color-accent-900)'],['var(--color-text)','var(--color-bg)'],['var(--color-accent-2-500)','var(--color-bg)'],['var(--color-accent)','var(--color-bg)'],['var(--color-neutral-200)','var(--color-text)']];
+    const N = ['Zamrock','Zeuhl','Krautrock','Afrobeat','Shoegaze','City Pop','Ethio-jazz','Trip hop','Cumbia','Bossa Nova','Dream Pop'];
+    const S = N.map((n,i) => { const g = G2.find(x => x.name === n); return { ...g, meta:m(g), bg:T[i%6][0], fg:T[i%6][1], i }; });
+    const cyc = (k, d) => () => this.setState(p => ({ [k]: (p[k] + d + S.length) % S.length }));
+    const crate = S.slice(0,8).map(g => { const on = s.a3 === g.i; return { ...g, h: on ? '186px' : '26px', on, onClick:set({a3:g.i}) }; });
+    const crateOn = crate.map(c => ({ ...c, showCover: c.on }));
+    const bg3 = S[s.b3];
+    const thumbs = S.slice(0,8).map(g => ({ ...g, ring: s.b3 === g.i ? '0 0 0 3px var(--color-accent)' : 'none', onClick: () => this.setState({ b3:g.i, bOut:false }) }));
+    const tapes = S.slice(0,10).map(g => { const on = s.c3 === g.i; return { ...g, x: on ? '26px' : '0', sub: on ? g.meta : '', onClick:set({c3:g.i}) }; });
+    const dg = S[s.d3], spin = s.dPlay ? 'reelspin 1.6s linear infinite' : 'none';
+    const reel = () => React.createElement('span', { style:{ width:64, height:64, borderRadius:'50%', background:'var(--color-bg)', display:'flex', alignItems:'center', justifyContent:'center' } },
+      React.createElement('span', { style:{ width:34, height:34, borderRadius:'50%', background:'repeating-conic-gradient(var(--color-text) 0 18deg, var(--color-neutral-200) 18deg 60deg)', animation:spin } }));
+    const records = S.slice(0,9).map(g => { const on = s.e3 === g.i; return { ...g, ring: on ? '0 0 0 4px var(--color-accent)' : 'none', rot: on ? 'rotate(24deg)' : 'none', weight: on ? '800' : '600', onClick:set({e3:g.i}) }; });
+    const W = [28,26,40,30,26,34,28,44,26,30,32], H = [150,132,160,140,124,156,138,148,130,158,144];
+    const spine = g => { const on = s.f3 === g.i; return { ...g, w:W[g.i]+'px', h:H[g.i]+'px', lift: on ? 'translateY(-18px)' : (g.i === 4 ? 'rotate(-9deg)' : 'none'), origin: 'bottom left', onClick:set({f3:g.i}) }; };
+    return {
+      crate3: crateOn,
+      bSel: bg3, bRecX: s.bOut ? '150px' : '46px', bToggle: () => this.setState(p => ({ bOut: !p.bOut })), bLabel: s.bOut ? 'Put back' : 'Pull out', thumbs,
+      tapes, tapeSel: S[s.c3],
+      dSel: dg, reelL: reel(), reelR: reel(), dPrev: cyc('d3', -1), dNext: cyc('d3', 1), dPlayLabel: s.dPlay ? 'Pause' : 'Play', dToggle: () => this.setState(p => ({ dPlay: !p.dPlay })), dPos: `${s.d3 + 1} / ${S.length}`,
+      records, recSel: S[s.e3],
+      shelfTop: S.slice(0,6).map(spine), shelfBot: S.slice(6).map(spine), fSel: S[s.f3],
+    };
+  }
+  rv2() {
+    const s = this.state, set = o => () => this.setState(o), m = g => `${g.origin} · ${g.era}`;
+    const pill = on => ({ bg: on ? 'var(--color-accent)' : 'var(--color-bg)', fg: on ? 'var(--color-bg)' : 'var(--color-text)' });
+    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('').map(L => {
+      const has = G2.some(g => g.name[0] === L), on = s.az === L;
+      return { L, onClick: has ? set({az:L}) : undefined, cursor: has ? 'pointer' : 'default',
+        bg: on ? 'var(--color-accent)' : has ? 'var(--color-bg)' : 'transparent', fg: on ? 'var(--color-bg)' : has ? 'var(--color-text)' : 'var(--color-neutral-400)' };
+    });
+    const azList = G2.filter(g => g.name[0] === s.az).map(g => ({ name:g.name, meta:m(g) }));
+    const regions = ['Africa','Americas','Europe','Asia'].map(r => ({ name:r, ...pill(s.reg === r), onClick:set({reg:r}) }));
+    const regList = G2.filter(g => g.region === s.reg).slice(0,5).map(g => ({ name:g.name, meta:`${g.origin} · ${g.era}` }));
+    const decades = ['1950s','1960s','1970s','1980s','1990s','2000s'].map(d => {
+      const on = s.dec === d;
+      return { name:d.slice(2), dot: on ? '22px' : '12px', bg: on ? 'var(--color-accent)' : 'var(--color-accent-2)', fg: on ? 'var(--color-accent-700)' : 'var(--color-neutral-700)', onClick:set({dec:d}) };
+    });
+    const decList = G2.filter(g => g.decade === s.dec).map(g => ({ name:g.name, meta:g.origin }));
+    const wall = G.map(g => { const on = s.wall === g.name; return { name:g.name, fg: on ? 'var(--color-accent-700)' : 'var(--color-text)', deco: on ? 'underline' : 'none', onClick:set({wall:g.name}) }; });
+    const wg = G.find(g => g.name === s.wall);
+    const heights = [262,228,278,210,252,290,222,268,238,258];
+    const tones = ['var(--color-accent-2-300)','var(--color-accent-200)','var(--color-text)','var(--color-accent-2-500)','var(--color-accent)'];
+    const shelfG = G2.filter((g,i) => [5,14,9,2,12,18,19,8,0,21].includes(i));
+    const spines = shelfG.map((g,i) => { const on = s.shelf === g.name, t = tones[i%5], dark = i%5 >= 2;
+      return { name:g.name, h:heights[i]+'px', bg:t, fg: dark ? 'var(--color-bg)' : 'var(--color-text)', lift: on ? '-26px' : '0', shadow: on ? 'var(--shadow-md)' : 'none', onClick:set({shelf:g.name}) }; });
+    const sg = G2.find(g => g.name === s.shelf);
+    const q1 = ['Calm','Groovy','Wild'].map(o => ({ name:o, ...pill(s.m1 === o), onClick:set({m1:o}) }));
+    const q2 = ['Guitars','Synths','Drums & horns'].map(o => ({ name:o, ...pill(s.m2 === o), onClick:set({m2:o}) }));
+    const qn = s.m1 && s.m2 ? QUIZ[s.m1 + '|' + s.m2] : null, qg = qn && G2.find(g => g.name === qn);
+    return { letters, azList, regions, regList, decades, decList, decLabel: s.dec, wall, wallSel:{ name:wg.name, meta:m(wg) },
+      spines, shelfSel:{ name:sg.name, meta:m(sg) }, q1, q2, quizReady: !!qg, quizWaiting: !qg,
+      quizResult: qg ? { name:qg.name, meta:m(qg) } : { name:'', meta:'' }, quizReset: set({m1:null, m2:null}) };
+  }
+  state = { a3:0, b3:1, bOut:true, c3:3, d3:5, dPlay:false, e3:0, f3:2, az:'S', reg:'Africa', dec:'1970s', wall:'Zeuhl', shelf:'Zamrock', m1:'Groovy', m2:null, fam:'Psychedelic', bub:'Zamrock', mood:'Trip hop', tune:5, q:'', crate:'Shoegaze', deck:0 };
+  meta(g){ return `${g.origin} · ${g.era}`; }
+  renderVals() {
+    const s = this.state, set = o => () => this.setState(o);
+    const families = FAM.map(label => ({ label, chips: G.filter(g => (famMap[g.family]||g.family) === label).map(g => {
+      const on = s.fam === g.name;
+      return { name:g.name, onClick:set({fam:g.name}), bg: on?'var(--color-accent)':'var(--color-bg)', fg: on?'var(--color-bg)':'var(--color-text)' };
+    })}));
+    const tones = [['var(--color-accent-2-300)','var(--color-accent-2-900)'],['var(--color-accent-200)','var(--color-accent-900)'],['var(--color-bg)','var(--color-text)']];
+    const bubbles = G.slice(0,14).map((g,i) => {
+      const on = s.bub === g.name, sz = [0,66,84,104][g.rare], t = tones[i%3];
+      return { name:g.name, size:sz+'px', fs:(g.rare===3?15:13)+'px', onClick:set({bub:g.name}), bg: on?'var(--color-text)':t[0], fg: on?'var(--color-bg)':t[1] };
+    });
+    const dots = G.filter(g => !['Post-rock','Funk','Zeuhl','Post-punk'].includes(g.name)).map(g => {
+      const on = s.mood === g.name;
+      return { name:g.name, x:g.x+'%', y:g.y+'%', dir: g.x>72?'row-reverse':'row', dot: on?'16px':'10px', bg: on?'var(--color-accent)':'var(--color-accent-2)', weight: on?'800':'500', onClick:set({mood:g.name}) };
+    });
+    const mg = G.find(g => g.name === s.mood);
+    const ti = s.tune, tg = G[ti];
+    const stations = G.map((g,i) => ({ name:g.name, fg: i===ti?'var(--color-accent-700)':'var(--color-neutral-700)', onClick:set({tune:i}) }));
+    const q = s.q.trim().toLowerCase();
+    const crate = G.filter(g => !q || g.name.toLowerCase().includes(q) || g.origin.toLowerCase().includes(q)).map((g,i) => {
+      const on = s.crate === g.name;
+      return { name:g.name, meta:this.meta(g), cta: on?'▶ Playing':'', disc: i%2?'var(--color-accent)':'var(--color-accent-2)', bg: on?'var(--color-accent-2-200)':'transparent', onClick:set({crate:g.name}) };
+    });
+    const dk = Object.keys(DESC), dn = dk[s.deck % dk.length], dg = G.find(g => g.name === dn);
+    return { ...this.rv2(), ...this.rv3(),
+      families, famShuffle: () => this.setState({ fam: G[Math.floor(Math.random()*G.length)].name }),
+      bubbles, dots, moodSel: { name:mg.name, meta:this.meta(mg) },
+      stations, tuneSel: { name:tg.name, meta:this.meta(tg) }, tuneFreq: (88.1 + ti*1.2).toFixed(1)+' FM',
+      tuneOffset: (194 - (ti*110 + 55))+'px',
+      tunePrev: () => this.setState(p => ({ tune:(p.tune - 1 + G.length) % G.length })),
+      tuneNext: () => this.setState(p => ({ tune:(p.tune + 1) % G.length })),
+      q: s.q, onQ: e => this.setState({ q:e.target.value }), crate, crateEmpty: crate.length === 0,
+      deckCard: { ...dg, desc: DESC[dn] }, deckPos: `${(s.deck % dk.length)+1} / ${dk.length}`,
+      deckNext: () => this.setState(p => ({ deck:p.deck + 1 })),
+    };
+  }
+}
+</script>
+</body>
+</html>

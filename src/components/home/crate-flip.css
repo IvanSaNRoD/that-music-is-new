@@ -1,0 +1,132 @@
+/* Crate Flip — spec: docs/claude-design/design_handoff_crate_flip/README.md (Seiji-Kinari tokens). */
+
+.crate-stack {
+  position: relative;
+  flex: 1;
+  min-height: 0;
+  margin-top: 26px; /* breathing room under the heading (≈40px with the panel gap) */
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end; /* sleeves sit at the bottom */
+  padding: 0 14px 36px; /* front is 50px tall → last sleeve tucks 14px behind it, like every other overlap */
+}
+
+.crate-sleeve {
+  /* All sleeves positioned → later sleeves always paint over earlier ones (incl. the open one). */
+  position: relative;
+  flex: none;
+  /* Each sleeve overlaps the previous by its corner radius (14px), so the rounded top corners
+     show the sleeve behind instead of the panel. Visible tab = 42 − 14 = 28px. */
+  height: 42px;
+  margin-top: -14px;
+  overflow: hidden;
+  cursor: pointer;
+  text-align: left;
+  padding: 0 16px;
+  border-radius: 14px 14px 0 0;
+  background: var(--sleeve-bg);
+  color: var(--sleeve-fg);
+  box-shadow: 0 -2px 6px rgb(28 28 28 / 0.14);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  transition: height 0.6s var(--ease-lift);
+}
+.crate-sleeve[aria-expanded="true"] {
+  height: 180px; /* visible 166px */
+}
+.crate-sleeve:focus-visible {
+  outline: 2px solid var(--primary-ink);
+  outline-offset: 2px;
+}
+
+.crate-tab {
+  position: absolute;
+  inset: 0 16px auto;
+  padding: 3px 0;
+  font: 700 13px/26px var(--font-inter);
+  transition: opacity 0.2s ease-out;
+}
+/* Open-state content is always rendered and revealed by the growing height (overflow clips it). */
+.crate-name,
+.crate-play {
+  opacity: 0;
+  transition: opacity 0.35s ease-out;
+}
+.crate-sleeve[aria-expanded="true"] .crate-tab {
+  opacity: 0;
+}
+.crate-sleeve[aria-expanded="true"] .crate-name,
+.crate-sleeve[aria-expanded="true"] .crate-play {
+  opacity: 1;
+  transition-delay: 0.1s;
+}
+.crate-name {
+  margin-top: 14px;
+  font: 800 40px/1 var(--font-inter-tight);
+  letter-spacing: -0.02em;
+}
+.crate-play {
+  margin-top: 8px;
+  align-self: flex-start;
+  border-radius: 9999px;
+  padding: 8px 16px;
+  background: var(--background);
+  color: var(--foreground);
+  font: 700 14px var(--font-inter);
+}
+
+/* Die-cut hole: anchored to the sleeve TOP so it is revealed progressively as the sleeve rises.
+   Centre at 154px = open height 180 − 26 → sits just above the 14px overlap; lower part clipped. */
+.crate-hole {
+  position: absolute;
+  left: 50%;
+  top: 154px;
+  width: 88px;
+  height: 88px;
+  border-radius: 9999px;
+  border: 1px solid var(--foreground);
+  background: var(--sleeve-hole);
+  transform: translate(-50%, -50%);
+}
+.crate-hole::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--foreground); /* spindle hole: always Sumi */
+  transform: translate(-50%, -50%);
+}
+
+.crate-front {
+  position: absolute;
+  inset: auto 0 0 0;
+  height: 50px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 16px;
+  background: var(--muted);
+  box-shadow: 0 1px 2px rgb(28 28 28 / 0.14);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 12px;
+  pointer-events: none;
+}
+.crate-front::after {
+  content: "";
+  width: 90px;
+  height: 14px;
+  border-radius: 9999px;
+  background: var(--border);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .crate-sleeve,
+  .crate-tab,
+  .crate-name,
+  .crate-play {
+    transition: none;
+  }
+}
