@@ -1,0 +1,338 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-11-12T18:14:34.090Z",
+  "title": "Design System: That Music Is New",
+  "extensions": {
+    "colorMeta": {
+      "kinari": {
+        "role": "neutral",
+        "displayName": "Kinari Paper",
+        "canonical": "#F3EBDA",
+        "tonalRamp": [
+          "#3D3B37",
+          "#6D6A62",
+          "#AAA599",
+          "#F3EBDA",
+          "#F7F1E5",
+          "#FAF6EE",
+          "#FCFAF6",
+          "#FEFDFB"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Card Stock",
+        "canonical": "#FAF6EE",
+        "tonalRamp": [
+          "#3F3E3C",
+          "#706F6B",
+          "#AFACA7",
+          "#FAF6EE",
+          "#FCF9F3",
+          "#FDFBF7",
+          "#FEFDFB",
+          "#FFFEFD"
+        ]
+      },
+      "sumi": {
+        "role": "neutral",
+        "displayName": "Sumi Ink",
+        "canonical": "#1C1C1C",
+        "tonalRamp": [
+          "#070707",
+          "#0D0D0D",
+          "#141414",
+          "#1C1C1C",
+          "#606060",
+          "#999999",
+          "#C6C6C6",
+          "#E8E8E8"
+        ]
+      },
+      "seiji": {
+        "role": "primary",
+        "displayName": "Seiji Celadon",
+        "canonical": "#8DB6A5",
+        "tonalRamp": [
+          "#232E29",
+          "#3F524A",
+          "#637F73",
+          "#8DB6A5",
+          "#AFCCC0",
+          "#CCDED7",
+          "#E3EDE9",
+          "#F4F8F6"
+        ]
+      },
+      "seiji-hover": {
+        "role": "primary",
+        "displayName": "Seiji Celadon, pressed",
+        "canonical": "#7AA593",
+        "tonalRamp": [
+          "#1F2925",
+          "#374A42",
+          "#557367",
+          "#7AA593",
+          "#A2C0B3",
+          "#C3D7CE",
+          "#DEE9E4",
+          "#F2F6F4"
+        ]
+      },
+      "seiji-ink": {
+        "role": "primary",
+        "displayName": "Seiji Ink",
+        "canonical": "#3B705D",
+        "tonalRamp": [
+          "#0F1C17",
+          "#1B322A",
+          "#294E41",
+          "#3B705D",
+          "#769B8E",
+          "#A7BFB6",
+          "#CEDBD7",
+          "#EBF1EF"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Aged Paper",
+        "canonical": "#E6DCC6",
+        "tonalRamp": [
+          "#3A3732",
+          "#676359",
+          "#A19A8B",
+          "#E6DCC6",
+          "#EEE7D7",
+          "#F4EFE5",
+          "#F9F6F1",
+          "#FDFCF9"
+        ]
+      },
+      "muted-ink": {
+        "role": "neutral",
+        "displayName": "Faded Ink",
+        "canonical": "#4F5A4D",
+        "tonalRamp": [
+          "#141713",
+          "#242823",
+          "#373F36",
+          "#4F5A4D",
+          "#848C82",
+          "#B0B5AF",
+          "#D3D6D3",
+          "#EDEFED"
+        ]
+      },
+      "matsuba": {
+        "role": "neutral",
+        "displayName": "Matsuba Pine",
+        "canonical": "#6E7B6A",
+        "tonalRamp": [
+          "#1C1F1B",
+          "#313730",
+          "#4D564A",
+          "#6E7B6A",
+          "#9AA397",
+          "#BEC4BC",
+          "#DBDEDA",
+          "#F1F2F0"
+        ]
+      },
+      "divider": {
+        "role": "neutral",
+        "displayName": "Pencil Rule",
+        "canonical": "#D9CDB4",
+        "tonalRamp": [
+          "#36332D",
+          "#625C51",
+          "#98907E",
+          "#D9CDB4",
+          "#E4DCCB",
+          "#EEE9DD",
+          "#F6F3EC",
+          "#FBFAF8"
+        ]
+      },
+      "destructive": {
+        "role": "tertiary",
+        "displayName": "Shu Red",
+        "canonical": "#B3412F",
+        "tonalRamp": [
+          "#2D100C",
+          "#511D15",
+          "#7D2E21",
+          "#B3412F",
+          "#CA7A6D",
+          "#DDAAA1",
+          "#ECD0CB",
+          "#F7ECEA"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Home headline only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Card titles and the open sleeve's genre name."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Step card titles."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "UI text and descriptions."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Buttons, tabs, names, links."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Catalog data: origin, era, counts, dates, shortcuts, logo."
+      }
+    },
+    "shadows": [
+      {
+        "name": "sleeve-lift",
+        "value": "0 -2px 6px rgb(28 28 28 / 0.14)",
+        "purpose": "Sleeves overlapping in the crate."
+      },
+      {
+        "name": "crate-rest",
+        "value": "0 1px 2px rgb(28 28 28 / 0.14)",
+        "purpose": "Crate front resting on the panel."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-lift",
+        "value": "cubic-bezier(0.3, 0.7, 0.3, 1)",
+        "purpose": "Sleeve open/close (height, 0.3s). Disabled with prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ],
+    "textures": [
+      {
+        "name": "paper-grain",
+        "value": "fixed body::after, SVG fractalNoise in Sumi, opacity 0.1, mix-blend-mode multiply",
+        "purpose": "Makes kinari read as paper stock."
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Randomize: the single primary action.",
+      "html": "<button class=\"ds-btn-primary\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><path d=\"m18 14 4 4-4 4\"/><path d=\"m18 2 4 4-4 4\"/><path d=\"M2 18h1.973a4 4 0 0 0 3.3-1.7l5.454-7.6a4 4 0 0 1 3.3-1.7H22\"/><path d=\"M2 6h1.972a4 4 0 0 1 3.6 2.2\"/><path d=\"M22 18h-6.041a4 4 0 0 1-3.3-1.8l-.359-.45\"/></svg>Randomize</button>",
+      "css": ".ds-btn-primary{display:inline-flex;align-items:center;gap:12px;background:#8DB6A5;color:#1C1C1C;border:1.5px solid #1C1C1C;border-radius:16px;padding:22px 40px;font:700 26px Inter,sans-serif;cursor:pointer;transition:background .15s}.ds-btn-primary:hover{background:#7AA593}.ds-btn-primary:active{transform:translateY(1px)}.ds-btn-primary:focus-visible{outline:2px solid #3B705D;outline-offset:2px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Small secondary action (Restock).",
+      "html": "<button class=\"ds-btn-ghost\">Restock</button>",
+      "css": ".ds-btn-ghost{background:none;border:0;color:#3B705D;border-radius:9999px;padding:6px 12px;font:600 14px Inter,sans-serif;cursor:pointer;transition:background .15s}.ds-btn-ghost:hover{background:rgb(59 112 93/.1)}.ds-btn-ghost:active{background:rgb(59 112 93/.18)}.ds-btn-ghost:focus-visible{outline:2px solid #3B705D;outline-offset:2px}"
+    },
+    {
+      "name": "Keyboard hint",
+      "kind": "chip",
+      "refersTo": "kbd",
+      "description": "Shortcut hint next to the primary action.",
+      "html": "<span class=\"ds-hint\">or press <kbd class=\"ds-kbd\">Space</kbd></span>",
+      "css": ".ds-hint{display:inline-flex;align-items:center;gap:8px;color:#4F5A4D;font:400 15px Inter,sans-serif}.ds-kbd{border:1.5px solid #1C1C1C;border-radius:6px;padding:4px 10px;color:#1C1C1C;font:400 15px 'Space Mono',monospace}"
+    },
+    {
+      "name": "Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Ink-outlined flat container.",
+      "html": "<section class=\"ds-card\"><h2 class=\"ds-card-title\">History</h2><p class=\"ds-card-body\">Nothing here yet. Randomize a genre and it shows up here.</p></section>",
+      "css": ".ds-card{background:#FAF6EE;border:1.5px solid #1C1C1C;border-radius:16px;padding:20px;max-width:320px}.ds-card-title{margin:0 0 8px;font:800 30px/1.1 'Inter Tight',Inter,sans-serif;letter-spacing:-.02em;color:#1C1C1C}.ds-card-body{margin:0;font:400 14px/1.5 Inter,sans-serif;color:#4F5A4D}"
+    },
+    {
+      "name": "History Row",
+      "kind": "custom",
+      "refersTo": "history-row",
+      "description": "A discovered genre; hover/selected tint to Aged Paper.",
+      "html": "<button class=\"ds-row\"><svg width=\"44\" height=\"44\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"49\" fill=\"#1C1C1C\"/><circle cx=\"50\" cy=\"50\" r=\"36\" fill=\"none\" stroke=\"#F3EBDA\" stroke-opacity=\".22\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#8DB6A5\"/><circle cx=\"50\" cy=\"50\" r=\"4\" fill=\"#F3EBDA\"/></svg><span class=\"ds-row-text\"><span class=\"ds-row-name\">Zeuhl</span><span class=\"ds-row-meta\">10 tracks · 23 Oct</span></span></button>",
+      "css": ".ds-row{display:flex;align-items:center;gap:14px;width:320px;background:#FAF6EE;border:0;border-top:1px solid #D9CDB4;padding:16px 16px 16px 20px;text-align:left;cursor:pointer;transition:background .15s}.ds-row:hover{background:#E6DCC6}.ds-row:focus-visible{outline:2px solid #3B705D;outline-offset:-2px}.ds-row-text{display:flex;flex-direction:column;gap:2px}.ds-row-name{font:700 17px Inter,sans-serif;color:#1C1C1C}.ds-row-meta{font:400 13px 'Space Mono',monospace;color:#4F5A4D}"
+    },
+    {
+      "name": "Record Sleeve",
+      "kind": "custom",
+      "refersTo": "sleeve-open",
+      "description": "Open sleeve from the crate: genre name, origin · era, Play pill.",
+      "html": "<div class=\"ds-sleeve\"><span class=\"ds-sleeve-tab\">Zeuhl</span><span class=\"ds-sleeve-name\">Zeuhl</span><span class=\"ds-sleeve-meta\">France · 1970s</span><span class=\"ds-sleeve-play\">▶ Play 10 tracks</span></div>",
+      "css": ".ds-sleeve{display:flex;flex-direction:column;gap:6px;width:360px;height:170px;padding:0 16px;border-radius:14px 14px 0 0;background:#8DB6A5;color:#1C1C1C;box-shadow:0 -2px 6px rgb(28 28 28/.14)}.ds-sleeve-tab{font:700 13px/26px Inter,sans-serif}.ds-sleeve-name{font:800 40px/1 'Inter Tight',Inter,sans-serif;letter-spacing:-.02em}.ds-sleeve-meta{font:400 14px 'Space Mono',monospace}.ds-sleeve-play{margin-top:8px;align-self:flex-start;border-radius:9999px;padding:8px 16px;background:#F3EBDA;font:700 14px Inter,sans-serif}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Record Crate",
+    "overview": "A second-hand record shop on warm paper. The page is kinari stock, every container is outlined in sumi ink like a printed object, and the music lives in things you can pull out: sleeves standing in a crate, vinyl discs, a stack of finds. Discovery should feel physical and a little analog, never like a streaming dashboard.\n\nDensity is calm: three columns on desktop (pitch, crate, history), generous gutters, one loud headline. Color is restrained: paper neutrals carry the page, Seiji green is the single accent, and the record sleeves are the one place where the full palette shows at once. Type pairs a heavy, tight grotesk for voice with a monospace for catalog data (origins, eras, dates, counts), the way a shop labels its bins.",
+    "keyCharacteristics": [
+      "Warm paper background with a fine paper grain, ink outlines (1.5px Sumi) instead of shadows.",
+      "One accent (Seiji) for the primary action; Seiji Ink for text-level links and focus.",
+      "Display type: Inter Tight 800, tight tracking; data and labels in Space Mono.",
+      "Physical metaphors are geometry, not illustration: vinyl SVGs, sleeves, crate.",
+      "Light theme only."
+    ],
+    "rules": [
+      {
+        "name": "The One Accent Rule",
+        "body": "Seiji is the only fill color outside the sleeves. If something else wants color, it gets ink or paper.",
+        "section": "colors"
+      },
+      {
+        "name": "The Ink-Readable Rule",
+        "body": "Any accent that is read as text uses Seiji Ink, never Seiji. Every text pair must pass WCAG AA (4.5:1; 3:1 for ≥24px).",
+        "section": "colors"
+      },
+      {
+        "name": "The Sleeve Palette Rule",
+        "body": "Record sleeves rotate through six AA-safe pairs by catalog index % 6, alternating light and dark: Seiji/Sumi, Sumi/Kinari, Card/Sumi, Seiji Ink/Kinari, Aged Paper/Sumi, Faded Ink/Kinari.",
+        "section": "colors"
+      },
+      {
+        "name": "The Catalog Label Rule",
+        "body": "Facts about music (origin, era, track count, date) are set in Space Mono. Persuasion and names are set in Inter / Inter Tight.",
+        "section": "typography"
+      },
+      {
+        "name": "The Ink-Outline Rule",
+        "body": "Containers are defined by a 1.5px Sumi border, never by a shadow. Never both on the same element.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do outline every container with 1.5px Sumi and keep it flat.",
+      "Do use Seiji as a fill and Seiji Ink whenever the accent must be read.",
+      "Do set catalog data (origin, era, counts, dates, shortcuts) in Space Mono.",
+      "Do draw music objects (vinyl, sleeves, crate) as exact vector geometry.",
+      "Do verify every text pair at WCAG AA and keep visible Seiji Ink focus rings.",
+      "Do keep the paper grain subtle: texture you notice up close, never a pattern that competes with text."
+    ],
+    "donts": [
+      "Don't use the Spotify logo as decoration; the vinyl is the brand mark.",
+      "Don't use Seiji or Matsuba as text color.",
+      "Don't combine a border and a drop shadow on the same container.",
+      "Don't introduce a second accent hue; the red is reserved for errors."
+    ]
+  }
+}
