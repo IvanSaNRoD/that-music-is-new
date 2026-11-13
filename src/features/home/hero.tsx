@@ -27,7 +27,7 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
         <button
           type="button"
           onClick={onRandomize}
-          className="bg-primary text-primary-foreground border-border-strong hover:bg-primary-hover cursor-pointer focus-visible:outline-primary-ink inline-flex items-center gap-3 rounded-2xl border-[1.5px] px-10 py-[22px] text-[26px] font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-px"
+          className="bg-primary text-primary-foreground border-border-strong hover:bg-primary-hover focus-visible:outline-primary-ink inline-flex items-center gap-3 rounded-2xl border-[1.5px] px-10 py-[22px] text-[26px] font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-px"
         >
           <Shuffle size={28} strokeWidth={2.5} aria-hidden="true" />
           Randomize
