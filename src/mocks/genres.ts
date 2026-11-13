@@ -1,11 +1,6 @@
-export type Genre = {
-  id: string;
-  name: string;
-  origin: string;
-  era: string;
-};
+import type { Genre } from "@/domain/genre";
 
-// Placeholder catalog (from the Crate Flip handoff) until the Spotify-backed catalog lands.
+// PLACEHOLDER catalog (from the Crate Flip handoff) until the Spotify-backed catalog lands (E1).
 export const GENRES: Genre[] = [
   ["Indie Folk", "US", "2000s"],
   ["Psychedelic", "UK", "1960s"],

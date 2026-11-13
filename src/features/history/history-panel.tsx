@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import { ChevronRight, History, X } from "lucide-react";
-import type { Genre } from "@/domain/genres";
-import type { HistoryItem } from "@/hooks/use-crate";
+import { Vinyl } from "@/components/brand/vinyl";
+import type { Genre } from "@/domain/genre";
+import type { HistoryItem } from "@/domain/history";
 import { blurIfPointer } from "@/lib/utils";
-import { Vinyl } from "./vinyl";
 
 const UNDO_MS = 6000;
 

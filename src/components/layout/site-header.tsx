@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { Vinyl } from "./vinyl";
+import { Vinyl } from "@/components/brand/vinyl";
 
 export function SiteHeader() {
   return (

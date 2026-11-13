@@ -1,7 +1,6 @@
-import { HomeScreen } from "@/components/home/home-screen";
-import { HowItWorks } from "@/components/home/how-it-works";
-import { SiteHeader } from "@/components/home/site-header";
-import { Vinyl } from "@/components/home/vinyl";
+import { Vinyl } from "@/components/brand/vinyl";
+import { SiteHeader } from "@/components/layout/site-header";
+import { HomeScreen, HowItWorks } from "@/features/home";
 
 export default function Home() {
   return (
