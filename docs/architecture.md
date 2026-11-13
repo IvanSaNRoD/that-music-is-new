@@ -1,6 +1,6 @@
 # Architecture — iteration 1
 
-Related: PRD (`docs/prd.md`), ADR-0001…0004.
+Related: PRD (`docs/prd.md`), ADR-0001…0005.
 
 ## Components
 
@@ -87,29 +87,43 @@ sequenceDiagram
 History click: same flow via `GET /api/genres/{playlistId}`, skipping `pickGenre`; the history entry is not duplicated.
 
 ## Client state
-- `useGenreHistory()` hook: `{ genre, playlistId, discoveredAt }[]` in `localStorage`, most recent first, validated with zod on read (corrupt data → empty list). Actions: add (dedupe by `playlistId`), remove one, clear all.
+- `useGenreHistory()` hook (`features/history`): `{ genre, playlistId, discoveredAt }[]` in `localStorage`, most recent first, validated with zod on read (corrupt data → empty list). Actions: add (dedupe by `playlistId`), remove one, clear all.
 - Current result and selected track: React state on the page. No state library.
 
 ## Folder structure
+
+Layer-based backbone (routes · pure domain · server-only) with the UI organised by feature — see **ADR-0005**. Next.js strategy: *"store project files outside of `app`"* (`node_modules/next/dist/docs/01-app/01-getting-started/02-project-structure.md`).
 
 ```
 config/genres.json            # generated catalog (committed)
 scripts/build-genres.mjs      # one-time: thesoundsofspotify → genres.json
 src/
-  app/
-    page.tsx                  # home
+  app/                        # routing only (Next special files)
+    page.tsx                  # home → renders features/home
+    layout.tsx  globals.css   # root layout, fonts, design tokens
     api/genres/random/route.ts
     api/genres/[playlistId]/route.ts
-  domain/                     # pure, unit-tested (TDD)
-    pick-genre.ts  random-offset.ts  filter-tracks.ts  shuffle.ts
+  features/                   # UI + client state, one folder per feature
+    home/                     # HomeScreen (composition), Hero, HowItWorks
+    crate/                    # CrateFlip (genre picker), tones, useCrate
+    result/                   # ResultView = GenreResult · TrackList · TrackPlayer slot · states, useResult
+    history/                  # HistoryPanel, useGenreHistory
+  components/                 # shared, feature-agnostic
+    ui/                       # shadcn/ui primitives
+    brand/                    # Vinyl, Sparkle
+    layout/                   # SiteHeader
+  domain/                     # pure, unit-tested (TDD) — no React, no I/O
+    pick-genre.ts  random-offset.ts  filter-tracks.ts  shuffle.ts  (+ types)
   server/                     # server-only
     catalog.ts                # loads/validates genres.json
     randomizer.ts             # service: domain + catalog + spotify
     spotify/ token.ts  playlists.ts  schemas.ts
-  components/                 # Randomizer, GenreResult, TrackList, TrackPlayer, History
-  hooks/use-genre-history.ts
+  mocks/                      # design-phase placeholder data (removed when real data lands)
+  lib/                        # tiny shared helpers
 tests/e2e/                    # Playwright (Spotify mocked with MSW)
 ```
+
+Import rules (ADR-0005): features use each other only through `features/<name>/index.ts`; `domain/` imports nothing from React/UI/server; `server/` is never imported by client code.
 
 ## Genre catalog script
 - Run manually (`node scripts/build-genres.mjs`) with `.env.local` credentials; not part of the build.
