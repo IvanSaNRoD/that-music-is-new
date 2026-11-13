@@ -1,6 +1,6 @@
 # Architecture — iteration 1
 
-Related: PRD (`docs/prd.md`), ADR-0001…0005.
+Related: PRD (`docs/prd.md`), ADR-0001…0006.
 
 ## Components
 
@@ -35,6 +35,15 @@ flowchart LR
 - **Domain** is pure TypeScript with injected randomness → unit-tested without mocks.
 - **Spotify client** is the only code that talks to Spotify; responses validated with zod.
 - **Catalog** is a static JSON generated offline (ADR-0003), read only on the server.
+
+## Routes (ADR-0006)
+
+| URL | Page | Notes |
+|---|---|---|
+| `/` | Home: Hero + crate | History column + steps from the shared `(site)` layout |
+| `/{slug}` | Genre page: tracks, player, loading/error/empty | `slug` from `domain/slug.ts` (`R&B` → `r-and-b`); unknown → 404 |
+
+Entry points: Randomize/Space/Roll again → random `/{slug}`; sleeve Play → that genre; History row → that genre. **Only crate actions change the crate.** Crate + History state live in layout providers, so they persist across navigation.
 
 ## API
 
@@ -99,21 +108,25 @@ config/genres.json            # generated catalog (committed)
 scripts/build-genres.mjs      # one-time: thesoundsofspotify → genres.json
 src/
   app/                        # routing only (Next special files)
-    page.tsx                  # home → renders features/home
-    layout.tsx  globals.css   # root layout, fonts, design tokens
+    layout.tsx  globals.css   # root layout: html, fonts, design tokens
+    (site)/layout.tsx         # shared shell: header, crate + history providers, History column, steps (ADR-0006)
+    (site)/page.tsx           # / → features/home (Hero + crate)
+    (site)/[genre]/page.tsx   # /{slug} → features/result; unknown slug → not-found
+    (site)/not-found.tsx
     api/genres/random/route.ts
     api/genres/[playlistId]/route.ts
   features/                   # UI + client state, one folder per feature
-    home/                     # HomeScreen (composition), Hero, HowItWorks
-    crate/                    # CrateFlip (genre picker), tones, useCrate
-    result/                   # ResultView = GenreResult · TrackList · TrackPlayer slot · states, useResult
-    history/                  # HistoryPanel, useGenreHistory
+    home/                     # HomeView (Hero + crate), HowItWorks
+    crate/                    # CrateFlip, CrateProvider, tones, useCrate
+    randomizer/               # useRandomize (→ /{random slug}), RandomizeShortcut (Space)
+    result/                   # ResultView = GenreResult · TrackList · PlayerSlot (TrackPlayer) · notices, useResult
+    history/                  # HistoryPanel, HistoryColumn, HistoryProvider, useGenreHistory
   components/                 # shared, feature-agnostic
     ui/                       # shadcn/ui primitives
     brand/                    # Vinyl, Sparkle
     layout/                   # SiteHeader
   domain/                     # pure, unit-tested (TDD) — no React, no I/O
-    pick-genre.ts  random-offset.ts  filter-tracks.ts  shuffle.ts  (+ types)
+    slug.ts  pick-genre.ts  random-offset.ts  filter-tracks.ts  shuffle.ts  (+ types: genre, track, history)
   server/                     # server-only
     catalog.ts                # loads/validates genres.json
     randomizer.ts             # service: domain + catalog + spotify

@@ -1,2 +1,2 @@
-export { HistoryPanel } from "./history-panel";
-export { useGenreHistory } from "./use-genre-history";
+export { HistoryColumn } from "./history-column";
+export { HistoryProvider, useHistoryState } from "./history-provider";

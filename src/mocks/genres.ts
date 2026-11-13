@@ -1,4 +1,5 @@
 import type { Genre } from "@/domain/genre";
+import { toSlug } from "@/domain/slug";
 
 // PLACEHOLDER catalog (from the Crate Flip handoff) until the Spotify-backed catalog lands (E1).
 export const GENRES: Genre[] = [
@@ -22,7 +23,8 @@ export const GENRES: Genre[] = [
   ["Funk", "US", "1960s"],
   ["Ambient", "UK", "1970s"],
 ].map(([name, origin, era]) => ({
-  id: name.toLowerCase().replace(/\s+/g, "-"),
+  id: toSlug(name),
+  slug: toSlug(name),
   name,
   origin,
   era,

@@ -21,6 +21,8 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 6. As a user, I see the **history of genres** I've played, kept between visits.
 7. As a user, I can **delete history entries one by one or all at once**.
 8. As a user, I can **click a history entry to reload that genre's tracks**, so I can go back to a genre I liked.
+9. As a user, each genre has its **own URL** (`/{genre}`, e.g. `/bossa-nova`), so I can share or bookmark it and use the browser Back button.
+10. As a user, I can **browse the crate** (a selection of genres) and play one I recognise; Randomize is a separate blind jump that never changes the crate.
 
 ## Acceptance criteria
 - Home page shows the Randomizer button; no login or account required.
@@ -33,6 +35,16 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - History shows the **last 5 played** genres, most recent first (no duplicates; replaying moves an entry to the top); each entry has a delete action; a "clear all" action empties the list (with confirmation).
 - If `localStorage` is unavailable, the Randomizer still works (history simply not persisted).
 - Responsive (mobile and desktop) and keyboard accessible.
+
+### Entry points → effects (ADR-0006)
+
+| Entry | Goes to | Changes the crate | Adds to History |
+|---|---|---|---|
+| Randomize · Space · Roll again | `/{random genre}` (≠ current) | No | When a track is played |
+| Crate sleeve → Play | `/{that genre}` | Only the open sleeve | When a track is played |
+| History row | `/{that genre}` | No | Moves to top when a track is played |
+
+- Genre URL slug: lowercase, accents stripped, `&` → `and`, other symbols/spaces → `-` (`R&B` → `/r-and-b`). Unknown slug → not-found page.
 
 ## Out of scope (iteration 1)
 - User login, saving playlists to the user's account.

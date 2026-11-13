@@ -82,6 +82,11 @@
     background: var(--primary);
     color: var(--foreground);
   }
+  /* Tailwind v4 no longer gives buttons a pointer cursor; restore it for every enabled button. */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]) {
+    cursor: pointer;
+  }
 }
 
 /* Paper grain (user-confirmed): fixed noise over the page, multiplied into the kinari paper.
