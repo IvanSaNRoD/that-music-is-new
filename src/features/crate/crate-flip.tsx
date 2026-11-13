@@ -1,18 +1,10 @@
 import type { CSSProperties } from "react";
 import { Play } from "lucide-react";
-import type { Genre } from "@/domain/genres";
+import type { Genre } from "@/domain/genre";
 import { blurIfPointer } from "@/lib/utils";
 import "./crate-flip.css";
+import { toneFor } from "./tones";
 
-// Sleeve [bg, text, hole] by catalog index % 5 — text pairs WCAG AA; no white/card sleeve (blends into the panel).
-// "hole" = the die-cut circle showing the record label; picked to contrast with the sleeve.
-const TONES = [
-  ["var(--primary)", "var(--foreground)", "var(--background)"],
-  ["var(--foreground)", "var(--background)", "var(--primary)"],
-  ["var(--muted)", "var(--foreground)", "var(--primary-ink)"],
-  ["var(--primary-ink)", "var(--background)", "var(--background)"],
-  ["var(--muted-foreground)", "var(--background)", "var(--primary)"],
-] as const;
 
 type CrateFlipProps = {
   catalog: Genre[];
@@ -49,7 +41,7 @@ export function CrateFlip({ catalog, stock, selected, onSelect, onRestock, onPla
         {stock.map((id) => {
           const index = catalog.findIndex((x) => x.id === id);
           const g = catalog[index];
-          const [bg, fg, hole] = TONES[index % TONES.length];
+          const [bg, fg, hole] = toneFor(index);
           const open = id === selected;
           return (
             <button

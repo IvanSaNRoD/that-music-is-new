@@ -1,5 +1,5 @@
 import { Shuffle } from "lucide-react";
-import { Sparkle } from "./sparkle";
+import { Sparkle } from "@/components/brand/sparkle";
 
 export function Hero({ onRandomize }: { onRandomize: () => void }) {
   return (

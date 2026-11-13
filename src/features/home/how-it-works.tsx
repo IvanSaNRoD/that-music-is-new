@@ -1,5 +1,5 @@
 import { Fragment } from "react";
-import { Vinyl } from "./vinyl";
+import { Vinyl } from "@/components/brand/vinyl";
 
 const STEPS = [
   { title: "Roll", body: "Get a random genre from the catalog." },
