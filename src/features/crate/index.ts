@@ -1,3 +1,3 @@
 export { CrateFlip } from "./crate-flip";
-export { useCrate } from "./use-crate";
+export { CrateProvider, useCrateState } from "./crate-provider";
 export { TONES, toneFor } from "./tones";

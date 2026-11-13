@@ -1,0 +1,63 @@
+/* Result view — spec: docs/design/result-screen-brief.md. "The record comes out of the sleeve". */
+
+.result-head {
+  position: relative;
+  padding-top: 110px; /* room for the upper half of the record */
+}
+
+/* The record: lower half sits behind the sleeve, slides up out of it on arrival. */
+.result-record {
+  position: absolute;
+  top: 0;
+  right: 48px;
+  animation: record-out 0.7s var(--ease-lift) 0.15s both;
+}
+.result-record.is-spinning svg {
+  animation: record-spin 1.6s linear infinite;
+}
+
+.result-sleeve {
+  position: relative;
+  z-index: 1;
+  border-radius: 14px;
+  background: var(--sleeve-bg);
+  color: var(--sleeve-fg);
+  box-shadow: 0 -2px 6px rgb(28 28 28 / 0.14);
+  animation: sleeve-in 0.45s var(--ease-lift) both;
+}
+
+.result-body {
+  animation: body-in 0.4s ease-out 0.35s both;
+}
+
+@keyframes sleeve-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@keyframes record-out {
+  from {
+    transform: translateY(110px) rotate(-120deg);
+  }
+}
+@keyframes record-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes body-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .result-record,
+  .result-record.is-spinning svg,
+  .result-sleeve,
+  .result-body {
+    animation: none;
+  }
+}

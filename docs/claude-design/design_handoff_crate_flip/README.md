@@ -39,6 +39,7 @@ The files here are **design references built in HTML**. They show the intended l
 - **Click a closed sleeve**: it becomes selected and opens; the previous one closes. The genre is added to the top of History. Clicking the open sleeve should trigger Play (wire it to your player).
 - **Animation**: only `height` animates, 26px ↔ 170px, `0.3s cubic-bezier(.3,.7,.3,1)`. Closing and opening run at the same time, so the stack "flips". With `prefers-reduced-motion` the transition is off.
 - **Randomize button / Space key**: picks a random genre other than the current one. Space is ignored while focus is in an input, textarea, select or button. If the genre is not in the crate, it takes the place of the top (oldest) sleeve, so the crate always holds 8.
+  - **Superseded by ADR-0006 (2026-11-13):** Randomize no longer touches the crate — it navigates to `/{random genre}`. Only crate actions (open a sleeve, Restock) change the crate; History rows also navigate without changing it.
 - **Restock**: refills the crate with 8 random genres from the catalog and selects the first.
 - **History**: newest first, max 8, no duplicates (re-picking moves an item to the top). Each item has an open action (calls the same `pick`) and ✕ remove. "Clear all history" empties it. The selected genre's row is highlighted with `muted` #E6DCC6.
 - **Focus**: `:focus-visible` gets a 2px `primary-ink` #3B705D outline with 2px offset.
