@@ -1,27 +1,25 @@
 "use client";
 
-import { useParams, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useCrateState } from "@/features/crate";
 import { GENRES } from "@/mocks/genres";
 import { HistoryPanel } from "./history-panel";
 import { useHistoryState } from "./history-provider";
 
 /**
- * History panel wired to the app: opening a row navigates to that genre's page (never touches the crate).
- * Highlight = the genre on screen (result page) or the open sleeve (home).
+ * History panel wired to the app (home page only; genre pages show RecentFinds): opening a row navigates
+ * to that genre's page (never touches the crate). Highlight = the open sleeve.
  */
 export function HistoryColumn() {
   const history = useHistoryState();
   const crate = useCrateState();
   const router = useRouter();
-  const params = useParams<{ genre?: string }>();
-  const current = params.genre ? GENRES.find((g) => g.slug === params.genre)?.id : crate.selected;
 
   return (
     <HistoryPanel
       catalog={GENRES}
       items={history.items}
-      selected={current ?? ""}
+      selected={crate.selected}
       onOpen={(id) => {
         const g = GENRES.find((x) => x.id === id);
         if (g) router.push(`/${g.slug}`);

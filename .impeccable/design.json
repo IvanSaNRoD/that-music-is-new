@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-11-12T23:12:06.560297+00:00",
+  "generatedAt": "2026-11-13T17:32:35+00:00",
   "title": "Design System: That Music Is New",
   "extensions": {
     "colorMeta": {
@@ -181,7 +181,7 @@
       },
       "title": {
         "displayName": "Title",
-        "purpose": "Step card titles (18px, quiet)."
+        "purpose": "Step card titles and the \"Your finds\" heading (18px, quiet)."
       },
       "body": {
         "displayName": "Body",
@@ -206,6 +206,18 @@
       "display-mobile": {
         "displayName": "Display (mobile)",
         "purpose": "Home headline below 640px."
+      },
+      "display-genre": {
+        "displayName": "Genre title",
+        "purpose": "Genre name on its page (64px)."
+      },
+      "headline-large": {
+        "displayName": "Headline large",
+        "purpose": "Not-found title (48px)."
+      },
+      "track-title": {
+        "displayName": "Track title",
+        "purpose": "Track names in the genre page list (16px bold)."
       }
     },
     "shadows": [
@@ -218,6 +230,11 @@
         "name": "crate-rest",
         "value": "0 1px 2px rgb(28 28 28 / 0.14)",
         "purpose": "Crate front resting on the panel."
+      },
+      {
+        "name": "record-rest",
+        "value": "0 2px 6px rgb(28 28 28 / 0.18)",
+        "purpose": "Record on the turntable platter (static wrapper, never rotates)."
       }
     ],
     "motion": [
@@ -225,6 +242,26 @@
         "name": "ease-lift",
         "value": "cubic-bezier(0.3, 0.7, 0.3, 1)",
         "purpose": "Sleeve open/close (height, 0.6s); text fades 0.2–0.35s. Disabled with prefers-reduced-motion."
+      },
+      {
+        "name": "record-arrive",
+        "value": "0.7s cubic-bezier(0.3, 0.7, 0.3, 1)",
+        "purpose": "Record lands on the platter on page arrival (from -32px, -90deg, transparent)."
+      },
+      {
+        "name": "record-spin",
+        "value": "1.8s linear infinite",
+        "purpose": "Record turns while loading or playing; animation-play-state pauses it in place."
+      },
+      {
+        "name": "tonearm-drop",
+        "value": "0.7s cubic-bezier(0.3, 0.7, 0.3, 1)",
+        "purpose": "Tonearm 0deg -> 24deg onto the grooves while a track plays."
+      },
+      {
+        "name": "finds-roll-in",
+        "value": "0.5s cubic-bezier(0.3, 0.7, 0.3, 1)",
+        "purpose": "New \"Your finds\" pill slides in 12px while its disc turns 180deg."
       }
     ],
     "breakpoints": [
@@ -301,22 +338,47 @@
       "description": "Quiet secondary card in the how-it-works row: tonal, no outline.",
       "html": "<div class=\"ds-step\"><span class=\"ds-step-badge\">1</span><span><span class=\"ds-step-title\">Roll</span><span class=\"ds-step-body\">Get a random genre from the catalog.</span></span></div>",
       "css": ".ds-step{display:flex;align-items:center;gap:16px;width:290px;height:96px;padding:0 20px;border-radius:14px;background:#FAF6EE}.ds-step-badge{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex:none;border-radius:9999px;background:#8DB6A5;font:800 18px 'Inter Tight',Inter,sans-serif}.ds-step-title{display:block;font:800 18px/1.2 'Inter Tight',Inter,sans-serif;letter-spacing:-.02em}.ds-step-body{display:block;font:400 14px/1.4 Inter,sans-serif;color:#4F5A4D}"
+    },
+    {
+      "name": "Turntable",
+      "kind": "custom",
+      "refersTo": "turntable",
+      "description": "Genre page record player; plinth wears the genre's sleeve tone, arm drops while a track plays.",
+      "html": "<div class=\"ds-tt\" data-playing=\"true\"><span class=\"ds-tt-mat\"></span><span class=\"ds-tt-rec\"><svg width=\"170\" height=\"170\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"49\" fill=\"#1C1C1C\"/><circle cx=\"50\" cy=\"50\" r=\"36\" fill=\"none\" stroke=\"#F3EBDA\" stroke-opacity=\".22\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#F3EBDA\"/><circle cx=\"50\" cy=\"50\" r=\"4\" fill=\"#1C1C1C\"/></svg></span><span class=\"ds-tt-arm\"><span class=\"ds-tt-head\"></span></span><span class=\"ds-tt-pivot\"></span><span class=\"ds-tt-speed\">33⅓</span></div>",
+      "css": ".ds-tt{position:relative;width:220px;aspect-ratio:440/400;border:1.5px solid #1C1C1C;border-radius:16px;background:#3B705D;color:#F3EBDA}.ds-tt-mat{position:absolute;left:3.64%;top:5.5%;width:80.91%;aspect-ratio:1;border:1.5px solid #1C1C1C;border-radius:50%;background:#FAF6EE}.ds-tt-rec{position:absolute;left:5.45%;top:7.5%;width:77.27%;display:flex;border-radius:50%;box-shadow:0 2px 6px rgb(28 28 28/.18)}.ds-tt-rec svg{width:100%;height:auto;animation:ds-spin 1.8s linear infinite}.ds-tt-arm{position:absolute;left:88.18%;top:12.5%;width:6px;height:62.5%;margin-left:-3px;border:1.5px solid #1C1C1C;border-radius:9999px;background:#E6DCC6;transform-origin:50% 0;transform:rotate(24deg);transition:transform .7s cubic-bezier(.3,.7,.3,1)}.ds-tt:hover .ds-tt-arm{transform:rotate(0)}.ds-tt-head{position:absolute;left:50%;bottom:-8px;width:10px;height:16px;margin-left:-5px;border:1.5px solid #1C1C1C;border-radius:4px;background:#E6DCC6}.ds-tt-pivot{position:absolute;left:88.18%;top:12.5%;width:10%;aspect-ratio:1;border:1.5px solid #1C1C1C;border-radius:50%;background:#E6DCC6;transform:translate(-50%,-50%)}.ds-tt-speed{position:absolute;right:5%;bottom:5%;font:400 11px 'Space Mono',monospace}@keyframes ds-spin{to{transform:rotate(360deg)}}@media (prefers-reduced-motion:reduce){.ds-tt-rec svg{animation:none}.ds-tt-arm{transition:none}}"
+    },
+    {
+      "name": "Track Row",
+      "kind": "custom",
+      "refersTo": "track-row",
+      "description": "Pill row in the genre page track list; hover 50% Aged Paper, playing = genre sleeve tone.",
+      "html": "<div class=\"ds-tracks\"><button class=\"ds-track ds-track-on\"><span class=\"ds-track-n\">♪</span><span class=\"ds-track-t\"><b>Sample track 01</b><small>Sample artist 1</small></span></button><button class=\"ds-track\"><span class=\"ds-track-n\">02</span><span class=\"ds-track-t\"><b>Sample track 02</b><small>Sample artist 4</small></span></button></div>",
+      "css": ".ds-tracks{display:grid;gap:2px;width:360px}.ds-track{display:flex;align-items:center;gap:16px;border:0;border-radius:9999px;padding:8px 16px;background:transparent;color:#1C1C1C;text-align:left;cursor:pointer;transition:background .15s}.ds-track:hover{background:rgb(230 220 198/.5)}.ds-track:focus-visible{outline:2px solid #3B705D;outline-offset:0}.ds-track-on,.ds-track-on:hover{background:#1C1C1C;color:#F3EBDA}.ds-track-on small{color:#F3EBDA}.ds-track-n{width:24px;text-align:right;font:400 13px 'Space Mono',monospace;color:#4F5A4D}.ds-track-on .ds-track-n{color:#F3EBDA}.ds-track-t{display:flex;flex-direction:column}.ds-track-t b{font:700 16px Inter,sans-serif}.ds-track-t small{font:400 14px Inter,sans-serif;color:#4F5A4D}"
+    },
+    {
+      "name": "Finds Pill",
+      "kind": "chip",
+      "refersTo": "finds-pill",
+      "description": "\"Your finds\" link to a recent genre, in that genre's sleeve tone; current = Sumi ring; hover lifts 2px.",
+      "html": "<div class=\"ds-finds\"><a href=\"#\" class=\"ds-find ds-find-cur\" style=\"background:#8DB6A5;color:#1C1C1C\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"49\" fill=\"#1C1C1C\"/><circle cx=\"50\" cy=\"50\" r=\"36\" fill=\"none\" stroke=\"#F3EBDA\" stroke-opacity=\".22\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#F3EBDA\"/><circle cx=\"50\" cy=\"50\" r=\"4\" fill=\"#1C1C1C\"/></svg>Indie Folk</a><a href=\"#\" class=\"ds-find\" style=\"background:#3B705D;color:#F3EBDA\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"49\" fill=\"#1C1C1C\"/><circle cx=\"50\" cy=\"50\" r=\"36\" fill=\"none\" stroke=\"#F3EBDA\" stroke-opacity=\".22\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#F3EBDA\"/><circle cx=\"50\" cy=\"50\" r=\"4\" fill=\"#1C1C1C\"/></svg>Post-rock</a><a href=\"#\" class=\"ds-find\" style=\"background:#E6DCC6;color:#1C1C1C\"><svg width=\"28\" height=\"28\" viewBox=\"0 0 100 100\"><circle cx=\"50\" cy=\"50\" r=\"49\" fill=\"#1C1C1C\"/><circle cx=\"50\" cy=\"50\" r=\"36\" fill=\"none\" stroke=\"#F3EBDA\" stroke-opacity=\".22\" stroke-width=\"1.5\"/><circle cx=\"50\" cy=\"50\" r=\"20\" fill=\"#3B705D\"/><circle cx=\"50\" cy=\"50\" r=\"4\" fill=\"#1C1C1C\"/></svg>Afrobeat</a></div>",
+      "css": ".ds-finds{display:flex;flex-wrap:wrap;gap:8px}.ds-find{display:flex;align-items:center;gap:8px;border:1.5px solid #1C1C1C;border-radius:9999px;padding:4px 16px 4px 4px;font:600 15px Inter,sans-serif;text-decoration:none;transition:transform .2s cubic-bezier(.3,.7,.3,1)}.ds-find:hover{transform:translateY(-2px)}.ds-find-cur{outline:2px solid #1C1C1C;outline-offset:2px}.ds-find:focus-visible{outline:2px solid #3B705D;outline-offset:2px}@media (prefers-reduced-motion:reduce){.ds-find,.ds-find:hover{transition:none;transform:none}}"
     }
   ],
   "narrative": {
     "northStar": "The Record Crate",
-    "overview": "A second-hand record shop on warm paper. The page is kinari stock, every container is outlined in sumi ink like a printed object, and the music lives in things you can pull out: sleeves standing in a crate, vinyl discs, a stack of finds. Discovery should feel physical and a little analog, never like a streaming dashboard.\n\nDensity is calm: three columns on desktop (pitch, crate, history) inside a 1440px container, generous gutters, one loud headline. Color is restrained: paper neutrals carry the page, Seiji green is the single accent, and the record sleeves are the one place where the full palette shows at once. Type pairs a heavy, tight grotesk for voice with a monospace for catalog data (origins, eras, dates, counts), the way a shop labels its bins.",
+    "overview": "A second-hand record shop on warm paper. The page is kinari stock, every container is outlined in sumi ink like a printed object, and the music lives in things you can pull out: sleeves standing in a crate, vinyl discs, a stack of finds. Discovery should feel physical and a little analog, never like a streaming dashboard.\n\nDensity is calm: three columns on the desktop home (pitch, crate, history) and two on a genre page (turntable, tracks) inside a 1440px container, generous gutters, one loud headline. Color is restrained: paper neutrals carry the page, Seiji green is the single accent, and the record sleeves are the one place where the full palette shows at once. Type pairs a heavy, tight grotesk for voice with a monospace for catalog data (origins, eras, dates, counts), the way a shop labels its bins.",
     "keyCharacteristics": [
       "Warm paper background with a fine paper grain, ink outlines (1.5px Sumi) instead of shadows.",
       "One accent (Seiji) for the primary action; Seiji Ink for text-level links and focus.",
       "Display type: Inter Tight 800, tight tracking; data and labels in Space Mono.",
-      "Physical metaphors are geometry, not illustration: vinyl SVGs, sleeves, crate.",
+      "Physical metaphors are geometry, not illustration: vinyl SVGs, sleeves, crate, turntable.",
+      "A genre carries its sleeve tone from the crate to its own page.",
       "Light theme only."
     ],
     "rules": [
       {
         "name": "The One Accent Rule",
-        "body": "Seiji is the only fill color outside the sleeves. If something else wants color, it gets ink or paper.",
+        "body": "Seiji is the only fill color outside the sleeves (and what carries a sleeve tone, see the Genre Tone Rule). If something else wants color, it gets ink or paper.",
         "section": "colors"
       },
       {
@@ -327,6 +389,11 @@
       {
         "name": "The Sleeve Palette Rule",
         "body": "Record sleeves rotate through five AA-safe pairs by catalog index % 5: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper), outlined 1px Sumi, with a Sumi spindle dot.",
+        "section": "colors"
+      },
+      {
+        "name": "The Genre Tone Rule",
+        "body": "A genre's sleeve tone travels with it: on its genre page the turntable plinth, the playing track row and its \"Your finds\" pill wear that tone (same AA pair, full-strength foreground for secondary text, never alpha). No new hues: variety comes only from the five sleeve tones.",
         "section": "colors"
       },
       {
@@ -341,18 +408,19 @@
       }
     ],
     "dos": [
-      "Do outline primary containers with 1.5px Sumi and keep them flat; let secondary ones sit as tonal Card Stock.",
-      "Do use Seiji as a fill and Seiji Ink whenever the accent must be read.",
-      "Do set catalog data (origin, era, counts, dates, shortcuts) in Space Mono.",
-      "Do draw music objects (vinyl, sleeves, crate) as exact vector geometry.",
-      "Do verify every text pair at WCAG AA and keep visible Seiji Ink focus rings.",
-      "Do keep the paper grain subtle: texture you notice up close, never a pattern that competes with text."
+      "**Do** outline primary containers with 1.5px Sumi and keep them flat; let secondary ones sit as tonal Card Stock.",
+      "**Do** use Seiji as a fill and Seiji Ink whenever the accent must be read.",
+      "**Do** set catalog data (origin, era, counts, dates, shortcuts) in Space Mono.",
+      "**Do** draw music objects (vinyl, sleeves, crate) as exact vector geometry.",
+      "**Do** verify every text pair at WCAG AA and keep visible Seiji Ink focus rings.",
+      "**Do** keep the paper grain subtle: texture you notice up close, never a pattern that competes with text.",
+      "**Do** let a genre's sleeve tone travel with it (turntable plinth, playing row, its \"Your finds\" pill), with full-strength tone foreground for all text on it."
     ],
     "donts": [
-      "Don't use the Spotify logo as decoration; the vinyl is the brand mark.",
-      "Don't use Seiji or Matsuba as text color.",
-      "Don't combine a border and a drop shadow on the same container.",
-      "Don't introduce a second accent hue; the red is reserved for errors."
+      "**Don't** use the Spotify logo as decoration; the vinyl is the brand mark.",
+      "**Don't** use Seiji or Matsuba as text color.",
+      "**Don't** combine a border and a drop shadow on the same container.",
+      "**Don't** introduce a second accent hue; the red is reserved for errors. Colour variety comes only from the five sleeve tones."
     ]
   }
 }

@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="stylesheet" href="_ds/organic-2ff1e123-2843-4a80-9bd1-e39aa3ff36dc/styles.css">
+<script src="_ds/organic-2ff1e123-2843-4a80-9bd1-e39aa3ff36dc/_ds_bundle.js"></script>
+<style>@keyframes vinylspin{to{transform:rotate(360deg)}}body{margin:0;background:var(--color-surface);color:var(--color-text);font-family:var(--font-body)}a{color:var(--color-accent-700)}a:hover{color:var(--color-accent-800)}</style>
+</helmet>
+<section style="padding:56px 64px 40px;display:flex;flex-direction:column;gap:36px">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:680px">
+    <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">Turn 2 · More results screens</div>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:40px;line-height:1.1">Grooves, jukebox, a fan of records, a box of singles</h1>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+    <div id="2a" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2a</span><span style="font-weight:600">Groove map</span><span style="font-size:14px;color:var(--color-neutral-700)">— each track is a groove; tap a ring to drop the needle there</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:flex;flex-direction:column;gap:24px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <a href="#" style="font-size:14px;font-weight:600;text-decoration:none">← Back to the crate</a>
+          <div style="display:flex;gap:12px;align-items:center"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a><button class="btn btn-secondary" style="font-size:14px" onClick="{{ e.roll }}">⤮ Roll again</button></div>
+        </div>
+        <div style="display:flex;gap:36px;align-items:center">
+          <div style="position:relative;width:500px;height:500px;flex:none;border-radius:50%;box-shadow:var(--shadow-md)">
+            <sc-for list="{{ grooves }}" as="r" hint-placeholder-count="10">
+              <button onClick="{{ r.onClick }}" style="position:absolute;left:{{ r.off }};top:{{ r.off }};width:{{ r.size }};height:{{ r.size }};border-radius:50%;border:none;padding:0;cursor:pointer;background:{{ r.bg }};box-shadow:inset 0 0 0 1px color-mix(in srgb, var(--color-bg) 12%, transparent);transition:background .25s" style-hover="filter:brightness(1.5)"></button>
+            </sc-for>
+            <div style="position:absolute;left:155px;top:155px;width:190px;height:190px;border-radius:50%;background:{{ e.g.label }};pointer-events:none;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center">
+              <span style="font-family:var(--font-heading);font-size:26px;line-height:1;color:var(--color-text)">{{ e.g.name }}</span>
+              <span style="font-size:12px;font-weight:700;color:var(--color-text)">{{ e.g.meta }}</span>
+              <span style="width:10px;height:10px;border-radius:50%;background:var(--color-bg);margin-top:6px"></span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:40px;line-height:1">{{ e.g.name }}</h2><span style="font-size:13px;color:var(--color-neutral-700)">10 of {{ e.g.count }} tracks · outer groove first</span></div>
+            <div style="display:flex;flex-direction:column;gap:0">
+              <sc-for list="{{ e.tracks }}" as="t" hint-placeholder-count="10">
+                <button onClick="{{ t.onClick }}" style="border:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:5px 14px;border-radius:999px;text-align:left;background:{{ t.bg }}" style-hover="background:var(--color-accent-2-200)">
+                  <span style="width:22px;font:700 13px var(--font-body);color:var(--color-accent-700)">{{ t.num }}</span>
+                  <span style="flex:1;font:700 14px var(--font-body);color:var(--color-text)">{{ t.title }}</span>
+                  <span style="font-size:12px;color:var(--color-neutral-700)">{{ t.dur }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <button class="btn btn-primary" style="align-self:flex-start" onClick="{{ e.toggle }}">{{ e.playLabel }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="2b" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2b</span><span style="font-weight:600">Jukebox</span><span style="font-size:14px;color:var(--color-neutral-700)">— title strips A1–B5; the record rises in the arch when it plays</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:flex;flex-direction:column;gap:24px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <a href="#" style="font-size:14px;font-weight:600;text-decoration:none">← Back to the crate</a>
+          <div style="display:flex;gap:12px;align-items:center"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a><button class="btn btn-secondary" style="font-size:14px" onClick="{{ f.roll }}">⤮ Roll again</button></div>
+        </div>
+        <div style="flex:1;min-height:0;display:flex;gap:32px">
+          <div style="position:relative;width:320px;flex:none;border-radius:160px 160px var(--radius-lg) var(--radius-lg);background:{{ f.g.bg }};color:{{ f.g.fg }};overflow:hidden;display:flex;flex-direction:column;align-items:center;padding:64px 24px 0;box-sizing:border-box;gap:6px;text-align:center;transition:background .4s">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">Now selecting</span>
+            <span style="font-family:var(--font-heading);font-size:44px;line-height:1">{{ f.g.name }}</span>
+            <span style="font-size:14px">{{ f.g.meta }}</span>
+            <span style="font-size:14px;font-weight:700;margin-top:14px">{{ f.nowTitle }}</span>
+            <span style="font-size:12px">{{ f.nowArtist }}</span>
+            <div style="position:absolute;left:50px;bottom:-70px;transform:{{ fRise }};transition:transform .7s cubic-bezier(.3,.7,.3,1)">{{ fDisc }}</div>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+            <div style="flex:1;display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(5,1fr);gap:10px">
+              <sc-for list="{{ f.tracks }}" as="t" hint-placeholder-count="10">
+                <button onClick="{{ t.onClick }}" style="border:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:0 14px 0 8px;border-radius:var(--radius-md);text-align:left;background:{{ t.bg }};box-shadow:inset 0 0 0 2px var(--color-neutral-300)" style-hover="background:var(--color-accent-2-200)">
+                  <span style="width:40px;height:40px;flex:none;border-radius:50%;background:var(--color-text);color:var(--color-bg);display:flex;align-items:center;justify-content:center;font:700 13px var(--font-body)">{{ t.side }}</span>
+                  <span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font:700 14px var(--font-body);color:var(--color-text)">{{ t.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ t.artist }}</span></span>
+                  <span style="font:700 13px var(--font-body);color:var(--color-accent-700)">{{ t.num }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-secondary" style="flex:1" onClick="{{ f.prev }}">⏮</button>
+              <button class="btn btn-primary" style="flex:2" onClick="{{ f.toggle }}">{{ f.playLabel }}</button>
+              <button class="btn btn-secondary" style="flex:1" onClick="{{ f.next }}">⏭</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="2c" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2c</span><span style="font-weight:600">Record fan</span><span style="font-size:14px;color:var(--color-neutral-700)">— ten records fanned out, one per track; the chosen one lifts and spins</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:flex;flex-direction:column;gap:24px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <a href="#" style="font-size:14px;font-weight:600;text-decoration:none">← Back to the crate</a>
+          <div style="display:flex;gap:12px;align-items:center"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a><button class="btn btn-secondary" style="font-size:14px" onClick="{{ h.roll }}">⤮ Roll again</button></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;max-width:620px">
+          <span style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)">{{ h.g.meta }} · 10 of {{ h.g.count }} tracks</span>
+          <h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:64px;line-height:1">{{ h.g.name }}</h2>
+          <p style="margin:0;font-size:16px;line-height:1.5;text-wrap:pretty">{{ h.g.desc }}</p>
+        </div>
+        <div style="flex:1;display:flex;align-items:flex-end;padding-left:4px">
+          <sc-for list="{{ hFan }}" as="t" hint-placeholder-count="10">
+            <button onClick="{{ t.onClick }}" style="position:relative;flex:none;width:150px;height:150px;margin-right:-68px;border:none;padding:0;background:none;cursor:pointer;border-radius:50%;z-index:{{ t.z }};transform:{{ t.lift }};transition:transform .35s cubic-bezier(.3,.7,.3,1)">
+              {{ t.disc }}
+              <span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font:700 15px var(--font-body);color:{{ t.fg }};pointer-events:none">{{ t.num }}</span>
+            </button>
+          </sc-for>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--color-surface);border-radius:999px;padding:8px 8px 8px 22px">
+          <span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:700;font-size:15px">{{ hCur.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ hCur.artist }}</span></span>
+          <button class="btn btn-ghost" onClick="{{ h.prev }}">⏮</button>
+          <button class="btn btn-primary" onClick="{{ h.toggle }}">{{ h.playLabel }}</button>
+          <button class="btn btn-ghost" onClick="{{ h.next }}">⏭</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="2d" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">2d</span><span style="font-weight:600">Box of singles</span><span style="font-size:14px;color:var(--color-neutral-700)">— every track is a 7" in its own sleeve; the playing one pops up</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:flex;flex-direction:column;gap:20px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <a href="#" style="font-size:14px;font-weight:600;text-decoration:none">← Back to the crate</a>
+          <div style="display:flex;gap:12px;align-items:center"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a><button class="btn btn-secondary" style="font-size:14px" onClick="{{ i.roll }}">⤮ Roll again</button></div>
+        </div>
+        <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:4px"><h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:52px;line-height:1">{{ i.g.name }}</h2><span style="font-size:14px;color:var(--color-neutral-700)">{{ i.g.meta }} · 10 of {{ i.g.count }} tracks</span></div>
+          <div style="display:flex;align-items:center;gap:12px"><span style="display:flex;flex-direction:column;text-align:right"><span style="font-weight:700;font-size:14px">{{ i.nowTitle }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ i.nowArtist }}</span></span><button class="btn btn-primary" onClick="{{ i.toggle }}">{{ i.playLabel }}</button></div>
+        </div>
+        <div style="flex:1;display:grid;grid-template-columns:repeat(5,1fr);gap:8px 22px;align-content:end">
+          <sc-for list="{{ iSingles }}" as="t" hint-placeholder-count="10">
+            <button onClick="{{ t.onClick }}" style="border:none;background:none;padding:36px 0 0;cursor:pointer;display:flex;flex-direction:column;gap:6px;text-align:left">
+              <span style="position:relative;display:block;width:136px;height:136px">
+                <span style="position:absolute;left:13px;top:13px;transform:{{ t.up }};transition:transform .4s cubic-bezier(.3,.7,.3,1)">{{ t.disc }}</span>
+                <span style="position:absolute;inset:0;border-radius:var(--radius-md);background:{{ t.bg }};color:{{ t.fg }};box-shadow:var(--shadow-sm);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box;font:700 13px var(--font-body)">{{ t.num }}<span style="position:absolute;left:50px;top:40px;width:36px;height:36px;border-radius:50%;background:var(--color-bg)"></span></span>
+              </span>
+              <span style="display:flex;flex-direction:column"><span style="font:700 13px var(--font-body);color:var(--color-text)">{{ t.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ t.artist }}</span></span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+<section style="padding:40px 64px 80px;display:flex;flex-direction:column;gap:36px">
+  <div style="display:flex;flex-direction:column;gap:8px;max-width:680px">
+    <div style="font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:var(--color-accent-700);font-weight:600">Turn 1 · Results screen</div>
+    <h1 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:40px;line-height:1.1">After Randomize: four ways to hand over the record</h1>
+    <p style="margin:0;font-size:16px;line-height:1.5;text-wrap:pretty">All live: tap tracks, play/pause, Roll again. History column left out to focus on the main area — it stays as in your current screen.</p>
+  </div>
+  <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1a</span><span style="font-weight:600">Sleeve &amp; record</span><span style="font-size:14px;color:var(--color-neutral-700)">— the record slides out of the sleeve as it plays</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:flex;flex-direction:column;gap:26px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <a href="#" style="font-size:14px;font-weight:600;text-decoration:none">← Back to the crate</a>
+          <div style="display:flex;gap:12px;align-items:center"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a><button class="btn btn-secondary" style="font-size:14px" onClick="{{ a.roll }}">⤮ Roll again</button></div>
+        </div>
+        <div style="display:flex;gap:36px;align-items:center">
+          <div style="position:relative;width:480px;height:300px;flex:none">
+            <div style="position:absolute;top:10px;left:{{ aDiscX }};transition:left .6s cubic-bezier(.3,.7,.3,1)">{{ aDisc }}</div>
+            <div style="position:absolute;left:0;top:0;width:300px;height:300px;box-sizing:border-box;border-radius:var(--radius-md);background:{{ a.g.bg }};color:{{ a.g.fg }};box-shadow:var(--shadow-md);padding:24px;display:flex;flex-direction:column;justify-content:space-between">
+              <span style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">TMIN · {{ a.g.cat }}</span>
+              <span style="display:flex;flex-direction:column;gap:6px"><span style="font-family:var(--font-heading);font-size:44px;line-height:1">{{ a.g.name }}</span><span style="font-size:14px">{{ a.g.meta }}</span></span>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:12px">
+            <span style="font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)">Now spinning</span>
+            <p style="margin:0;font-size:15px;line-height:1.5;text-wrap:pretty">{{ a.g.desc }}</p>
+            <span style="font-size:13px;color:var(--color-neutral-700)">10 of {{ a.g.count }} tracks</span>
+            <div style="display:flex;align-items:center;gap:14px;margin-top:6px">
+              <button class="btn btn-primary" onClick="{{ a.toggle }}">{{ a.playLabel }}</button>
+              <span style="display:flex;flex-direction:column;min-width:0"><span style="font-weight:700;font-size:14px">{{ a.nowTitle }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ a.nowArtist }}</span></span>
+            </div>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;grid-auto-flow:column;grid-template-rows:repeat(5,auto);gap:2px 24px">
+          <sc-for list="{{ a.tracks }}" as="t" hint-placeholder-count="10">
+            <button onClick="{{ t.onClick }}" style="border:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:7px 16px;border-radius:999px;text-align:left;background:{{ t.bg }}" style-hover="background:var(--color-accent-2-200)">
+              <span style="width:22px;font:700 13px var(--font-body);color:var(--color-accent-700)">{{ t.num }}</span>
+              <span style="flex:1;display:flex;flex-direction:column"><span style="font:700 14px var(--font-body);color:var(--color-text)">{{ t.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ t.artist }}</span></span>
+              <span style="font-size:12px;color:var(--color-neutral-700)">{{ t.dur }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div id="1b" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1b</span><span style="font-weight:600">Turntable</span><span style="font-size:14px;color:var(--color-neutral-700)">— the tonearm drops when you hit play</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:flex;flex-direction:column;gap:24px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <a href="#" style="font-size:14px;font-weight:600;text-decoration:none">← Back to the crate</a>
+          <div style="display:flex;gap:12px;align-items:center"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a><button class="btn btn-secondary" style="font-size:14px" onClick="{{ b.roll }}">⤮ Roll again</button></div>
+        </div>
+        <div style="display:flex;gap:40px;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:16px;flex:none">
+            <div style="position:relative;width:420px;height:400px;border-radius:var(--radius-lg);background:var(--color-neutral-300);box-shadow:var(--shadow-sm)">
+              <div style="position:absolute;left:24px;top:35px">{{ bDisc }}</div>
+              <div style="position:absolute;right:26px;top:24px;width:48px;height:48px;border-radius:50%;background:var(--color-neutral-500);box-shadow:var(--shadow-sm)"></div>
+              <div style="position:absolute;right:45px;top:48px;width:10px;height:250px;transform-origin:5px 0;transform:rotate({{ bArm }});transition:transform .7s cubic-bezier(.3,.7,.3,1)">
+                <div style="width:10px;height:100%;border-radius:999px;background:var(--color-neutral-700)"></div>
+                <div style="position:absolute;left:-7px;bottom:-14px;width:24px;height:34px;border-radius:8px;background:var(--color-text)"></div>
+              </div>
+              <span style="position:absolute;right:22px;bottom:20px;font-size:12px;font-weight:700;color:var(--color-neutral-700)">33⅓</span>
+            </div>
+            <div style="display:flex;gap:10px">
+              <button class="btn btn-secondary" style="flex:1" onClick="{{ b.prev }}">⏮</button>
+              <button class="btn btn-primary" style="flex:2" onClick="{{ b.toggle }}">{{ b.playLabel }}</button>
+              <button class="btn btn-secondary" style="flex:1" onClick="{{ b.next }}">⏭</button>
+            </div>
+          </div>
+          <div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:14px">
+            <div style="display:flex;flex-direction:column;gap:4px">
+              <h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:48px;line-height:1">{{ b.g.name }}</h2>
+              <span style="font-size:14px;color:var(--color-neutral-700)">{{ b.g.meta }} · 10 of {{ b.g.count }} tracks</span>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <sc-for list="{{ b.tracks }}" as="t" hint-placeholder-count="10">
+                <button onClick="{{ t.onClick }}" style="border:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:6px 16px;border-radius:999px;text-align:left;background:{{ t.bg }}" style-hover="background:var(--color-accent-2-200)">
+                  <span style="width:22px;font:700 13px var(--font-body);color:var(--color-accent-700)">{{ t.num }}</span>
+                  <span style="flex:1;display:flex;flex-direction:column"><span style="font:700 14px var(--font-body);color:var(--color-text)">{{ t.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ t.artist }}</span></span>
+                  <span style="font-size:12px;color:var(--color-neutral-700)">{{ t.dur }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="1c" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1c</span><span style="font-weight:600">Back cover</span><span style="font-size:14px;color:var(--color-neutral-700)">— the whole screen is the back of the sleeve: liner notes + Side A / Side B</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:flex;flex-direction:column;gap:20px;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:16px">
+          <a href="#" style="font-size:14px;font-weight:600;text-decoration:none">← Back to the crate</a>
+          <div style="display:flex;gap:12px;align-items:center"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a><button class="btn btn-secondary" style="font-size:14px" onClick="{{ c.roll }}">⤮ Roll again</button></div>
+        </div>
+        <div style="position:relative;flex:1;min-height:0;border-radius:var(--radius-lg);background:{{ c.g.bg }};color:{{ c.g.fg }};padding:30px 250px 30px 36px;display:flex;flex-direction:column;gap:18px;overflow:hidden;transition:background .4s">
+          <div style="position:absolute;right:-190px;top:50%;margin-top:-200px">{{ cDisc }}</div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <span style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase">TMIN · {{ c.g.cat }} · {{ c.g.meta }}</span>
+            <h2 style="margin:0;font-family:var(--font-heading);font-weight:400;font-size:56px;line-height:1">{{ c.g.name }}</h2>
+          </div>
+          <p style="margin:0;font-size:15px;line-height:1.5;max-width:46ch;text-wrap:pretty">{{ c.g.desc }}</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:28px">
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:var(--font-heading);font-size:20px;margin-bottom:4px">Side A</span>
+              <sc-for list="{{ c.sideA }}" as="t" hint-placeholder-count="5">
+                <button onClick="{{ t.onClick }}" style="border:none;cursor:pointer;color:inherit;display:flex;align-items:baseline;gap:12px;padding:6px 12px;margin:0 -12px;border-radius:999px;text-align:left;background:{{ t.bgC }}" style-hover="background:color-mix(in srgb, currentColor 10%, transparent)">
+                  <span style="width:22px;font:700 12px var(--font-body)">{{ t.side }}</span>
+                  <span style="flex:1;font:700 14px var(--font-body)">{{ t.title }}</span>
+                  <span style="font-size:12px">{{ t.dur }}</span>
+                </button>
+              </sc-for>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:2px">
+              <span style="font-family:var(--font-heading);font-size:20px;margin-bottom:4px">Side B</span>
+              <sc-for list="{{ c.sideB }}" as="t" hint-placeholder-count="5">
+                <button onClick="{{ t.onClick }}" style="border:none;cursor:pointer;color:inherit;display:flex;align-items:baseline;gap:12px;padding:6px 12px;margin:0 -12px;border-radius:999px;text-align:left;background:{{ t.bgC }}" style-hover="background:color-mix(in srgb, currentColor 10%, transparent)">
+                  <span style="width:22px;font:700 12px var(--font-body)">{{ t.side }}</span>
+                  <span style="flex:1;font:700 14px var(--font-body)">{{ t.title }}</span>
+                  <span style="font-size:12px">{{ t.dur }}</span>
+                </button>
+              </sc-for>
+            </div>
+          </div>
+        </div>
+        <div style="display:flex;align-items:center;gap:14px;background:var(--color-surface);border-radius:999px;padding:8px 8px 8px 10px">
+          <span>{{ cMini }}</span>
+          <span style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-weight:700;font-size:14px">{{ c.nowTitle }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ c.nowArtist }}</span></span>
+          <button class="btn btn-ghost" onClick="{{ c.prev }}">⏮</button>
+          <button class="btn btn-primary" onClick="{{ c.toggle }}">{{ c.playLabel }}</button>
+          <button class="btn btn-ghost" onClick="{{ c.next }}">⏭</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="1d" style="display:flex;flex-direction:column;gap:12px;width:960px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px"><span style="background:var(--color-text);color:var(--color-bg);border-radius:999px;padding:3px 11px;font-weight:700;font-size:14px">1d</span><span style="font-weight:600">Crate stays open</span><span style="font-size:14px;color:var(--color-neutral-700)">— no separate screen: the pulled sleeve grows, the rest wait below</span></div>
+      <div style="height:680px;box-sizing:border-box;background:var(--color-bg);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);padding:28px 36px;display:grid;grid-template-columns:380px minmax(0,1fr);grid-template-rows:minmax(0,1fr);gap:36px;overflow:hidden">
+        <div style="background:var(--color-surface);border-radius:var(--radius-lg);padding:22px;display:flex;flex-direction:column;gap:12px;min-height:0">
+          <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-family:var(--font-heading);font-size:22px">The crate</span><button class="btn btn-ghost" style="font-size:14px;padding:6px 12px" onClick="{{ d.roll }}">⤮ Roll again</button></div>
+          <div style="position:relative;flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-end;padding:0 12px 54px">
+            <sc-for list="{{ dSleeves }}" as="s" hint-placeholder-count="6">
+              <button onClick="{{ s.onClick }}" style="height:{{ s.h }};flex:none;border:none;cursor:pointer;margin-top:-4px;border-radius:14px 14px 0 0;background:{{ s.bg }};color:{{ s.fg }};box-shadow:0 -2px 6px color-mix(in srgb, var(--color-text) 14%, transparent);transition:height .35s cubic-bezier(.3,.7,.3,1);overflow:hidden;text-align:left;padding:0 18px;display:flex;flex-direction:column;gap:8px">
+                <span style="font:700 13px var(--font-body);line-height:26px;flex:none">{{ s.name }}</span>
+                <sc-if value="{{ s.on }}" hint-placeholder-val="{{ false }}">
+                  <span style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;margin-top:6px">TMIN · {{ s.cat }}</span>
+                  <span style="font-family:var(--font-heading);font-size:44px;line-height:1">{{ s.name }}</span>
+                  <span style="font-size:14px">{{ s.meta }} · {{ s.count }} tracks</span>
+                  <span style="font-size:14px;line-height:1.45;text-wrap:pretty">{{ s.desc }}</span>
+                </sc-if>
+              </button>
+            </sc-for>
+            <div style="position:absolute;left:0;right:0;bottom:0;height:50px;border-radius:var(--radius-md);background:var(--color-neutral-400);box-shadow:var(--shadow-sm);display:flex;align-items:flex-end;justify-content:center;padding-bottom:12px;box-sizing:border-box;pointer-events:none"><span style="width:90px;height:14px;border-radius:999px;background:var(--color-neutral-600)"></span></div>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:12px;min-width:0;min-height:0">
+          <div style="display:flex;justify-content:flex-end"><a href="#" style="font-size:14px;font-weight:600">Listen more on Spotify ↗</a></div>
+          <div style="display:flex;align-items:center;gap:18px;background:var(--color-surface);border-radius:var(--radius-lg);padding:12px 18px">
+            <span>{{ dDisc }}</span>
+            <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--color-accent-700)">Now playing</span><span style="font-family:var(--font-heading);font-size:20px">{{ d.nowTitle }}</span><span style="font-size:13px;color:var(--color-neutral-700)">{{ d.nowArtist }}</span></span>
+            <div style="display:flex;gap:6px"><button class="btn btn-ghost" onClick="{{ d.prev }}">⏮</button><button class="btn btn-primary" onClick="{{ d.toggle }}">{{ d.playLabel }}</button><button class="btn btn-ghost" onClick="{{ d.next }}">⏭</button></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:2px;min-height:0;overflow:auto">
+            <sc-for list="{{ d.tracks }}" as="t" hint-placeholder-count="10">
+              <button onClick="{{ t.onClick }}" style="border:none;cursor:pointer;display:flex;align-items:center;gap:14px;padding:4px 16px;border-radius:999px;text-align:left;background:{{ t.bg }}" style-hover="background:var(--color-accent-2-200)">
+                <span style="width:22px;font:700 13px var(--font-body);color:var(--color-accent-700)">{{ t.num }}</span>
+                <span style="flex:1;display:flex;flex-direction:column"><span style="font:700 14px var(--font-body);color:var(--color-text)">{{ t.title }}</span><span style="font-size:12px;color:var(--color-neutral-700)">{{ t.artist }}</span></span>
+                <span style="font-size:12px;color:var(--color-neutral-700)">{{ t.dur }}</span>
+              </button>
+            </sc-for>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const GEN = [
+  ['Shoegaze','UK','1990s',164,'var(--color-accent-200)','var(--color-accent-900)','var(--color-accent)','Walls of distorted, swirling guitar with vocals buried in the mix. Loud and dreamy at once.'],
+  ['Zamrock','Zambia','1970s',58,'var(--color-accent)','var(--color-bg)','var(--color-accent-2-300)','Zambian rock from the 70s — fuzzed guitars, James Brown swagger and psychedelic haze, born in Lusaka clubs.'],
+  ['Krautrock','Germany','1970s',212,'var(--color-accent-2-300)','var(--color-accent-2-900)','var(--color-accent-2-500)','German experiments with hypnotic motorik beats, analog synths and long repetitive grooves.'],
+  ['Ethio-jazz','Ethiopia','1960s',73,'var(--color-text)','var(--color-bg)','var(--color-accent)','Addis Ababa’s blend of Ethiopian scales with jazz, funk and Latin rhythm.'],
+  ['City Pop','Japan','1980s',190,'var(--color-accent-2-500)','var(--color-bg)','var(--color-accent-200)','Glossy Japanese pop from the bubble era — funk bass, jazzy chords, night-drive synths.'],
+  ['Zeuhl','France','1970s',41,'var(--color-neutral-200)','var(--color-text)','var(--color-accent-2-300)','A French prog offshoot built on chanting choirs, hammering bass and an invented language.'],
+].map(([name,origin,era,count,bg,fg,label,desc],i) => ({ name, meta:`${origin} · ${era}`, count, bg, fg, label, desc, cat:String(count).padStart(4,'0') }));
+const DUR = ['3:42','4:18','2:56','5:07','3:31','6:12','3:03','4:45','2:49','7:20'];
+const TR = DUR.map((dur,i) => ({ n:String(i+1).padStart(2,'0'), title:`Sample track ${String(i+1).padStart(2,'0')}`, artist:`Sample artist ${[1,4,7,3,6,2,5,1,4,8][i]}`, dur, side: i < 5 ? `A${i+1}` : `B${i-4}` }));
+
+class Component extends DCLogic {
+  state = { e:{g:4,t:2,play:false}, f:{g:0,t:null,play:false}, h:{g:5,t:3,play:false}, i:{g:2,t:1,play:false}, a:{g:0,t:null,play:false}, b:{g:1,t:2,play:false}, c:{g:2,t:null,play:false}, d:{g:3,t:0,play:false} };
+  up(k, o) { this.setState(s => ({ [k]: { ...s[k], ...o } })); }
+  disc(size, label, spin) {
+    const sheen = 'color-mix(in srgb, var(--color-bg) 20%, transparent)';
+    return React.createElement('div', { style:{ width:size, height:size, borderRadius:'50%', flex:'none', position:'relative', boxShadow:'var(--shadow-md)',
+      background:`radial-gradient(circle, var(--color-bg) 0 2.2%, ${label} 2.6% 31%, var(--color-text) 31.5% 34%, transparent 34.5%), repeating-radial-gradient(circle, var(--color-text) 0 2px, color-mix(in srgb, var(--color-text) 84%, var(--color-bg)) 2px 3px)`,
+      animation:'vinylspin 1.8s linear infinite', animationPlayState: spin ? 'running' : 'paused' } },
+      React.createElement('div', { style:{ position:'absolute', inset:0, borderRadius:'50%', background:`conic-gradient(from 20deg, transparent 0 30deg, ${sheen} 45deg, transparent 60deg 210deg, ${sheen} 225deg, transparent 240deg)` } }));
+  }
+  mk(k) {
+    const st = this.state[k], g = GEN[st.g];
+    const tracks = TR.map((tr, i) => {
+      const on = st.t === i;
+      return { ...tr, num: on ? (st.play ? '▶' : '❚❚') : tr.n, bg: on ? 'var(--color-accent-2-200)' : 'transparent',
+        bgC: on ? 'color-mix(in srgb, currentColor 16%, transparent)' : 'transparent',
+        onClick: () => this.up(k, on ? { play: !st.play } : { t: i, play: true }) };
+    });
+    const cur = st.t == null ? null : TR[st.t];
+    return {
+      g, tracks, sideA: tracks.slice(0, 5), sideB: tracks.slice(5),
+      playLabel: st.play ? '❚❚ Pause' : '▶ Play',
+      toggle: () => this.up(k, st.t == null ? { t: 0, play: true } : { play: !st.play }),
+      prev: () => this.up(k, { t: ((st.t ?? 0) + 9) % 10, play: true }),
+      next: () => this.up(k, { t: ((st.t ?? -1) + 1) % 10, play: true }),
+      roll: () => { let n; do { n = Math.floor(Math.random() * GEN.length); } while (n === st.g); this.up(k, { g: n, t: null, play: false }); },
+      nowTitle: cur ? cur.title : 'Pick a track', nowArtist: cur ? cur.artist : 'or press play to start side A',
+    };
+  }
+  renderVals() {
+    const s = this.state, a = this.mk('a'), b = this.mk('b'), c = this.mk('c'), d = this.mk('d');
+    const dSleeves = GEN.map((g, i) => ({ ...g, on: i === s.d.g, h: i === s.d.g ? '280px' : '26px', onClick: () => this.up('d', { g: i, t: null, play: false }) }));
+    const e = this.mk('e'), f = this.mk('f'), h = this.mk('h'), i = this.mk('i');
+    const TONES = GEN.map(g => [g.bg, g.fg]);
+    const grooves = e.tracks.map((t, n) => ({ size:(500 - n*30)+'px', off:(n*15)+'px', onClick:t.onClick,
+      bg: s.e.t === n ? 'var(--color-accent)' : n % 2 ? 'color-mix(in srgb, var(--color-text) 90%, var(--color-bg))' : 'var(--color-text)' }));
+    const hFan = h.tracks.map((t, n) => { const on = s.h.t === n;
+      return { ...t, disc:this.disc(150, TONES[n%6][0], on && s.h.play), fg:TONES[n%6][1], lift: on ? 'translateY(-56px)' : 'none', z: on ? 20 : n }; });
+    const iSingles = i.tracks.map((t, n) => { const on = s.i.t === n;
+      return { ...t, bg:TONES[n%6][0], fg:TONES[n%6][1], disc:this.disc(110, TONES[(n+2)%6][0], on && s.i.play), up: on ? 'translateY(-34px)' : 'translateY(0)' }; });
+    return {
+      e, f, h, i, grooves, hFan, iSingles, hCur: s.h.t == null ? { title:'Pick a record', artist:'Each disc is one track' } : TR[s.h.t],
+      fDisc: this.disc(220, f.g.label, s.f.play), fRise: s.f.play ? 'translateY(0)' : 'translateY(120px)',
+      a, b, c, d, dSleeves,
+      aDisc: this.disc(280, a.g.label, s.a.play), aDiscX: s.a.play ? '190px' : s.a.t == null ? '60px' : '120px',
+      bDisc: this.disc(330, b.g.label, s.b.play), bArm: s.b.play ? '24deg' : '0deg',
+      cDisc: this.disc(400, c.g.label, s.c.play), cMini: this.disc(40, c.g.label, s.c.play),
+      dDisc: this.disc(64, d.g.label, s.d.play),
+    };
+  }
+}
+</script>
+</body>
+</html>

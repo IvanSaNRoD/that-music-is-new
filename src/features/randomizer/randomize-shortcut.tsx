@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { installInputModality } from "@/lib/input-modality";
 import { useRandomize } from "./use-randomize";
 
 /**
@@ -10,11 +11,15 @@ import { useRandomize } from "./use-randomize";
 export function RandomizeShortcut() {
   const randomize = useRandomize();
 
+  // Mounted in the (site) layout from the first load, so it also starts the keyboard/pointer tracking
+  // that genre pages use to show a focus ring on the heading for keyboard users only.
+  useEffect(installInputModality, []);
+
   useEffect(() => {
     if (window.matchMedia("(hover: none)").matches) return;
     const onKey = (e: KeyboardEvent) => {
       const tag = (e.target as HTMLElement).tagName;
-      if (e.code !== "Space" || /INPUT|TEXTAREA|BUTTON|SELECT|A/.test(tag)) return;
+      if (e.code !== "Space" || /^(INPUT|TEXTAREA|BUTTON|SELECT|A)$/.test(tag)) return;
       e.preventDefault();
       randomize();
     };

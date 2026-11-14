@@ -1,0 +1,134 @@
+/* Turntable — geometry in % of a 440×400 plinth. Pivot centre = (388, 50) px → (88.18%, 12.5%).
+   Arm 250px long; at 24° its tip rests on the grooves (≈120px from the record centre). */
+
+.turntable {
+  position: relative;
+  width: 100%;
+  max-width: 440px;
+  aspect-ratio: 440 / 400;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 16px;
+  background: var(--genre-bg, var(--card));
+  color: var(--genre-fg, var(--foreground));
+}
+
+/* Paper platter under the record (356px at (16, 22)): separates the disc from any plinth tone, Sumi included. */
+.turntable-platter-mat {
+  position: absolute;
+  left: 3.64%;
+  top: 5.5%;
+  width: 80.91%;
+  aspect-ratio: 1;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--card);
+}
+
+/* Record: 340px at (24, 30). Shadow on the static wrapper so it doesn't rotate with the disc. */
+.turntable-record {
+  position: absolute;
+  left: 5.45%;
+  top: 7.5%;
+  width: 77.27%;
+  border-radius: 50%;
+  box-shadow: 0 2px 6px rgb(28 28 28 / 0.18);
+}
+/* Empty platter outline while the route resolves; the record then lands on it. */
+.turntable-platter {
+  position: absolute;
+  left: 5.45%;
+  top: 7.5%;
+  width: 77.27%;
+  aspect-ratio: 1;
+  border: 1.5px dashed var(--divider);
+  border-radius: 50%;
+}
+.turntable-record.is-arriving {
+  animation: turntable-arrive 0.7s var(--ease-lift) both;
+}
+.turntable-spin {
+  display: flex;
+  animation: turntable-spin 1.8s linear infinite;
+  animation-play-state: paused;
+}
+.turntable-spin[data-spinning="true"] {
+  animation-play-state: running;
+}
+
+.turntable-arm {
+  position: absolute;
+  left: 88.18%;
+  top: 12.5%;
+  width: 8px;
+  height: 62.5%;
+  margin-left: -4px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 9999px;
+  background: var(--muted);
+  transform-origin: 50% 0;
+  transition: transform 0.7s var(--ease-lift);
+}
+/* Needle drops into the playing track's band; changing track glides the arm across the record. */
+.turntable-arm[data-down="true"] {
+  transform: rotate(var(--arm-angle, 24deg));
+}
+.turntable-arm-head {
+  position: absolute;
+  left: 50%;
+  bottom: -12px;
+  width: 18px;
+  height: 28px;
+  margin-left: -9px;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 4px;
+  background: var(--muted);
+}
+
+.turntable-pivot {
+  position: absolute;
+  left: 88.18%;
+  top: 12.5%;
+  width: 10%;
+  aspect-ratio: 1;
+  border: 1.5px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--muted);
+  transform: translate(-50%, -50%);
+}
+.turntable-pivot::after {
+  content: "";
+  position: absolute;
+  inset: 35%;
+  border-radius: 50%;
+  background: var(--foreground);
+}
+
+.turntable-speed {
+  position: absolute;
+  right: 5%;
+  bottom: 5%;
+  font-family: var(--font-space-mono), monospace;
+  font-size: 13px;
+}
+
+@keyframes turntable-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes turntable-arrive {
+  from {
+    opacity: 0;
+    transform: translateX(-32px) rotate(-90deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .turntable-record.is-arriving,
+  .turntable-spin {
+    animation: none;
+  }
+  .turntable-arm {
+    transition: none;
+  }
+}

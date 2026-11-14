@@ -1,6 +1,8 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
+import { PageRow } from "@/components/layout/page-row";
 import { findBySlug } from "@/domain/slug";
+import { HowItWorks } from "@/features/home";
 import { ResultFallback, ResultView } from "@/features/result";
 import { GENRES } from "@/mocks/genres";
 
@@ -9,13 +11,19 @@ export function generateStaticParams() {
   return GENRES.map((g) => ({ genre: g.slug }));
 }
 
-// Instant navigation: the URL param is read inside <Suspense>, so the shell (header, History, fallback)
+// Instant navigation: the URL param is read inside <Suspense>, so the shell (header, fallback)
 // renders immediately and the genre streams in.
+// No steps band on genre pages, only its invisible spacer (keeps the corner vinyl in place).
 export default function GenrePage({ params }: PageProps<"/[genre]">) {
   return (
-    <Suspense fallback={<ResultFallback />}>
-      <GenreResult params={params} />
-    </Suspense>
+    <>
+      <PageRow>
+        <Suspense fallback={<ResultFallback />}>
+          <GenreResult params={params} />
+        </Suspense>
+      </PageRow>
+      <HowItWorks placeholder />
+    </>
   );
 }
 

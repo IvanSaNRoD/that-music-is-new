@@ -1,0 +1,39 @@
+/* Pulled like a record from the crate. */
+.recent-finds-pill {
+  transition: transform 0.2s var(--ease-lift);
+}
+.recent-finds-pill:hover {
+  transform: translateY(-2px);
+}
+
+/* A genre added while on its page drops into the trail (record rolling in). */
+.recent-finds-new {
+  animation: recent-finds-in 0.5s var(--ease-lift) both;
+}
+.recent-finds-new .recent-finds-disc {
+  animation: recent-finds-roll 0.5s var(--ease-lift) both;
+}
+
+@keyframes recent-finds-in {
+  from {
+    opacity: 0;
+    transform: translateX(-12px);
+  }
+}
+@keyframes recent-finds-roll {
+  from {
+    transform: rotate(-180deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .recent-finds-new,
+  .recent-finds-new .recent-finds-disc {
+    animation: none;
+  }
+  .recent-finds-pill,
+  .recent-finds-pill:hover {
+    transition: none;
+    transform: none;
+  }
+}
