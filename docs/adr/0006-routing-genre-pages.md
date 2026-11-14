@@ -15,7 +15,9 @@
    - `/` → home (Hero + crate).
    - `/{slug}` → genre page (result: tracks, player, states). Unknown slug → `notFound()` (404 inside the shell).
 2. **Slug** (`src/domain/slug.ts`, pure): lowercase, accents stripped (NFKD), `&` → `and`, any other run of non-alphanumerics → `-`, trimmed. `Trip hop` → `trip-hop`, `R&B` → `r-and-b`, `Música popular` → `musica-popular`. `Genre` gets a `slug` field; slug uniqueness is checked when the real catalog is generated (E1).
-3. **Shared shell**: route group `src/app/(site)/layout.tsx` holds header, `CrateProvider` + `HistoryProvider` (client contexts), the main row (`{children}` + History column), the steps band and the decorative vinyl. Pages render only their column(s).
+3. **Shared shell**: route group `src/app/(site)/layout.tsx` holds header, `CrateProvider` + `HistoryProvider` (client contexts), the main row (`{children}`), the steps band and the decorative vinyl. Pages render only their column(s).
+   - *Amended 2026-11-13*: the full History column belongs to the home page only (`HomeView`). Genre pages show a compact "Your finds" trail (`features/history/recent-finds.tsx`: last 5, click to open; remove/clear stay on home), so the turntable and track list get the full width. History state still lives in the layout provider.
+   - *Amended 2026-11-13*: the main row moved from the layout into each page (`components/layout/page-row.tsx`), so pages can own what sits below it. The "how it works" steps band renders on home only; genre and not-found pages render an invisible, inert copy (desktop only) so the page height and the decorative corner vinyl don't jump.
 4. **Entry points → effects**
 
    | Entry | Goes to | Changes the crate | Adds to History |

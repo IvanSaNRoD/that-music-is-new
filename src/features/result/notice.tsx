@@ -1,22 +1,27 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 const focusRing = "focus-visible:outline-primary-ink focus-visible:outline-2 focus-visible:outline-offset-2";
 
-export function Notice({ title, body, action }: { title: string; body: string; action: { label: string; onClick: () => void; disabled?: boolean } }) {
+type Action = { label: string; onClick: () => void; disabled?: boolean };
+
+// Not a live region: ResultView's page-level aria-live announces each state once.
+export function Notice({ title, body, action }: { title: string; body: ReactNode; action?: Action }) {
   return (
-    <div role="status" className="bg-card border-border-strong flex flex-col items-start gap-3 rounded-2xl border-[1.5px] p-8 xl:col-span-2">
-      <h3 className="font-display text-[26px] font-extrabold tracking-[-0.02em]">{title}</h3>
+    <div className="bg-card border-border-strong flex flex-col items-start gap-3 rounded-2xl border-[1.5px] p-8">
+      <h2 className="font-display text-[26px] font-extrabold tracking-[-0.02em]">{title}</h2>
       <p className="text-muted-foreground max-w-[46ch]">{body}</p>
-      <button
-        type="button"
-        disabled={action.disabled}
-        onClick={action.onClick}
-        className={`bg-primary border-border-strong hover:bg-primary-hover mt-2 rounded-xl border-[1.5px] px-5 py-2.5 text-[17px] font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}
-      >
-        {action.label}
-      </button>
+      {action && (
+        <button
+          type="button"
+          disabled={action.disabled}
+          onClick={action.onClick}
+          className={`bg-primary border-border-strong hover:bg-primary-hover mt-2 rounded-xl border-[1.5px] px-5 py-2.5 text-[17px] font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}
+        >
+          {action.label}
+        </button>
+      )}
     </div>
   );
 }
@@ -31,7 +36,14 @@ export function BusyNotice({ seconds, onRetry }: { seconds: number; onRetry: () 
   return (
     <Notice
       title="Spotify is busy right now"
-      body={left > 0 ? `Too many requests. Try again in ${left} s.` : "You can try again now."}
+      body={
+        // The visible countdown ticks every second but is hidden from screen readers: they get the wait once
+        // (ResultView's page-level live region), then this always-mounted status says "try again now".
+        <>
+          {left > 0 && <span aria-hidden="true">Too many requests. Try again in {left} s.</span>}
+          <span role="status">{left > 0 ? "" : "You can try again now."}</span>
+        </>
+      }
       action={{ label: "Try again", onClick: onRetry, disabled: left > 0 }}
     />
   );

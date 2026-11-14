@@ -1,5 +1,13 @@
-import { HomeView } from "@/features/home";
+import { PageRow } from "@/components/layout/page-row";
+import { HomeView, HowItWorks } from "@/features/home";
 
 export default function HomePage() {
-  return <HomeView />;
+  return (
+    <>
+      <PageRow>
+        <HomeView />
+      </PageRow>
+      <HowItWorks />
+    </>
+  );
 }

@@ -9,27 +9,29 @@ const STEPS = [
 
 // Tablet: cards + tagline form one centred group.
 // Desktop: same 1440px container as the row above; 3 equal card columns + tagline on the right.
-export function HowItWorks() {
+/**
+ * `placeholder`: invisible, inert copy that keeps the band's height on desktop (genre pages), so the
+ * page height — and the decorative corner vinyl — doesn't jump between home and a genre.
+ */
+export function HowItWorks({ placeholder = false }: { placeholder?: boolean }) {
   return (
     <section
-      aria-label="How it works"
-      className="flex flex-col gap-8 px-6 pt-6 pb-12 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-x-14 md:gap-y-6 md:px-12 lg:mx-auto lg:grid lg:w-full lg:max-w-[1440px] lg:grid-cols-[1fr_auto]"
+      aria-label={placeholder ? undefined : "How it works"}
+      aria-hidden={placeholder || undefined}
+      inert={placeholder}
+      className={`${placeholder ? "invisible max-lg:hidden " : ""}flex flex-col gap-8 px-6 pt-6 pb-12 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-x-14 md:gap-y-6 md:px-12 lg:mx-auto lg:grid lg:w-full lg:max-w-[1440px] lg:grid-cols-[1fr_auto]`}
     >
       <ol className="flex flex-col items-stretch md:flex-row md:items-center lg:grid lg:grid-cols-[1fr_32px_1fr_32px_1fr]">
         {STEPS.map((s, i) => (
           <Fragment key={s.title}>
-            {i > 0 && (
-              <li aria-hidden="true" className="bg-border mx-auto h-6 w-px md:mx-0 md:h-px md:w-8 lg:w-full" />
-            )}
+            {i > 0 && <li aria-hidden="true" className="bg-border mx-auto h-6 w-px md:mx-0 md:h-px md:w-8 lg:w-full" />}
             {/* Lighter than the main panels: tonal card, no ink outline, so the crate stays the focus. */}
             <li className="bg-card flex items-center gap-4 rounded-[14px] px-5 max-md:py-4 md:h-[96px] md:w-[290px] md:max-w-[26vw] lg:w-auto lg:max-w-none lg:min-w-0">
               <span className="bg-primary font-display flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold">
                 {i + 1}
               </span>
               <span className="flex flex-col gap-1">
-                <span className="font-display text-lg leading-tight font-extrabold tracking-[-0.02em]">
-                  {s.title}
-                </span>
+                <span className="font-display text-lg leading-tight font-extrabold tracking-[-0.02em]">{s.title}</span>
                 <span className="text-muted-foreground text-sm leading-snug">{s.body}</span>
               </span>
             </li>

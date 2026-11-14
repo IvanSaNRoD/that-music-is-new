@@ -40,8 +40,8 @@ flowchart LR
 
 | URL | Page | Notes |
 |---|---|---|
-| `/` | Home: Hero + crate | History column + steps from the shared `(site)` layout |
-| `/{slug}` | Genre page: tracks, player, loading/error/empty | `slug` from `domain/slug.ts` (`R&B` → `r-and-b`); unknown → 404 |
+| `/` | Home: Hero + crate + History column + steps band | Row via `PageRow` (`components/layout`) |
+| `/{slug}` | Genre page: turntable, tracks, player, "Your finds" trail, loading/error/empty | `slug` from `domain/slug.ts` (`R&B` → `r-and-b`); unknown → 404 |
 
 Entry points: Randomize/Space/Roll again → random `/{slug}`; sleeve Play → that genre; History row → that genre. **Only crate actions change the crate.** Crate + History state live in layout providers, so they persist across navigation.
 
@@ -109,7 +109,7 @@ scripts/build-genres.mjs      # one-time: thesoundsofspotify → genres.json
 src/
   app/                        # routing only (Next special files)
     layout.tsx  globals.css   # root layout: html, fonts, design tokens
-    (site)/layout.tsx         # shared shell: header, crate + history providers, History column, steps (ADR-0006)
+    (site)/layout.tsx         # shared shell: header, crate + history providers, decorative vinyl (ADR-0006)
     (site)/page.tsx           # / → features/home (Hero + crate)
     (site)/[genre]/page.tsx   # /{slug} → features/result; unknown slug → not-found
     (site)/not-found.tsx
@@ -120,7 +120,7 @@ src/
     crate/                    # CrateFlip, CrateProvider, tones, useCrate
     randomizer/               # useRandomize (→ /{random slug}), RandomizeShortcut (Space)
     result/                   # ResultView = GenreResult · TrackList · PlayerSlot (TrackPlayer) · notices, useResult
-    history/                  # HistoryPanel, HistoryColumn, HistoryProvider, useGenreHistory
+    history/                  # HistoryPanel, HistoryColumn (home), RecentFinds (genre page), HistoryProvider, useGenreHistory
   components/                 # shared, feature-agnostic
     ui/                       # shadcn/ui primitives
     brand/                    # Vinyl, Sparkle
