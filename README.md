@@ -32,18 +32,27 @@ Full scope: [PRD](docs/prd.md).
 | Tests | Vitest + Testing Library, MSW, Playwright |
 | Quality | ESLint, Prettier, Husky + lint-staged, commitlint |
 | CI / Hosting | GitHub Actions / Vercel |
-| Design | Penpot (design tokens + mockups) |
+| Design | Designed in code with the [impeccable](https://github.com/pbakaus/impeccable) skill · exploration in Claude Design · Penpot for documentation |
 
 Why each choice: [ADR-0004](docs/adr/0004-tech-stack.md).
 
 ## Design system
 
-Built in Penpot. **Public link:** https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19
+**Source of truth: [`DESIGN.md`](DESIGN.md)** (North Star "The Record Crate": tokens, named rules, components; machine-readable sidecar in `.impeccable/design.json`) and the code itself. Screen briefs live in [`docs/design/`](docs/design/). Penpot mirrors the finished design as documentation: [public link](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19).
 
-- **Palette**: Seiji–Kinari (traditional Japanese colors): Kinari `#F3EBDA` background, Seiji `#8DB6A5` primary, Matsuba `#6E7B6A` borders, Sumi `#1C1C1C` text. All text pairs pass WCAG AA.
-- **Type**: Space Grotesk (display) + Inter (body), Tailwind type scale.
-- **Tokens**: color, font size/weight, spacing (4 px scale), radius — named like shadcn/ui variables (`background`, `primary`, `muted-foreground`…) so they map 1:1 to code.
-- **Screens** (page *Screens*, desktop 1440 + mobile 390): home (genre cloud, prominent Randomize + `Space` shortcut, how-it-works steps, illustrated empty history), loading (skeleton), result (genre, Spotify Embed, 10 tracks, history), error (retry), clear-history confirmation.
+- **Palette**: Seiji–Kinari (traditional Japanese colors): Kinari `#F3EBDA` paper, Seiji `#8DB6A5` single accent, Sumi `#1C1C1C` ink and outlines. Five sleeve tones give each genre its own color (Genre Tone Rule). All text pairs pass WCAG AA.
+- **Type**: Inter Tight (display) + Inter (UI) + Space Mono (catalog data: counts, dates, shortcuts).
+- **Tokens**: CSS variables in [`src/app/globals.css`](src/app/globals.css), named like shadcn/ui (`background`, `primary`, `muted-foreground`…).
+- **Status**: desktop home and genre page (turntable) are final in code. Mobile, tablet and touch are next; open points are listed in `DESIGN.md › Layout`. The *Screens* page in Penpot still holds the early drafts until it is updated from the coded design.
+
+## Design workflow
+
+Changed on 2026-11-12: screens built in Penpot through its plugin API were assembled "blind" and lacked polish, so design moved into code, where the see-fix loop is immediate.
+
+1. **Explore in Claude Design.** Visual options for a screen are generated in Claude Design and exported as a handoff (HTML/React reference) into [`docs/claude-design/`](docs/claude-design/) (Crate Flip for the home, Turntable for the genre page). Handoffs are references, not code: they are re-implemented with the project's tokens and rules.
+2. **Build in code with impeccable.** The [impeccable](https://github.com/pbakaus/impeccable) skill drives every step: `shape` (brief in `docs/design/`) → implement → `live` (variants in the browser) → `audit` (technical: a11y, performance, responsive) → `critique` (UX heuristics, personas) → `layout` / `harden` / `polish` (fixes) → `document` (updates `DESIGN.md`). Its detector also runs on every UI edit through a hook.
+3. **Critique with isolated subagents.** `critique` runs two subagents in parallel that never see each other's output: one does the design review (heuristics, cognitive load, personas) and the other gathers deterministic evidence (detector scans, headless-browser measurements such as contrast, focus order and layout stability). Keeping them apart stops the detector's findings from anchoring the design judgment. Each re-run uses fresh subagents without access to earlier reports.
+4. **Document in Penpot.** Once a screen is final, its tokens and screenshots are copied to Penpot so the design stays documented outside the code.
 
 ## AI-assisted workflow
 
@@ -61,6 +70,7 @@ Where subagents/extra reviews *are* used:
 |---|---|---|
 | `/code-review` | Before closing logic-heavy issues (E3, E4) | Independent review of code the main agent wrote |
 | `/security-review` | F1 (hardening) | Specialized security pass |
+| `/impeccable critique` | Every design review | Two isolated subagents (design review ∥ detector/browser evidence) so findings don't anchor each other |
 | Parallel work (optional) | E2 Spotify client ∥ E4 UI with mock data | Independent; only if pace needs it |
 
 ## Getting started
@@ -72,7 +82,7 @@ npm run build   # production build
 npm run lint
 ```
 
-Design tokens live in [`src/app/globals.css`](src/app/globals.css) (mapped 1:1 from Penpot).
+Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules that use them are in [`DESIGN.md`](DESIGN.md).
 
 ## Docs
 

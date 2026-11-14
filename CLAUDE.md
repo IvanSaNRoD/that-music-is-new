@@ -40,7 +40,7 @@ src/lib/         tiny helpers
 
 1. **Plan first** for anything touching >2 files or adding files: list files to create/modify with their location, wait for approval.
 2. UI work: use the `impeccable` skill; design in code; Penpot is documentation only.
-3. New screen: `/impeccable shape` → brief in `docs/design/` → implement → `/impeccable live` → audit/critique → `/impeccable document`.
+3. New screen: `/impeccable shape` → brief in `docs/design/` → implement → `/impeccable live` → audit/critique → `/impeccable document` → **document it in Penpot** (tokens + screenshots of the coded design). A screen's design is not done until it is in Penpot.
 4. Phase order: no Phase E (catalog, Spotify client) until all designs and all Phase D tasks are done.
 
 ## Definition of done
