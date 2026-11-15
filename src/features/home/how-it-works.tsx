@@ -7,7 +7,7 @@ const STEPS = [
   { title: "Dig deeper", body: "Liked it? Continue on Spotify." },
 ];
 
-// Tablet: cards + tagline form one centred group.
+// Below lg (phones, tablets): one centred column, cards stacked with vertical connectors.
 // Desktop: same 1440px container as the row above; 3 equal card columns + tagline on the right.
 /**
  * `placeholder`: invisible, inert copy that keeps the band's height on desktop (genre pages), so the
@@ -19,14 +19,14 @@ export function HowItWorks({ placeholder = false }: { placeholder?: boolean }) {
       aria-label={placeholder ? undefined : "How it works"}
       aria-hidden={placeholder || undefined}
       inert={placeholder}
-      className={`${placeholder ? "invisible max-lg:hidden " : ""}flex flex-col gap-8 px-6 pt-6 pb-12 md:flex-row md:flex-wrap md:items-center md:justify-center md:gap-x-14 md:gap-y-6 md:px-12 lg:mx-auto lg:grid lg:w-full lg:max-w-[1440px] lg:grid-cols-[1fr_auto]`}
+      className={`${placeholder ? "invisible max-lg:hidden " : ""}mx-auto flex w-full max-w-[720px] flex-col gap-8 px-6 pt-6 pb-12 lg:grid lg:max-w-[1440px] lg:grid-cols-[1fr_auto] lg:items-center lg:gap-x-14 lg:gap-y-6 lg:px-12`}
     >
-      <ol className="flex flex-col items-stretch md:flex-row md:items-center lg:grid lg:grid-cols-[1fr_32px_1fr_32px_1fr]">
+      <ol className="flex flex-col items-stretch lg:grid lg:items-center lg:grid-cols-[1fr_32px_1fr_32px_1fr]">
         {STEPS.map((s, i) => (
           <Fragment key={s.title}>
-            {i > 0 && <li aria-hidden="true" className="bg-border mx-auto h-6 w-px md:mx-0 md:h-px md:w-8 lg:w-full" />}
+            {i > 0 && <li aria-hidden="true" className="bg-border mx-auto h-6 w-px lg:mx-0 lg:h-px lg:w-full" />}
             {/* Lighter than the main panels: tonal card, no ink outline, so the crate stays the focus. */}
-            <li className="bg-card flex items-center gap-4 rounded-[14px] px-5 max-md:py-4 md:h-[96px] md:w-[290px] md:max-w-[26vw] lg:w-auto lg:max-w-none lg:min-w-0">
+            <li className="bg-card flex items-center gap-4 rounded-[14px] px-5 py-4 lg:h-[96px] lg:min-w-0 lg:py-0">
               <span className="bg-primary font-display flex size-10 shrink-0 items-center justify-center rounded-full text-lg font-extrabold">
                 {i + 1}
               </span>
@@ -39,7 +39,7 @@ export function HowItWorks({ placeholder = false }: { placeholder?: boolean }) {
         ))}
       </ol>
 
-      <div className="flex items-center gap-4 self-end md:self-center">
+      <div className="flex items-center gap-4 self-end lg:self-center">
         <Vinyl size={48} rings={4} />
         <span className="relative font-mono text-[15px] leading-snug font-bold uppercase">
           Discover

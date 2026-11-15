@@ -1,6 +1,20 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 
+/* Touch input (phones, tablets, iPad landscape): bigger targets, no hover-only affordances. Independent of width. */
+@custom-variant touch {
+  @media (hover: none), (pointer: coarse) {
+    @slot;
+  }
+}
+
+/* Genre page bottom bar (<lg, fixed): keep focused/scrolled-to elements clear of it (WCAG 2.4.11). */
+@media (width < 64rem) {
+  html:has([data-bottom-bar]) {
+    scroll-padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+}
+
 /*
  * Design tokens — source of truth: Penpot token set "base" (Seiji–Kinari palette).
  * Names follow shadcn/ui so components pick them up without changes.

@@ -31,7 +31,7 @@ export function CrateFlip({ catalog, stock, selected, onSelect, onRestock, onPla
             blurIfPointer(e);
             onRestock();
           }}
-          className="text-primary-ink hover:bg-primary-ink/10 active:bg-primary-ink/[0.18] focus-visible:outline-primary-ink rounded-full px-3 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="text-primary-ink hover:bg-primary-ink/10 active:bg-primary-ink/[0.18] focus-visible:outline-primary-ink touch:min-h-11 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
         >
           Restock
         </button>

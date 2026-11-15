@@ -63,8 +63,13 @@
 }
 .crate-name {
   margin-top: 14px;
-  font: 800 40px/1 var(--font-inter-tight);
+  /* Phones: scales down and stops at 2 lines so the Play pill never drops into the die-cut hole. */
+  font: 800 clamp(26px, 8vw, 40px)/1 var(--font-inter-tight);
   letter-spacing: -0.02em;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
 }
 .crate-play {
   margin-top: 8px;

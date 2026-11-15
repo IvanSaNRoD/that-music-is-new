@@ -22,7 +22,7 @@ type HistoryPanelProps = {
 };
 
 const linkButton =
-  "text-primary-ink focus-visible:outline-primary-ink rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2";
+  "text-primary-ink focus-visible:outline-primary-ink touch:min-h-11 inline-flex items-center rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2";
 
 export function HistoryPanel({
   catalog,
@@ -49,7 +49,7 @@ export function HistoryPanel({
   return (
     <section
       aria-labelledby="history-title"
-      className="bg-card border-border-strong flex min-h-[500px] flex-col overflow-hidden rounded-2xl border-[1.5px] lg:w-[27%] lg:flex-none"
+      className="bg-card border-border-strong flex flex-col overflow-hidden lg:min-h-[500px] rounded-2xl border-[1.5px] lg:w-[27%] lg:flex-none"
     >
       <div className="flex items-center justify-between px-5 pt-5 pb-4">
         <h2 id="history-title" className="font-display text-[30px] font-extrabold tracking-[-0.02em]">
@@ -81,25 +81,25 @@ export function HistoryPanel({
                     onOpen(id);
                   }}
                   aria-current={isSelected || undefined}
-                  className="focus-visible:outline-primary-ink flex w-full items-center gap-3.5 py-4 pr-4 pl-5 text-left focus-visible:outline-2 focus-visible:-outline-offset-2"
+                  className="focus-visible:outline-primary-ink flex w-full items-center gap-3.5 py-4 pr-4 pl-5 text-left touch:pr-16 focus-visible:outline-2 focus-visible:-outline-offset-2"
                 >
                   <Vinyl size={44} rings={4} />
                   <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <span className="truncate text-[17px] font-bold">{g.name}</span>
-                    <span className="text-muted-foreground font-mono text-[13px]">10 tracks · {date}</span>
+                    <span className="text-muted-foreground font-mono text-[13px] whitespace-nowrap">10 tracks · {date}</span>
                   </span>
                   <ChevronRight
                     size={20}
                     aria-hidden="true"
-                    className="transition-opacity group-focus-within:opacity-0 group-hover:opacity-0"
+                    className="touch:hidden transition-opacity group-focus-within:opacity-0 group-hover:opacity-0"
                   />
                 </button>
-                {/* ✕ only on hover / keyboard focus (desktop); always reachable by Tab. */}
+                {/* ✕ on hover / keyboard focus with a pointer; always visible (44px) on touch; always reachable by Tab. */}
                 <button
                   type="button"
                   onClick={() => onRemove(id)}
                   aria-label={`Remove ${g.name} from history`}
-                  className="hover:bg-background focus-visible:outline-primary-ink absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:outline-2"
+                  className="hover:bg-background focus-visible:outline-primary-ink absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 focus-visible:outline-2 touch:right-2 touch:p-3.5 touch:opacity-100"
                 >
                   <X size={16} strokeWidth={2.75} aria-hidden="true" />
                 </button>
@@ -126,7 +126,7 @@ export function HistoryPanel({
               <button
                 type="button"
                 onClick={() => setConfirming(false)}
-                className="text-muted-foreground hover:text-foreground focus-visible:outline-primary-ink rounded text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="text-muted-foreground hover:text-foreground focus-visible:outline-primary-ink touch:min-h-11 inline-flex items-center rounded text-[15px] font-semibold focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 Cancel
               </button>
@@ -136,7 +136,7 @@ export function HistoryPanel({
                   onClear();
                   setConfirming(false);
                 }}
-                className="text-destructive focus-visible:outline-primary-ink rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
+                className="text-destructive focus-visible:outline-primary-ink touch:min-h-11 inline-flex items-center rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2"
               >
                 Clear
               </button>

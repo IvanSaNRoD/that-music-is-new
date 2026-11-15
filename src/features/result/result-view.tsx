@@ -58,7 +58,11 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
   // PLACEHOLDER: Spotify search until the catalog provides the playlist URL (E1).
   const spotifyUrl = `https://open.spotify.com/search/${encodeURIComponent(`The Sound of ${genre.name}`)}`;
   // Long names (e.g. "Musica Popular Brasileira Contemporanea") step down so the title stays within ~2 lines.
-  const titleSize = genre.name.length > 22 ? "text-[48px]" : "text-[56px] xl:text-[64px]";
+  // Below lg the title shares a row with the mini deck, so it scales with the viewport (never overflows at 320px).
+  const titleSize =
+    genre.name.length > 22
+      ? "text-[clamp(21px,6.5vw,36px)] lg:text-[48px]"
+      : "text-[clamp(28px,9vw,44px)] lg:text-[56px] xl:text-[64px]";
 
   return (
     <section aria-labelledby="result-title" className="flex min-w-0 flex-1 flex-col" style={toneVars}>
@@ -71,12 +75,14 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
       </p>
 
       {/* DOM order = reading order: Back → deck (decorative) → title, tracks, finds → player.
-          The grid puts the player under the deck on desktop. */}
-      <div className="grid gap-x-12 gap-y-8 lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-y-4">
-        <div className="flex flex-col items-start gap-4">
+          ≥lg: deck | info columns, the grid puts the player under the deck.
+          <lg: the column wrappers dissolve (display: contents) into one grid: mini deck beside the title,
+          everything else full width, player + Roll again in a bar fixed to the bottom. */}
+      <div className="grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 max-lg:pb-[calc(120px+env(safe-area-inset-bottom))] lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
+        <div className="flex flex-col items-start gap-4 max-lg:contents">
           <Link
             href="/"
-            className={`text-primary-ink hover:bg-primary-ink/10 -ml-3 inline-flex items-center gap-2 rounded-full px-3 py-1.5 text-[15px] font-semibold transition-colors ${focusRing}`}
+            className={`text-primary-ink hover:bg-primary-ink/10 touch:min-h-11 -ml-3 inline-flex items-center gap-2 justify-self-start rounded-full px-3 py-1.5 text-[15px] font-semibold transition-colors max-lg:col-span-2 ${focusRing}`}
           >
             <ArrowLeft size={18} strokeWidth={2.5} aria-hidden="true" />
             Back to the crate
@@ -89,60 +95,53 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
             track={playing ? tracks.indexOf(playing) : null}
             record={status !== "error" && status !== "busy"}
             arrive
+            compact
           />
         </div>
 
-        <div className="flex min-w-0 flex-col gap-6 lg:col-start-2 lg:row-span-2 lg:row-start-1">
+        <div className="flex min-w-0 flex-col gap-6 max-lg:contents lg:col-start-2 lg:row-span-2 lg:row-start-1">
           {/* Title and page actions share one line, so the page fits the home's height (no corner-vinyl jump). */}
-          <div className="flex flex-wrap items-start justify-between gap-x-8 gap-y-4">
-            <div className="flex min-w-0 flex-1 basis-80 flex-col gap-3">
+          <div className="flex flex-wrap items-start justify-between gap-x-8 gap-y-4 max-lg:contents">
+            <div className="flex min-w-0 flex-1 basis-80 flex-col gap-3 max-lg:gap-2 max-lg:self-center">
               <h1
                 id="result-title"
                 ref={headingRef}
                 tabIndex={-1}
-                className={`font-display ${titleSize} leading-[0.95] font-extrabold tracking-[-0.02em] self-start text-balance outline-none rounded-sm data-[kbd=true]:focus:outline-primary-ink data-[kbd=true]:focus:outline-2 data-[kbd=true]:focus:outline-solid data-[kbd=true]:focus:outline-offset-4`}
+                className={`font-display ${titleSize} leading-[0.95] font-extrabold tracking-[-0.02em] self-start text-balance [overflow-wrap:anywhere] outline-none rounded-sm data-[kbd=true]:focus:outline-primary-ink data-[kbd=true]:focus:outline-2 data-[kbd=true]:focus:outline-solid data-[kbd=true]:focus:outline-offset-4`}
               >
                 {genre.name}
               </h1>
-              <p className="text-muted-foreground text-[15px] leading-6">
+              <p className="text-muted-foreground text-[15px] leading-6 max-lg:text-sm max-lg:leading-5">
                 <span className="font-mono">
                   {status === "loading"
                     ? "Pulling the record…"
                     : trackCount > 0
-                      ? `${trackCount} tracks in the playlist`
-                      : " "}
+                      ? <>{trackCount} tracks<span className="max-lg:hidden"> in the playlist</span></>
+                      : " "}
                 </span>
-                {status === "ready" && !playing && <span> · pick one to start listening</span>}
+                {status === "ready" && !playing && <span className="max-lg:hidden"> · pick one to start listening</span>}
               </p>
             </div>
-            <div className="flex flex-wrap items-center gap-5">
+            {/* <lg: its own row, 44px tall even while loading so nothing shifts when the link appears. */}
+            <div className="flex flex-wrap items-center gap-5 max-lg:col-span-2 max-lg:min-h-11">
               {status !== "loading" && (
                 <a
                   href={spotifyUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className={`text-primary-ink inline-flex items-center gap-1 rounded py-1.5 text-[15px] font-semibold underline-offset-4 hover:underline ${focusRing}`}
+                  className={`text-primary-ink touch:min-h-11 inline-flex items-center gap-1 rounded py-1.5 text-[15px] font-semibold underline-offset-4 hover:underline ${focusRing}`}
                 >
                   Listen more on Spotify
                   <ArrowUpRight size={16} strokeWidth={2.5} aria-hidden="true" />
                   <span className="sr-only">(opens in a new tab)</span>
                 </a>
               )}
-              <button
-                type="button"
-                onClick={(e) => {
-                  blurIfPointer(e);
-                  randomize();
-                }}
-                className={`border-border-strong hover:bg-muted/50 inline-flex items-center gap-2 rounded-xl border-[1.5px] px-5 py-2.5 text-[17px] font-bold transition-colors active:translate-y-px ${focusRing}`}
-              >
-                <Shuffle size={20} strokeWidth={2.5} aria-hidden="true" />
-                Roll again
-              </button>
+              {/* <lg: Roll again lives in the bottom bar (thumb reach). */}
+              <RollAgain onRoll={randomize} className="max-lg:hidden" />
             </div>
           </div>
 
-          <div key={status} className="result-body">
+          <div key={status} className="result-body max-lg:col-span-2">
             {status === "ready" && <TrackList tracks={tracks} playingId={playingId} onPlay={playTrack} />}
             {status === "loading" && <TrackSkeleton />}
             {status === "empty" && (
@@ -158,19 +157,54 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
             {status === "busy" && <BusyNotice seconds={retryAfter} onRetry={retry} />}
           </div>
 
-          <div className="border-divider mt-auto border-t pt-5">
+          <div className="border-divider mt-auto border-t pt-5 max-lg:col-span-2">
             <RecentFinds />
           </div>
         </div>
 
-        {/* Always in the layout (hidden outside "ready") so loading → ready → error never changes the page height. */}
-        <div
-          className={`lg:col-start-1 lg:row-start-2 lg:self-start ${status === "ready" ? "" : "invisible max-lg:hidden"}`}
-          aria-hidden={status !== "ready" || undefined}
-        >
-          <PlayerSlot track={playing} spotifyUrl={spotifyUrl} />
+        {/* ≥lg: under the deck. <lg: bottom bar (player + Roll again), safe-area aware.
+            The player always keeps its slot (hidden outside "ready") so states never change the geometry. */}
+        <div data-bottom-bar className="max-lg:border-border-strong max-lg:bg-background lg:col-start-1 lg:row-start-2 lg:self-start max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-40 max-lg:border-t-[1.5px] max-lg:pb-[env(safe-area-inset-bottom)]">
+          <div className="max-lg:mx-auto max-lg:flex max-lg:max-w-[720px] max-lg:items-center max-lg:gap-3 max-lg:px-6 max-lg:py-3">
+            <div
+              className={`min-w-0 flex-1 ${status === "ready" ? "" : "invisible max-lg:hidden"}`}
+              aria-hidden={status !== "ready" || undefined}
+            >
+              <PlayerSlot track={playing} spotifyUrl={spotifyUrl} />
+            </div>
+            <RollAgain onRoll={randomize} bar={status === "ready" ? "short" : "full"} className="lg:hidden" />
+          </div>
         </div>
       </div>
     </section>
+  );
+}
+
+/** Secondary on purpose (DESIGN.md › Buttons). `bar`: 56px tall in the bottom bar, always labelled (a bare shuffle reads as "shuffle tracks");
+ * "short" (beside the player): below 640px it reads "Roll" (the step-1 verb) so the now-playing title keeps its width;
+ * "full" (no player, outside ready): fills the bar, full label. */
+function RollAgain({
+  onRoll,
+  bar,
+  className = "",
+}: {
+  onRoll: () => void;
+  bar?: "short" | "full";
+  className?: string;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={(e) => {
+        blurIfPointer(e);
+        onRoll();
+      }}
+      className={`border-border-strong hover:bg-muted/50 inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border-[1.5px] text-[17px] font-bold transition-colors active:translate-y-px ${bar ? `bg-background h-14 px-5 ${bar === "full" ? "flex-1" : "max-sm:px-4"}` : "px-5 py-2.5"} ${focusRing} ${className}`}
+    >
+      <Shuffle size={20} strokeWidth={2.5} aria-hidden="true" />
+      <span>
+        Roll<span className={bar === "short" ? "max-sm:sr-only" : undefined}> again</span>
+      </span>
+    </button>
   );
 }

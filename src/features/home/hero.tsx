@@ -14,7 +14,8 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
         <span className="relative inline-block">
           genre
           <Sparkle size={34} className="absolute -top-3 -right-11" />
-          <Sparkle size={16} className="absolute top-6 -right-14" />
+          {/* Phones: the small sparkle would be cut by the screen edge. */}
+          <Sparkle size={16} className="absolute top-6 -right-14 max-sm:hidden" />
         </span>{" "}
         you’ve never heard of.
       </h1>
@@ -27,7 +28,7 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
         <button
           type="button"
           onClick={onRandomize}
-          className="bg-primary text-primary-foreground border-border-strong hover:bg-primary-hover focus-visible:outline-primary-ink inline-flex items-center gap-3 rounded-2xl border-[1.5px] px-10 py-[22px] text-[26px] font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-px"
+          className="bg-primary text-primary-foreground border-border-strong hover:bg-primary-hover focus-visible:outline-primary-ink inline-flex items-center justify-center gap-3 max-lg:w-full rounded-2xl border-[1.5px] px-10 py-[22px] text-[26px] font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 active:translate-y-px"
         >
           <Shuffle size={28} strokeWidth={2.5} aria-hidden="true" />
           Randomize

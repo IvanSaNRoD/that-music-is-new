@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Vinyl } from "@/components/brand/vinyl";
@@ -27,7 +27,11 @@ export function RecentFinds() {
       {items.length === 0 ? (
         <p className="text-muted-foreground text-sm">Play a track and this genre lands here.</p>
       ) : (
-        <ul className="flex flex-wrap gap-2" aria-live="polite">
+        // Below lg: one row that scrolls sideways, bleeding to the screen edges (py/px keep the current-pill ring unclipped).
+        <ul
+          className="flex gap-2 py-1 max-lg:-mx-6 max-lg:gap-3 max-lg:overflow-x-auto max-lg:px-6 max-lg:[scrollbar-width:none] lg:-m-1 lg:flex-wrap lg:p-1"
+          aria-live="polite"
+        >
           {items.map(({ id }) => {
             const index = GENRES.findIndex((g) => g.id === id);
             const g = GENRES[index];
@@ -35,15 +39,17 @@ export function RecentFinds() {
             const current = g.slug === params.genre;
             const [bg, fg, hole] = toneFor(index);
             return (
-              <li key={id} className={initial.has(id) ? undefined : "recent-finds-new"}>
+              <li key={id} className={`shrink-0 ${initial.has(id) ? "" : "recent-finds-new"}`}>
+                {/* Below lg: a mini sleeve (tone + die-cut hole) with the name under it, like the crate. lg+: tone pill. */}
                 <Link
                   href={`/${g.slug}`}
                   aria-current={current ? "page" : undefined}
-                  style={{ backgroundColor: bg, color: fg }}
-                  className={`recent-finds-pill border-border-strong flex max-w-[16rem] items-center gap-2 rounded-full border-[1.5px] py-1 pr-4 pl-1 text-[15px] font-semibold ${current ? "outline-border-strong outline-2 outline-offset-2" : ""} focus-visible:outline-primary-ink focus-visible:outline-2 focus-visible:outline-offset-2`}
+                  style={{ "--find-bg": bg, "--find-fg": fg, "--find-hole": hole } as CSSProperties}
+                  className={`recent-finds-item flex font-semibold max-lg:w-[76px] max-lg:flex-col max-lg:gap-1.5 max-lg:rounded-lg max-lg:text-[13px] max-lg:leading-tight lg:border-border-strong lg:max-w-[16rem] lg:items-center lg:gap-2 lg:rounded-full lg:border-[1.5px] lg:bg-(--find-bg) lg:py-1 lg:pr-4 lg:pl-1 lg:text-[15px] lg:text-(--find-fg) lg:touch:py-[7px] ${current ? "lg:outline-border-strong lg:outline-2 lg:outline-offset-2" : ""} focus-visible:outline-primary-ink focus-visible:outline-2 focus-visible:outline-offset-2`}
                 >
-                  <Vinyl size={28} rings={3} label={hole} className="recent-finds-disc" />
-                  <span className="truncate">{g.name}</span>
+                  <span className="recent-finds-cover lg:hidden" aria-hidden="true" />
+                  <Vinyl size={28} rings={3} label={hole} className="recent-finds-disc max-lg:hidden" />
+                  <span className="max-lg:line-clamp-2 lg:truncate">{g.name}</span>
                 </Link>
               </li>
             );
