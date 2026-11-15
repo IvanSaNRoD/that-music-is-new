@@ -42,3 +42,9 @@ next-env.d.ts
 
 # private notes (retrospectives, personal guides)
 notes/
+
+# tests
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

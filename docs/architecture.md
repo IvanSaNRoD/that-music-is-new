@@ -133,7 +133,12 @@ src/
     spotify/ token.ts  playlists.ts  schemas.ts
   mocks/                      # design-phase placeholder data (removed when real data lands)
   lib/                        # tiny shared helpers
-tests/e2e/                    # Playwright (Spotify mocked with MSW)
+tests/e2e/                    # Playwright: desktop + touch phone (Pixel 7)
+tests/msw/                    # MSW server + Spotify handlers for unit tests
+# Unit/component tests sit next to their file: src/**/<name>.test.ts(x) (Vitest + Testing Library, jsdom).
+# Async Server Components are covered by e2e only (Vitest can't render them).
+# Open (Phase E): server-side fetch runs inside the Next process, so MSW in vitest.setup.ts does not reach it
+# during e2e; decide how e2e mocks Spotify (e.g. a test-only base URL served by MSW) when server/spotify lands.
 ```
 
 Import rules (ADR-0005): features use each other only through `features/<name>/index.ts`; `domain/` imports nothing from React/UI/server; `server/` is never imported by client code.

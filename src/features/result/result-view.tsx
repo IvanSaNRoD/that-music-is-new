@@ -139,7 +139,7 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
                 >
                   Listen more on Spotify
                   <ArrowUpRight size={16} strokeWidth={2.5} aria-hidden="true" />
-                  <span className="sr-only">(opens in a new tab)</span>
+                  <span className="sr-only"> (opens in a new tab)</span>
                 </a>
               )}
               {/* <lg: Roll again lives in the bottom bar (thumb reach). */}

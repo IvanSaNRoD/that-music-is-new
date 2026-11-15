@@ -29,7 +29,7 @@ export function PlayerSlot({ track, spotifyUrl }: { track: Track | null; spotify
           {/* Below 1280 (narrow deck, bottom bar): shorter visible label; below 640: icon only (room for the title). Same accessible name. */}
           <span className="max-sm:sr-only">Dig deeper</span> <span className="sr-only xl:not-sr-only">on Spotify</span>
           <ArrowUpRight size={15} strokeWidth={2.5} aria-hidden="true" />
-          <span className="sr-only">(opens in a new tab)</span>
+          <span className="sr-only"> (opens in a new tab)</span>
         </a>
       ) : (
         <span className="ml-auto shrink-0 font-mono text-[13px] text-muted-foreground max-sm:hidden">
