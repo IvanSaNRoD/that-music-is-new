@@ -53,6 +53,7 @@ src/lib/         tiny helpers
 ## Git
 
 - Never commit, push, merge, rebase or delete branches unless asked.
+- `main` is protected: PRs merge only with CI green (`checks` + `e2e`, `.github/workflows/ci.yml`); the admin may push docs-only commits (README rows) directly.
 - Conventional commits; one issue = one branch + PR; PR description lists scope, out-of-scope and test plan.
 - When an issue closes, add its row to the README Progress table.
 
