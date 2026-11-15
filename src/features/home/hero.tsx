@@ -9,11 +9,14 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
         <span className="h-px flex-1 bg-border-strong" aria-hidden="true" />
       </div>
 
-      <h1 className="font-display text-[56px] leading-[0.95] font-extrabold tracking-[-0.02em] text-balance sm:text-[80px]">
+      {/* Phones: scales with the column (max 56px) so "Hear a genre / you've never / heard of." stays 3 lines down to 320px.
+          Tablets (640–1023): 96px (display max) fills the 720px column; desktop: 80px in the 36% hero column. */}
+      <h1 className="font-display text-[clamp(40px,calc((100vw-48px)/6),56px)] leading-[0.95] font-extrabold tracking-[-0.02em] text-balance sm:text-[96px] lg:text-[80px]">
         Hear a{" "}
         <span className="relative inline-block">
           genre
-          <Sparkle size={34} className="absolute -top-3 -right-11" />
+          {/* Phones: "genre" ends at the column edge, so the sparkle tucks in to stay on screen. */}
+          <Sparkle size={34} className="absolute -top-3 -right-11 max-sm:-top-5 max-sm:-right-6" />
           {/* Phones: the small sparkle would be cut by the screen edge. */}
           <Sparkle size={16} className="absolute top-6 -right-14 max-sm:hidden" />
         </span>{" "}
