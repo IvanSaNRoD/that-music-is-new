@@ -58,6 +58,6 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 
 ## Future ideas
 - Avoid randomizing genres already in the history.
-- Select genre subgroups (e.g. by family/region) before randomizing.
+- Select genre subgroups (e.g. by family/region) before randomizing. Notes (2026-11-15, E1): Spotify gives no category, only the playlist name (6,490 genres), so the hard part is the taxonomy, not the script. Options: keyword rules on names (fast, leaves many unclassified: "C86", "ZXC"), LLM classification + manual review, or Every Noise's map (was down). Store it as a separate `config/genre-groups.json` (`playlistId → group`) so `genres.json` and its script stay unchanged.
 - Multi-genre mixes / genre blocks.
 - Login to save the list as a playlist (`POST /me/playlists`), full in-app playback (Web Playback SDK).
