@@ -8,7 +8,9 @@ A door into rare music genres. One click → a random genre from ~7,000 and a sh
 
 [![Design system on Penpot](https://img.shields.io/badge/Design_system-Penpot-8DB6A5?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=110d30a4-9d92-80de-8008-ee26a65adfd8&section=interactions&index=0&share-id=2ffa9ce6-5d22-4f57-a813-66d4d19c4d19)
 
-[![Screens on Penpot](https://img.shields.io/badge/Screens-Penpot-B3412F?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=4aa1a90e-d850-80aa-8008-ee4eb67a2ed2&section=interactions&index=0&share-id=aa919e04-9944-4418-955f-303e4a7de80e)
+[![Desktop screens on Penpot](https://img.shields.io/badge/Desktop_screens-Penpot-3B705D?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=3c1543f6-2e31-80fc-8008-f1289998b7e0&section=interactions&index=0&share-id=7f9dba8d-d809-4d98-b1a8-dbf920b0d5ed)
+
+[![Mobile screens on Penpot](https://img.shields.io/badge/Mobile_screens-Penpot-6E7B6A?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=c2a93463-2d22-807c-8008-f3373ae1170b&section=interactions&index=0&share-id=7f9dba8d-d809-4d98-b1a8-dbf920b0d5ed)
 
 [![Release v0.1.0](https://img.shields.io/github/v/release/IvanSaNRoD/that-music-is-new?include_prereleases&label=release&color=1C1C1C)](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.1.0)
 
@@ -43,7 +45,7 @@ Why each choice: [ADR-0004](docs/adr/0004-tech-stack.md).
 - **Palette**: Seiji–Kinari (traditional Japanese colors): Kinari `#F3EBDA` paper, Seiji `#8DB6A5` single accent, Sumi `#1C1C1C` ink and outlines. Five sleeve tones give each genre its own color (Genre Tone Rule). All text pairs pass WCAG AA.
 - **Type**: Inter Tight (display) + Inter (UI) + Space Mono (catalog data: counts, dates, shortcuts).
 - **Tokens**: CSS variables in [`src/app/globals.css`](src/app/globals.css), named like shadcn/ui (`background`, `primary`, `muted-foreground`…).
-- **Status**: desktop home and genre page (turntable) are final in code. Mobile, tablet and touch are next; open points are listed in `DESIGN.md › Layout`. The *Screens* page in Penpot still holds the early drafts until it is updated from the coded design.
+- **Status**: home and genre page (turntable) are final in code for desktop and for mobile + touch (one layout below 1024px; tablets use it in a centred column). Penpot documents both: *Desktop (final)* and *Mobile (final)* pages, captured from the coded design.
 
 ## Design workflow
 
