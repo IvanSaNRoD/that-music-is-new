@@ -84,6 +84,8 @@ npm run build   # production build
 npm run lint          # ESLint, incl. architecture boundaries (ADR-0005)
 npm run typecheck     # tsc --noEmit
 npm run format        # Prettier (+ Tailwind class order); format:check in CI
+npm test              # Vitest + Testing Library (unit/component, Spotify mocked with MSW)
+npm run test:e2e      # Playwright, desktop + touch phone (first time: npx playwright install chromium)
 ```
 
 Git hooks (Husky, installed by `npm install`): `pre-commit` runs ESLint + Prettier on staged files (lint-staged); `commit-msg` enforces conventional commits (commitlint).
