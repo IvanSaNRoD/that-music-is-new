@@ -56,6 +56,14 @@ src/lib/         tiny helpers
 - Conventional commits; one issue = one branch + PR; PR description lists scope, out-of-scope and test plan.
 - When an issue closes, add its row to the README Progress table.
 
+## Gotchas (Windows + Next 16)
+
+- One `next dev` per project (a second one exits). Stopping it may leave an orphan `node` on :3000: check `netstat -ano | grep :3000` and kill the PID.
+- Never run `npm run build` (or move many source files) while `next dev` runs: they share `.next` and the dev server breaks (500s). Fix: kill dev, delete `.next`, restart.
+- After adding/moving routes run `npx next typegen` before `tsc` (stale `.next/types` gives false errors).
+- Never edit project files with PowerShell `Get-Content`/`Set-Content`: Windows PowerShell 5.1 reads BOM-less UTF-8 as ANSI and writes a BOM (`·`, `—`, `→` get corrupted). Use the editor tools or Node/Python with explicit UTF-8.
+- `core.autocrlf=true` checks files out as CRLF; Prettier uses `endOfLine: "auto"` so `format:check` passes. Don't change it.
+
 ## Language
 
 - Chat with the user in Spanish. Code, comments, docs, commits and UI copy in English.
