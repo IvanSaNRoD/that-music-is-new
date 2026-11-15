@@ -14,6 +14,7 @@ Project rules for Claude Code. They override defaults. When a rule and a request
 | Screen briefs | `docs/design/*-brief.md` |
 | Backlog / phases | `docs/backlog.md`, GitHub Project board |
 
+- `docs/guides/` = explanations for humans only (e.g. `request-flow.md`); don't read them for tasks — the sources above are authoritative.
 - Next.js 16 differs from training data: check `node_modules/next/dist/docs/` before any Next API or structure decision.
 - Other libraries (Tailwind v4, shadcn/ui, Radix, Vitest, Playwright, MSW, zod): use Context7 docs when unsure; never guess APIs.
 

@@ -1,13 +1,13 @@
 # Architecture — iteration 1
 
-Related: PRD (`docs/prd.md`), ADR-0001…0006.
+Related: PRD (`docs/prd.md`), ADR-0001…0007. Human walkthrough of each request: `docs/guides/request-flow.md`.
 
 ## Components
 
 ```mermaid
 flowchart LR
   subgraph Browser
-    UI["Home page<br/>Randomizer · GenreResult · TrackList · History"]
+    UI["Pages / and /{slug}<br/>Randomize · crate · result · History"]
     LS[("localStorage<br/>genre history")]
     EMB["Spotify Embed<br/>(iframe, 1 player)"]
   end
@@ -15,7 +15,7 @@ flowchart LR
     API["Route handlers<br/>/api/genres/*"]
     SVC["Randomizer service"]
     DOM["Domain (pure)<br/>pick · offset · filter · shuffle"]
-    CAT[("config/genres.json<br/>~7,000 genres")]
+    CAT[("config/genres.json<br/>6,490 genres")]
     SP["Spotify client<br/>(server-only, token cache)"]
   end
   SAPI["Spotify Web API"]
@@ -45,28 +45,29 @@ flowchart LR
 
 Entry points: Randomize/Space/Roll again → random `/{slug}`; sleeve Play → that genre; History row → that genre. **Only crate actions change the crate.** Crate + History state live in layout providers, so they persist across navigation.
 
-## API
+## API (ADR-0007)
 
-| Endpoint | Purpose |
-|---|---|
-| `GET /api/genres/random` | Random genre + up to 10 tracks (Randomizer, "roll again"). |
-| `GET /api/genres/{playlistId}` | New sample of up to 10 tracks for a known genre (history click). `playlistId` must exist in the catalog, otherwise `404` (prevents using the app as an open proxy to Spotify). |
+| Endpoint | Purpose | Spotify calls |
+|---|---|---|
+| `GET /api/genres/random?exclude={slug}` | Pick a random catalog genre ≠ `exclude` (Randomize · Space · Roll again). Returns `{ genre, slug }`; the client navigates to `/{slug}`. | 0 |
+| `GET /api/genres/{slug}` | Genre + up to 10 tracks, for every way of opening a genre (after Randomize, sleeve Play, History, shared URL/reload, retry). `slug` must exist in the catalog, otherwise `404` (no open proxy to Spotify). | 1 |
 
-Both return the same shape and are not cached (`no-store`, results are random):
+Both are dynamic and send `Cache-Control: no-store` (results are random). `{slug}` returns:
 
 ```ts
 type GenreResult = {
-  genre: string;          // "acid jazz"
+  genre: string;          // "Acid Jazz"
+  slug: string;           // "acid-jazz"
   playlistId: string;
   playlistUrl: string;    // https://open.spotify.com/playlist/{id}
   total: number;          // tracks in the playlist (genre context)
-  tracks: { id: string; name: string; artists: string[] }[]; // ≤ 10
+  tracks: { id: string; title: string; artists: string }[]; // ≤ 10, domain Track
 };
 ```
 
-Errors: Spotify `429` → `503` + `Retry-After`; other Spotify/network errors → `502`. The UI shows an error state with retry.
+Errors (`server/spotify/errors.ts` › `toHttpError`): Spotify `429` → `503` + `Retry-After`; other Spotify/network/timeout/shape errors → `502`; anything else (e.g. missing credentials) → `500`; unknown slug → `404`. The UI shows busy/error states with retry.
 
-Market: Spotify only reports `is_playable` when the request has `market`. Users are anonymous, so routes pass the visitor's country from Vercel's `x-vercel-ip-country` header (fallback `US`); unplayable tracks are filtered out for that country.
+Market: Spotify only reports `is_playable` when the request has `market`. Users are anonymous, so `/{slug}` passes the visitor's country from Vercel's `x-vercel-ip-country` header (fallback `US`); unplayable tracks are filtered out for that country.
 
 ## Randomizer flow
 
@@ -74,31 +75,37 @@ Market: Spotify only reports `is_playable` when the request has `market`. Users 
 sequenceDiagram
   actor U as User
   participant UI as Browser
-  participant API as /api/genres/random
+  participant R as /api/genres/random
+  participant G as /api/genres/{slug}
+  participant C as Catalog (memory)
   participant D as Domain
   participant S as Spotify client
   participant SP as Spotify API
 
-  U->>UI: click Randomizer / Roll again
-  UI->>API: GET
-  API->>D: pickGenre(catalog, random)
-  API->>D: randomOffset(total, 10, random)
-  API->>S: getPlaylistItems(id, offset, 10)
+  U->>UI: Randomize / Space / Roll again
+  UI->>R: GET ?exclude=current
+  R->>C: catalog
+  R->>D: pickGenre(catalog, random, exclude)
+  R-->>UI: { genre, slug }
+  UI->>UI: navigate to /{slug}
+  UI->>G: GET
+  G->>C: bySlug(slug) (404 if missing)
+  G->>D: randomOffset(total, 10, random)
+  G->>S: getPlaylistItems(playlistId, offset, 10, market)
   S->>S: token cached? else client credentials
-  S->>SP: GET /playlists/{id}/items?limit=10&offset=n
+  S->>SP: GET /playlists/{id}/items?limit=10&offset=n&market=XX
   SP-->>S: items
-  S-->>API: tracks (zod-validated)
-  API->>D: filterPlayable → dedupe → shuffle
-  API-->>UI: GenreResult
-  UI->>UI: render + add to history (localStorage)
-  U->>UI: click track
-  UI->>UI: load track in Embed
+  S-->>G: candidates (zod-validated)
+  G->>D: filterPlayable (+ dedupe) → shuffle
+  G-->>UI: GenreResult
+  U->>UI: play a track
+  UI->>UI: load track in Embed + add genre to History (localStorage)
 ```
 
-History click: same flow via `GET /api/genres/{playlistId}`, skipping `pickGenre`; the history entry is not duplicated.
+Sleeve Play, History row, shared URL/reload and retry skip the first request: they go straight to `/{slug}`.
 
 ## Client state
-- `useGenreHistory()` hook (`features/history`): `{ genre, playlistId, discoveredAt }[]` in `localStorage`, most recent first, validated with zod on read (corrupt data → empty list). Actions: add (dedupe by `playlistId`), remove one, clear all.
+- `useGenreHistory()` hook (`features/history`): `{ genre, slug, discoveredAt }[]` in `localStorage`, most recent first, validated with zod on read (corrupt data → empty list). Actions: add (dedupe by `slug`, ADR-0007), remove one, clear all.
 - Current result and selected track: React state on the page. No state library.
 
 ## Folder structure
@@ -116,7 +123,7 @@ src/
     (site)/[genre]/page.tsx   # /{slug} → features/result; unknown slug → not-found
     (site)/not-found.tsx
     api/genres/random/route.ts
-    api/genres/[playlistId]/route.ts
+    api/genres/[slug]/route.ts
   features/                   # UI + client state, one folder per feature
     home/                     # HomeView (Hero + crate), HowItWorks
     crate/                    # CrateFlip, CrateProvider, tones, useCrate
@@ -130,7 +137,7 @@ src/
   domain/                     # pure, unit-tested (TDD) — no React, no I/O
     slug.ts  pick-genre.ts  random-offset.ts  filter-tracks.ts  shuffle.ts  (+ types: genre, track, history)
   server/                     # server-only
-    catalog.ts                # loads/validates genres.json
+    catalog.ts                # loads/validates genres.json once: array (random pick) + Map slug → entry
     randomizer.ts             # service: domain + catalog + spotify
     spotify/ token.ts  playlists.ts  schemas.ts  errors.ts   # errors.ts: SpotifyError + toHttpError (429 → 503, other → 502)
   mocks/                      # design-phase placeholder data (removed when real data lands)

@@ -35,6 +35,6 @@
 - + Shareable, bookmarkable genre URLs; native browser navigation.
 - + Clear separation: crate = selection, Randomize = blind jump, History = trail.
 - + Shared state lives in one layout, not threaded through pages.
-- − The API design in `architecture.md` (`/api/genres/{playlistId}`) must map slug → playlistId; the genre page may fetch on the server instead of the client — to be decided in E3 (new ADR if the API changes).
-- − Slug collisions in the real catalog need a resolution rule (suffix or skip) at catalog build time.
+- − The API design in `architecture.md` (`/api/genres/{playlistId}`) must map slug → playlistId; the genre page may fetch on the server instead of the client — to be decided in E3 (new ADR if the API changes). *Resolved 2026-11-16 by ADR-0007: API keyed by slug, Randomize only picks.*
+- − Slug collisions in the real catalog need a resolution rule (suffix or skip) at catalog build time. *2026-11-16: the E1 catalog (6,490 genres) has none.*
 - − With Cache Components the shell streams before the slug is checked, so an unknown slug renders the not-found UI with HTTP 200 (`dynamicParams = false` is not available with Cache Components). Acceptable for iteration 1; revisit with the real catalog (e.g. validate in `proxy`).

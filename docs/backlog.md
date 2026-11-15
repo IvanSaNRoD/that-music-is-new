@@ -46,9 +46,9 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 | ID | Task | Est. | Risk | Depends | Notes / assumptions |
 |---|---|---|---|---|---|
 | E3.1 | Domain (TDD): `pickGenre`, `randomOffset`, `filterPlayable` + dedupe, `shuffle` | 3 | L | D3 | Injected `random`. |
-| E3.2 | `catalog.ts`: load + validate `genres.json`, lookup by `playlistId` | 1 | L | E1.2 | |
+| E3.2 | `catalog.ts`: load + validate `genres.json`, lookup by slug (ADR-0007) | 1 | L | E1.2 | |
 | E3.3 | `randomizer.ts` service | 2 | L | E2, E3.1, E3.2 | |
-| E3.4 | Route handlers: `/api/genres/random`, `/api/genres/[playlistId]` (404 if not in catalog), `no-store` | 2 | L | E3.3 | |
+| E3.4 | Route handlers: `/api/genres/random?exclude=` (pick only), `/api/genres/[slug]` (404 if not in catalog), `no-store` (ADR-0007) | 2 | L | E3.3 | |
 
 ### E4 — Randomizer UI
 | ID | Task | Est. | Risk | Depends | Notes / assumptions |
@@ -63,7 +63,7 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 |---|---|---|---|---|---|
 | E5.1 | `useGenreHistory` hook: zod on read, add (dedupe), remove, clear; works without `localStorage` | 2 | L | D3 | SSR: read only on client to avoid hydration mismatch. |
 | E5.2 | `History` component: list (recent first), delete one, clear all with confirmation | 2 | L | E5.1, C3 | |
-| E5.3 | Click entry → `/api/genres/[playlistId]` → show result | 1 | L | E5.2, E3.4 | |
+| E5.3 | Click entry → `/{slug}` → `/api/genres/[slug]` → show result | 1 | L | E5.2, E3.4 | |
 
 ### E6 — E2E
 | ID | Task | Est. | Risk | Depends | Notes / assumptions |
