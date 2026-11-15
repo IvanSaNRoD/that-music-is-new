@@ -108,3 +108,4 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-11 | [v0.1.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.1.0) | Milestone: definition, planning and design done (phases A–C) |
 | 2026-11-12 | [#4](https://github.com/IvanSaNRoD/that-music-is-new/issues/4) | Scaffold: Next.js 16 (App Router, TS strict), Tailwind v4, shadcn/ui (Radix); Penpot tokens → CSS variables; architecture folders |
 | 2026-11-15 | [#42](https://github.com/IvanSaNRoD/that-music-is-new/issues/42) | Mobile + touch design: one layout below 1024px, mini turntable + bottom bar on the genre page, touch targets ≥44px; documented in Penpot |
+| 2026-11-15 | [#5](https://github.com/IvanSaNRoD/that-music-is-new/issues/5) | Quality: Prettier (+ Tailwind class order), ESLint architecture boundaries (ADR-0005), Husky + lint-staged, commitlint |
