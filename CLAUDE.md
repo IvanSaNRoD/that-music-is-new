@@ -45,7 +45,7 @@ src/lib/         tiny helpers
 
 ## Definition of done
 
-- `npx tsc --noEmit`, `npm run lint`, `npm run build` pass (stop `npm run dev` before building).
+- `npm run typecheck`, `npm run lint`, `npm run format:check`, `npm run build` pass (stop `npm run dev` before building). Lint enforces ADR-0005 boundaries; hooks run lint-staged + commitlint.
 - `impeccable detect` has no unexplained findings for changed UI.
 - WCAG 2.2 AA: contrast, keyboard, visible focus, `prefers-reduced-motion`.
 - Docs updated when behaviour changes: PRD (rules), `DESIGN.md` (visual), architecture/ADR (structure).

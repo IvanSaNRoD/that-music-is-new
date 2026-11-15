@@ -5,7 +5,7 @@ import type { Genre } from "@/domain/genre";
 
 export const CRATE_SIZE = 8;
 
-const shuffle = <T,>(list: T[]) => {
+const shuffle = <T>(list: T[]) => {
   const a = [...list];
   for (let i = a.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -26,7 +26,9 @@ export function useCrate(catalog: Genre[]) {
   const pick = useCallback((id: string) => setSelected(id), []);
 
   const restock = useCallback(() => {
-    const next = shuffle(catalog).slice(0, CRATE_SIZE).map((g) => g.id);
+    const next = shuffle(catalog)
+      .slice(0, CRATE_SIZE)
+      .map((g) => g.id);
     setStock(next);
     setSelected(next[0]);
   }, [catalog]);

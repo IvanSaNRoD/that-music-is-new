@@ -82,7 +82,7 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
         <div className="flex flex-col items-start gap-4 max-lg:contents">
           <Link
             href="/"
-            className={`text-primary-ink hover:bg-primary-ink/10 touch:min-h-11 -ml-3 inline-flex items-center gap-2 justify-self-start rounded-full px-3 py-1.5 text-[15px] font-semibold transition-colors max-lg:col-span-2 ${focusRing}`}
+            className={`-ml-3 inline-flex items-center gap-2 justify-self-start rounded-full px-3 py-1.5 text-[15px] font-semibold text-primary-ink transition-colors hover:bg-primary-ink/10 max-lg:col-span-2 touch:min-h-11 ${focusRing}`}
           >
             <ArrowLeft size={18} strokeWidth={2.5} aria-hidden="true" />
             Back to the crate
@@ -107,19 +107,25 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
                 id="result-title"
                 ref={headingRef}
                 tabIndex={-1}
-                className={`font-display ${titleSize} leading-[0.95] font-extrabold tracking-[-0.02em] self-start text-balance [overflow-wrap:anywhere] outline-none rounded-sm data-[kbd=true]:focus:outline-primary-ink data-[kbd=true]:focus:outline-2 data-[kbd=true]:focus:outline-solid data-[kbd=true]:focus:outline-offset-4`}
+                className={`font-display ${titleSize} self-start rounded-sm leading-[0.95] font-extrabold tracking-[-0.02em] text-balance [overflow-wrap:anywhere] outline-none data-[kbd=true]:focus:outline-2 data-[kbd=true]:focus:outline-offset-4 data-[kbd=true]:focus:outline-primary-ink data-[kbd=true]:focus:outline-solid`}
               >
                 {genre.name}
               </h1>
-              <p className="text-muted-foreground text-[15px] leading-6 max-lg:text-sm max-lg:leading-5">
+              <p className="text-[15px] leading-6 text-muted-foreground max-lg:text-sm max-lg:leading-5">
                 <span className="font-mono">
-                  {status === "loading"
-                    ? "Pulling the record…"
-                    : trackCount > 0
-                      ? <>{trackCount} tracks<span className="max-lg:hidden"> in the playlist</span></>
-                      : " "}
+                  {status === "loading" ? (
+                    "Pulling the record…"
+                  ) : trackCount > 0 ? (
+                    <>
+                      {trackCount} tracks<span className="max-lg:hidden"> in the playlist</span>
+                    </>
+                  ) : (
+                    " "
+                  )}
                 </span>
-                {status === "ready" && !playing && <span className="max-lg:hidden"> · pick one to start listening</span>}
+                {status === "ready" && !playing && (
+                  <span className="max-lg:hidden"> · pick one to start listening</span>
+                )}
               </p>
             </div>
             {/* <lg: its own row, 44px tall even while loading so nothing shifts when the link appears. */}
@@ -129,7 +135,7 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
                   href={spotifyUrl}
                   target="_blank"
                   rel="noreferrer"
-                  className={`text-primary-ink touch:min-h-11 inline-flex items-center gap-1 rounded py-1.5 text-[15px] font-semibold underline-offset-4 hover:underline ${focusRing}`}
+                  className={`inline-flex items-center gap-1 rounded py-1.5 text-[15px] font-semibold text-primary-ink underline-offset-4 hover:underline touch:min-h-11 ${focusRing}`}
                 >
                   Listen more on Spotify
                   <ArrowUpRight size={16} strokeWidth={2.5} aria-hidden="true" />
@@ -157,14 +163,17 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
             {status === "busy" && <BusyNotice seconds={retryAfter} onRetry={retry} />}
           </div>
 
-          <div className="border-divider mt-auto border-t pt-5 max-lg:col-span-2">
+          <div className="mt-auto border-t border-divider pt-5 max-lg:col-span-2">
             <RecentFinds />
           </div>
         </div>
 
         {/* ≥lg: under the deck. <lg: bottom bar (player + Roll again), safe-area aware.
             The player always keeps its slot (hidden outside "ready") so states never change the geometry. */}
-        <div data-bottom-bar className="max-lg:border-border-strong max-lg:bg-background lg:col-start-1 lg:row-start-2 lg:self-start max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-40 max-lg:border-t-[1.5px] max-lg:pb-[env(safe-area-inset-bottom)]">
+        <div
+          data-bottom-bar
+          className="max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-40 max-lg:border-t-[1.5px] max-lg:border-border-strong max-lg:bg-background max-lg:pb-[env(safe-area-inset-bottom)] lg:col-start-1 lg:row-start-2 lg:self-start"
+        >
           <div className="max-lg:mx-auto max-lg:flex max-lg:max-w-[720px] max-lg:items-center max-lg:gap-3 max-lg:px-6 max-lg:py-3">
             <div
               className={`min-w-0 flex-1 ${status === "ready" ? "" : "invisible max-lg:hidden"}`}
@@ -199,7 +208,7 @@ function RollAgain({
         blurIfPointer(e);
         onRoll();
       }}
-      className={`border-border-strong hover:bg-muted/50 inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border-[1.5px] text-[17px] font-bold transition-colors active:translate-y-px ${bar ? `bg-background h-14 px-5 ${bar === "full" ? "flex-1" : "max-sm:px-4"}` : "px-5 py-2.5"} ${focusRing} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border-[1.5px] border-border-strong text-[17px] font-bold transition-colors hover:bg-muted/50 active:translate-y-px ${bar ? `h-14 bg-background px-5 ${bar === "full" ? "flex-1" : "max-sm:px-4"}` : "px-5 py-2.5"} ${focusRing} ${className}`}
     >
       <Shuffle size={20} strokeWidth={2.5} aria-hidden="true" />
       <span>

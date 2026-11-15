@@ -5,7 +5,6 @@ import { blurIfPointer } from "@/lib/utils";
 import "./crate-flip.css";
 import { toneFor } from "./tones";
 
-
 type CrateFlipProps = {
   catalog: Genre[];
   stock: string[];
@@ -19,19 +18,17 @@ export function CrateFlip({ catalog, stock, selected, onSelect, onRestock, onPla
   return (
     <section
       aria-label="Genre crate"
-      className="bg-card border-border-strong flex min-h-[500px] min-w-0 flex-1 flex-col gap-3.5 lg:ml-[3%] overflow-hidden rounded-2xl border-[1.5px] p-[26px]"
+      className="flex min-h-[500px] min-w-0 flex-1 flex-col gap-3.5 overflow-hidden rounded-2xl border-[1.5px] border-border-strong bg-card p-[26px] lg:ml-[3%]"
     >
       <div className="flex items-center justify-between gap-3">
-        <h2 className="font-display text-[30px] font-extrabold tracking-[-0.02em] whitespace-nowrap">
-          The crate
-        </h2>
+        <h2 className="font-display text-[30px] font-extrabold tracking-[-0.02em] whitespace-nowrap">The crate</h2>
         <button
           type="button"
           onClick={(e) => {
             blurIfPointer(e);
             onRestock();
           }}
-          className="text-primary-ink hover:bg-primary-ink/10 active:bg-primary-ink/[0.18] focus-visible:outline-primary-ink touch:min-h-11 rounded-full px-3 py-1.5 text-sm font-semibold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+          className="rounded-full px-3 py-1.5 text-sm font-semibold text-primary-ink transition-colors hover:bg-primary-ink/10 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-ink active:bg-primary-ink/[0.18] touch:min-h-11"
         >
           Restock
         </button>

@@ -1,0 +1,12 @@
+.next
+node_modules
+package-lock.json
+next-env.d.ts
+docs/design/screenshots
+docs/design/handoffs
+.impeccable
+spikes
+docs/claude-design
+.claude
+# Hand-written prose and tables (DESIGN.md frontmatter, PRD, ADRs): not reformatted.
+*.md

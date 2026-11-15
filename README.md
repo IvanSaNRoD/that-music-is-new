@@ -81,8 +81,12 @@ Where subagents/extra reviews *are* used:
 npm install
 npm run dev     # http://localhost:3000
 npm run build   # production build
-npm run lint
+npm run lint          # ESLint, incl. architecture boundaries (ADR-0005)
+npm run typecheck     # tsc --noEmit
+npm run format        # Prettier (+ Tailwind class order); format:check in CI
 ```
+
+Git hooks (Husky, installed by `npm install`): `pre-commit` runs ESLint + Prettier on staged files (lint-staged); `commit-msg` enforces conventional commits (commitlint).
 
 Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules that use them are in [`DESIGN.md`](DESIGN.md).
 
