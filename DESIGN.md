@@ -37,6 +37,11 @@ typography:
     fontSize: "17px"
     fontWeight: 400
     lineHeight: 1.5
+  body-small:
+    fontFamily: "Inter, sans-serif"
+    fontSize: "14px"
+    fontWeight: 400
+    lineHeight: 1.4
   label:
     fontFamily: "Inter, sans-serif"
     fontSize: "15px"
@@ -152,6 +157,20 @@ components:
     rounded: "{rounded.xl}"
     height: "80px"
     width: "440px"
+  finds-sleeve:
+    rounded: "{rounded.md}"
+    size: "76px"
+  bottom-bar:
+    backgroundColor: "{colors.kinari}"
+    padding: "12px 24px"
+  button-secondary-bar:
+    textColor: "{colors.sumi}"
+    rounded: "{rounded.lg}"
+    height: "56px"
+    padding: "0 20px"
+  turntable-mini:
+    rounded: "{rounded.lg}"
+    width: "120px"
 ---
 
 # Design System: That Music Is New
@@ -212,10 +231,11 @@ Paper, ink and one celadon green; everything else is a tint of the paper.
 
 ### Hierarchy
 - **Display** (800, 80px desktop / 56px mobile, 0.95, -0.02em): the home headline only. Balanced wrap.
-- **Genre title** (800, 64px ≥1280px / 56px 1024–1279px, 0.95, -0.02em): the genre name on its page, balanced wrap. Names longer than 22 characters step down to 48px so they stay within ~2 lines. 48px (line-height 1) for the not-found title.
-- **Headline** (800, 30–40px, 1–1.1, -0.02em): card titles ("The crate" and "History", both 30px; the crate is never smaller) and the open sleeve's genre name (40px).
+- **Genre title** (800, 64px ≥1280px / 56px 1024–1279px / fluid 28–44px (9vw) below 1024px beside the mini deck, 0.95, -0.02em): the genre name on its page, balanced wrap, never overflows (breaks anywhere as a last resort). Names longer than 22 characters step down to 48px (fluid 21–36px below 1024px) so they stay within ~2–3 lines. 48px (line-height 1) for the not-found title.
+- **Headline** (800, 30–40px, 1–1.1, -0.02em): card titles ("The crate" and "History", both 30px; the crate is never smaller) and the open sleeve's genre name (40px; `clamp(26px, 8vw, 40px)` on phones, max 2 lines, so the Play pill never drops into the die-cut hole).
 - **Title** (800, 18px, 1.2): step card titles and the "Your finds" heading, kept quiet.
 - **Body** (400, 17px, 1.5): subtitle in mono; UI body in Inter 14–17px. Max ~30em per line.
+- **Body small** (400–600, 14px = Tailwind `text-sm`, 1.4): secondary lines (artists, notices, "Nothing playing yet.") and the "Dig deeper" pill (semibold).
 - **Label** (600–700, 13–26px): buttons (Randomize 26px bold), sleeve tabs (13px bold), history names (17px bold), track titles (16px bold over 14px artists), links (15px semibold), Roll again (17px bold, secondary outline).
 - **Mono** (Space Mono 400/700, 13–24px): logo (24 bold), eyebrow (15 uppercase), subtitle (17), meta "10 tracks · 24 Oct" (13), track numbers (13), "N tracks in the playlist" (15), "33⅓" (13), kbd (15).
 
@@ -228,20 +248,16 @@ Desktop (≥1024px): everything sits in a centred 1440px container with 48px sid
 
 Genre page (`/{slug}`, ≥1024px): same container; two columns, deck | fluid info, 48px gap; the deck is 440px from 1280px and 360px between 1024 and 1279px. Deck column: "Back to the crate" link, turntable (scales down with the column, fixed 440:400 ratio), player slot. Info column: genre title with Listen more on Spotify + Roll again on the same line (right, wrapping below when tight), Space Mono meta, tracks (two columns of five from 1024px), then a Pencil Rule hairline and "Your finds". No steps band: an invisible, inert copy keeps its height so the page height (and the corner vinyl) match the home at 1440×900. History management lives on the home only.
 
-Tablet (768–1023px): main row stacks; the step cards + tagline form one centred group (cards max 26vw).
+Below 1024px (phones and tablets, one layout, decided 2026-11-15, brief `docs/design/mobile-brief.md`): one centred column, max 720px, 24px side padding (header, main row and steps share it). No separate tablet design.
+- **Home:** same order as desktop, compacted: hero (56px display, 80px from 640px; the small sparkle hides below 640px), crate, History (no min height), steps stacked with vertical connectors. Nothing fixed on screen.
+- **Genre page:** the deck and info columns dissolve into one grid. "Back to the crate"; a **mini turntable** (clamp 88–120px wide, same geometry and motion; thinner arm and head, no "33⅓", 12px radius) beside the title + meta; "Listen more on Spotify" on its own 44px row (reserved while loading); tracks in one column; "Your finds" as one sideways-scrolling row of mini sleeves that bleeds to the screen edges.
+- **Bottom bar (genre page only):** fixed, Kinari with a 1.5px Sumi top rule, safe-area aware; player slot (no vinyl, no "Spotify player" label below 640px) + Roll again (secondary, 56px tall, always labelled: "Roll" below 640px beside the player, accessible name "Roll again"; a bare shuffle icon reads as "shuffle the tracks"). Below 640px "Dig deeper" is icon-only (44px ↗, same accessible name) so the now-playing title keeps its width. The top Roll again is hidden. The bar is last in the DOM (reading order unchanged); the page reserves 120px + safe area under it, and `scroll-padding-bottom` keeps focused elements clear of it (WCAG 2.4.11). Outside the ready state the empty player slot leaves the bar and Roll again fills it (loading, error, busy, empty).
 
-Mobile (<768px): single column, 24px side padding, same order (hero, crate, history, steps); step connectors become vertical. Touch layouts are not designed yet.
+Touch (`touch:` variant = `(hover: none), (pointer: coarse)`, at any width, so iPad landscape gets it on the desktop layout): page actions ≥44px (Back, Listen more, Dig deeper, Restock, History footer links, "Your finds" pills and sleeves); the History ✕ is always visible (44px) and replaces the chevron; hover-only effects (finds lift, track ▶ on hover) exist only with `(hover: hover)` (Tailwind `hover:` already does this); the Space shortcut and kbd hint stay off. Exception: closed crate sleeves keep their 28px visible tab (≥24px, WCAG 2.2 AA 2.5.8); 44px would stretch the crate ~130px.
 
-**Open for the mobile/tablet pass** (collected 2026-11-13 from the genre-page audit; resolve with `/impeccable adapt`, then move the answers into this section):
-- **Genre title** has no small-screen size: 64px "Psychedelic" already takes 353px at 390px wide; longer one-word names will overflow. Needs a mobile step (≈44–48px) and a check with ~40-char names.
-- **Order on the genre page:** the turntable (full column width) comes before the tracks, so at 390px the list starts below the fold (page ≈1,540px tall). Playing a track is the primary action: consider tracks first, a smaller deck, or the deck beside the title.
-- **Page actions:** "Listen more on Spotify" and "Back to the crate" are ≈34px tall (fine with a pointer); on touch they need ≥44px. Decide where Roll again lives for thumbs (top, or a bottom bar).
-- **Hover-only affordances:** "Your finds" hover lift and the History row ✕ (shown on hover/focus) have no touch equivalent; the ✕ must be reachable without hover.
-- **"Your finds" pills** wrap onto several lines on narrow screens; consider one scrollable row.
-- **Tablet (768–1023px):** the genre page falls back to one column below 1024px; design it explicitly instead of inheriting the stack.
-- **Unchanged by design:** the corner vinyl and the invisible steps spacer exist only ≥1024px; the Space shortcut and kbd hint stay off on touch.
+Unchanged by design: the corner vinyl and the invisible steps spacer exist only ≥1024px.
 
-**Status:** final on desktop: home (2026-11-12/13) and genre page with its loading, error, busy and empty states (2026-11-13, turntable). History-clear stays inline on the home. Tablet, mobile and touch layouts are still to be designed; Penpot (page "Screens") holds only preliminary, non-authoritative drafts of them. Extend this system to those screens rather than copying the drafts.
+**Status:** final on desktop: home (2026-11-12/13) and genre page with its loading, error, busy and empty states (2026-11-13, turntable). Mobile/tablet + touch implemented 2026-11-15 (issue #42). History-clear stays inline on the home. Penpot page "Screens" holds only early, non-authoritative drafts.
 
 Spacing rhythm uses 8px steps (8 / 16 / 24 / 32 / 48 / 56).
 
@@ -283,7 +299,7 @@ Generously rounded, ink-outlined objects. Cards 16px; step cards 14px; sleeves 1
 Sumi 1.5px outline, 6px radius, Space Mono 15px, next to "or press". Desktop only (≥1024px): Space = Randomize on hover-capable devices, ignored while focus is on a button, link or field; disabled on touch.
 
 ### History list
-Last 5 played genres (added on Play, not on open). Rows separated by Pencil Rule hairlines; vinyl icon (44px, 4 grooves), name (Inter 17 bold) over mono meta (13px, Faded Ink), chevron on the right. Selected row = Aged Paper, hover = 50% Aged Paper; on hover/focus the chevron is replaced by a ✕ remove pill. Footer (aria-live): "Clear all history" → inline confirm "Clear all history? Cancel / Clear"; after a ✕, "Removed <name> · Undo" for 6s. Empty state: "Nothing here yet. Play a genre and it lands here."
+Last 5 played genres (added on Play, not on open). Rows separated by Pencil Rule hairlines; vinyl icon (44px, 4 grooves), name (Inter 17 bold) over mono meta (13px, Faded Ink), chevron on the right. Selected row = Aged Paper, hover = 50% Aged Paper; on hover/focus the chevron is replaced by a ✕ remove pill; on touch the ✕ (44px) is always shown instead of the chevron. Footer (aria-live): "Clear all history" → inline confirm "Clear all history? Cancel / Clear"; after a ✕, "Removed <name> · Undo" for 6s. Empty state: "Nothing here yet. Play a genre and it lands here."
 
 ### Record Crate (signature)
 A card titled "The crate" (30px) with a Restock ghost button and ~40px of air above the stack. Eight sleeves stand bottom-aligned; each is 42px tall and overlaps the previous by 14px (visible tab 28px: 13px bold label, 3px vertical padding). All sleeves are positioned, so later sleeves always paint over earlier ones. The selected sleeve rises to 180px (166px visible): the tab label fades out, the genre name (Inter Tight 40) and a Kinari "Play 10 tracks" pill fade in, and an 88px die-cut hole (anchored to the sleeve top, centre at 154px) is revealed progressively as the sleeve rises; its lower part is clipped by the next sleeve and the spindle dot stays fully visible. Height animates 0.6s on the lift curve, text fades 0.2–0.35s, all off with `prefers-reduced-motion`. Playing a sleeve, not opening it, adds the genre to History. A 50px Aged Paper crate front (1.5px Sumi) with a Matsuba handle covers the last sleeve's feet by 14px.
@@ -299,13 +315,13 @@ The genre page's record player, purely decorative (`aria-hidden`), geometry in %
 - All motion off with `prefers-reduced-motion`.
 
 ### Track list
-Up to 10 rows, full pills (8px/16px padding, 2px gap): Space Mono number (13px, Faded Ink) or an Audio Lines icon on the playing row, title (Inter 16 bold) over artists (14px, Faded Ink), both truncated. Hover = 50% Aged Paper and the number turns into a filled ▶ (also on keyboard focus), so rows read as play buttons; playing row = the genre's sleeve tone, every text in the tone's foreground; on the light tones (Seiji 1.89:1 and Aged Paper 1.15:1 against the page) it also gets a 1.5px inset Sumi edge. Until the first play, row 01 is cued (a 14% tint of the genre tone, of Sumi on the light tones, and a resting ▶; no ring, rings are reserved for keyboard focus) and the meta line adds "· pick one to start listening" (Inter, same line, fixed 24px line height so nothing shifts when it goes). Focus: 2px Seiji Ink outline outside the pill. Loading = 10 skeleton rows pulsing in Aged Paper.
+Up to 10 rows, full pills (8px/16px padding, 2px gap): Space Mono number (13px, Faded Ink) or an Audio Lines icon on the playing row, title (Inter 16 bold) over artists (14px, Faded Ink), both truncated. Hover = 50% Aged Paper and the number turns into a filled ▶ (also on keyboard focus), so rows read as play buttons; playing row = the genre's sleeve tone, every text in the tone's foreground; on the light tones (Seiji 1.89:1 and Aged Paper 1.15:1 against the page) it also gets a 1.5px inset Sumi edge. Until the first play, row 01 is cued (a 10% tint of the genre tone, of Sumi on the light tones, and a resting ▶; no ring, rings are reserved for keyboard focus) and the meta line adds "· pick one to start listening" (Inter, same line, fixed 24px line height so nothing shifts when it goes). Below 1024px the meta is the count only ("40 tracks"): the cued row says the rest, and the line never wraps mid-phrase. Focus: 2px Seiji Ink outline outside the pill. Loading = 10 skeleton rows pulsing in Aged Paper.
 
 ### Your finds
-The compact History trail on a genre page, below a Pencil Rule hairline: "Your finds" (Inter Tight 18) and the last 5 played genres as pill links. Each pill wears its genre's sleeve tone (1.5px Sumi outline, 28px vinyl with that tone's hole colour as label, 15px semibold name). Current genre = 2px Sumi ring with 2px offset. Hover lifts 2px (0.2s lift curve). A genre added while on its page rolls in (0.5s: slide 12px + disc turning 180°). Empty: "Play a track and this genre lands here."
+The compact History trail on a genre page, below a Pencil Rule hairline: "Your finds" (Inter Tight 18) and the last 5 played genres as pill links. Each pill wears its genre's sleeve tone (1.5px Sumi outline, 28px vinyl with that tone's hole colour as label, 15px semibold name). Current genre = 2px Sumi ring with 2px offset. Hover lifts 2px (0.2s lift curve; hover-capable devices only). Below 1024px each find becomes a mini sleeve instead (crate echo): 76px square, 8px radius, genre tone, 1.5px Sumi outline, soft 2px shadow, 40px die-cut hole in the tone's hole colour with a Sumi spindle; name under it (13px semibold, ≤2 lines); current = 2px Sumi ring on the sleeve; one sideways-scrolling row, 12px gap. A genre added while on its page rolls in (0.5s: slide 12px + disc turning 180°). Empty: "Play a track and this genre lands here."
 
 ### Player slot
-Placeholder for the single compact Spotify Embed (~80px, 440px wide) under the turntable: dashed 1.5px Matsuba outline, 16px radius, 36px vinyl, now-playing title/artists or "Nothing playing yet.". Before the first play a Space Mono "Spotify player" label; once a track plays it becomes the hand-off: a secondary Sumi-outlined pill "Dig deeper on Spotify ↗" (14px semibold; "Dig deeper ↗" visible on the 360px deck, same accessible name). Replaced by the embed in E4.3; the turntable then follows the embed's playback state. Last in the DOM (read after title, tracks and finds); the grid places it under the deck. Always occupies its slot (invisible outside the ready state), so the page height never changes between loading, ready and failure states.
+Placeholder for the single compact Spotify Embed (~80px, 440px wide) under the turntable: dashed 1.5px Matsuba outline, 16px radius, 36px vinyl, now-playing title/artists or "Nothing playing yet.". Before the first play a Space Mono "Spotify player" label; once a track plays it becomes the hand-off: a secondary Sumi-outlined pill "Dig deeper on Spotify ↗" (14px semibold; "Dig deeper ↗" visible on the 360px deck, same accessible name). Below 1024px it lives in the genre page bottom bar (see Layout). Replaced by the embed in E4.3; the turntable then follows the embed's playback state. Last in the DOM (read after title, tracks and finds); the grid places it under the deck. Always occupies its slot (invisible outside the ready state), so the page height never changes between loading, ready and failure states.
 
 ### Step cards
 Home only. Quiet and secondary: tonal Card Stock, no outline, 14px radius, 96px tall; equal grid columns on desktop (290px, max 26vw, on tablet), joined by 1px Matsuba connectors; a 40px Seiji badge (no outline) holds the number; title Inter Tight 18px.

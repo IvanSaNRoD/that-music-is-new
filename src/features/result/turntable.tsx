@@ -17,6 +17,8 @@ type TurntableProps = {
   trackCount?: number;
   /** Index of the playing track: the needle sits in its band (track 1 at the rim, last near the label). */
   track?: number | null;
+  /** Below lg: mini deck beside the genre title (thinner arm, no speed label). Same geometry. */
+  compact?: boolean;
 };
 
 // Plinth geometry (px in the 440×400 design box; see turntable.css): tonearm pivot, arm length, record.
@@ -50,11 +52,12 @@ export function Turntable({
   record = true,
   trackCount = 0,
   track = null,
+  compact = false,
 }: TurntableProps) {
   const angle =
     track !== null && trackCount > 0 ? armAngleFor(bandCenter(track, trackCount) * RECORD.scale) : undefined;
   return (
-    <div className="turntable" aria-hidden="true">
+    <div className="turntable" data-compact={compact || undefined} aria-hidden="true">
       <span className="turntable-platter-mat" />
       {record ? (
         <div className={`turntable-record ${arrive ? "is-arriving" : ""}`}>

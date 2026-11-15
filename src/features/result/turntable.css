@@ -111,6 +111,34 @@
   font-size: 13px;
 }
 
+/* Mini deck (< lg, ~90–120px wide): px-sized parts shrink so the arm and head stay in proportion. */
+@media (width < 64rem) {
+  .turntable[data-compact] {
+    align-self: start;
+    border-radius: 12px;
+  }
+  .turntable[data-compact] .turntable-platter-mat,
+  .turntable[data-compact] .turntable-pivot {
+    border-width: 1px;
+  }
+  .turntable[data-compact] .turntable-arm {
+    width: 4px;
+    margin-left: -2px;
+    border-width: 1px;
+  }
+  .turntable[data-compact] .turntable-arm-head {
+    bottom: -4px;
+    width: 7px;
+    height: 11px;
+    margin-left: -3.5px;
+    border-width: 1px;
+    border-radius: 4px;
+  }
+  .turntable[data-compact] .turntable-speed {
+    display: none;
+  }
+}
+
 @keyframes turntable-spin {
   to {
     transform: rotate(360deg);

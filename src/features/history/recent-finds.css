@@ -1,9 +1,45 @@
 /* Pulled like a record from the crate. */
-.recent-finds-pill {
+.recent-finds-item {
   transition: transform 0.2s var(--ease-lift);
 }
-.recent-finds-pill:hover {
-  transform: translateY(-2px);
+@media (hover: hover) {
+  .recent-finds-item:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Below lg: mini sleeve in the genre tone with a die-cut hole showing the label (crate-flip.css). */
+.recent-finds-cover {
+  position: relative;
+  width: 76px;
+  aspect-ratio: 1;
+  border-radius: var(--radius);
+  border: 1.5px solid var(--border-strong);
+  background: var(--find-bg);
+  box-shadow: 0 2px 6px color-mix(in srgb, var(--foreground) 14%, transparent);
+}
+.recent-finds-cover::before,
+.recent-finds-cover::after {
+  content: "";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  border-radius: 9999px;
+  transform: translate(-50%, -50%);
+}
+.recent-finds-cover::before {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--foreground);
+  background: var(--find-hole);
+}
+.recent-finds-cover::after {
+  width: 6px;
+  height: 6px;
+  background: var(--foreground); /* spindle hole: always Sumi */
+}
+[aria-current="page"] > .recent-finds-cover {
+  outline: 2px solid var(--border-strong);
+  outline-offset: 2px;
 }
 
 /* A genre added while on its page drops into the trail (record rolling in). */
@@ -31,8 +67,8 @@
   .recent-finds-new .recent-finds-disc {
     animation: none;
   }
-  .recent-finds-pill,
-  .recent-finds-pill:hover {
+  .recent-finds-item,
+  .recent-finds-item:hover {
     transition: none;
     transform: none;
   }

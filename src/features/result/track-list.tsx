@@ -5,7 +5,7 @@ import type { Track } from "@/domain/track";
 import { blurIfPointer } from "@/lib/utils";
 
 // Playing row = the genre tone (--genre-bg/--genre-fg/--genre-edge, set by ResultView).
-// Before the first play, row 01 is "cued": a soft tint (--genre-cue at 14%) and a resting ▶, so the primary
+// Before the first play, row 01 is "cued": a soft tint (--genre-cue at 10%) and a resting ▶, so the primary
 // action reads at a glance. No ring: rings are reserved for keyboard focus.
 // Two columns of five from 1024px (01–05 | 06–10), so the list matches the deck's height.
 const listLayout = "grid gap-x-6 gap-y-0.5 lg:grid-flow-col lg:grid-cols-2 lg:grid-rows-5";
@@ -33,7 +33,7 @@ export function TrackList({
                 blurIfPointer(e);
                 onPlay(t.id);
               }}
-              className={`group flex w-full items-center gap-4 rounded-full px-4 py-2 text-left transition-colors ${isPlaying ? "bg-(--genre-bg) text-(--genre-fg) inset-ring-[1.5px] inset-ring-(--genre-edge)" : cued ? "bg-[color-mix(in_srgb,var(--genre-cue)_14%,transparent)]" : "hover:bg-muted/50"} focus-visible:outline-primary-ink focus-visible:outline-2 focus-visible:outline-offset-0`}
+              className={`group flex w-full items-center gap-4 rounded-full px-4 py-2 text-left transition-colors ${isPlaying ? "bg-(--genre-bg) text-(--genre-fg) inset-ring-[1.5px] inset-ring-(--genre-edge)" : cued ? "bg-[color-mix(in_srgb,var(--genre-cue)_10%,transparent)]" : "hover:bg-muted/50"} focus-visible:outline-primary-ink focus-visible:outline-2 focus-visible:outline-offset-0`}
             >
               <span
                 className={`${isPlaying ? "" : "text-muted-foreground"} w-6 shrink-0 text-right font-mono text-[13px]`}
