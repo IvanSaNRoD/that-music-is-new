@@ -12,6 +12,8 @@ A door into rare music genres. One click → a random genre from ~7,000 and a sh
 
 [![Mobile screens on Penpot](https://img.shields.io/badge/Mobile_screens-Penpot-6E7B6A?logo=penpot&logoColor=white)](https://design.penpot.app/?screen=viewer&file-id=110d30a4-9d92-80de-8008-ee26a65adfd7&page-id=c2a93463-2d22-807c-8008-f3373ae1170b&section=interactions&index=0&share-id=7f9dba8d-d809-4d98-b1a8-dbf920b0d5ed)
 
+[![Live on Vercel](https://img.shields.io/badge/Live-Vercel-1C1C1C?logo=vercel&logoColor=white)](https://that-music-is-new-seven.vercel.app/)
+
 [![CI](https://github.com/IvanSaNRoD/that-music-is-new/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/IvanSaNRoD/that-music-is-new/actions/workflows/ci.yml)
 
 [![Release v0.1.0](https://img.shields.io/github/v/release/IvanSaNRoD/that-music-is-new?include_prereleases&label=release&color=1C1C1C)](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.1.0)
@@ -81,6 +83,7 @@ Where subagents/extra reviews *are* used:
 
 ```bash
 npm install
+cp .env.example .env.local   # then fill in your Spotify app credentials
 npm run dev     # http://localhost:3000
 npm run build   # production build
 npm run lint          # ESLint, incl. architecture boundaries (ADR-0005)
