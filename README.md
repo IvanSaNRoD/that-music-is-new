@@ -77,7 +77,19 @@ Where subagents/extra reviews *are* used:
 | `/code-review` | Before closing logic-heavy issues (E3, E4) | Independent review of code the main agent wrote |
 | `/security-review` | F1 (hardening) | Specialized security pass |
 | `/impeccable critique` | Every design review | Two isolated subagents (design review ∥ detector/browser evidence) so findings don't anchor each other |
+| Isolated review subagent | Before the E2 PR | Fresh eyes on the diff: found 2 tests passing for the wrong reason (order-dependent 401 retry, untested episode branch) |
+| Parallel domain subagent | E3 (training exercise, 2026-11-16) | Pure domain functions (#17) own their files, so one subagent wrote them test-first while the main agent built catalog, service and routes; the contract (types + signatures) was fixed first |
 | Parallel work (optional) | E2 Spotify client ∥ E4 UI with mock data | Independent; only if pace needs it |
+
+### Skills
+
+| Skill | Used for | Why this one |
+|---|---|---|
+| [impeccable](https://github.com/pbakaus/impeccable) | All design work (see Design workflow) | Covers shape → live → audit → critique → document in one tool |
+| [tdd](https://skills.sh/mattpocock/skills/tdd) (`mattpocock/skills`) | Domain and server logic from E3 on | Most installed TDD skill (1.2M installs, repo ★325K, MIT, docs only). Red → green in vertical slices, tests only at seams agreed with the human, no tautological or implementation-coupled tests |
+| `/code-review` (built-in) | Before closing logic-heavy issues | Structured bug review of the diff |
+
+Choosing a skill: search (`npx skills find <topic>`), then check installs, repo stars, license and author, and **read the SKILL.md before installing** — skills run with the agent's permissions.
 
 ## Getting started
 
@@ -100,7 +112,8 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 ## Docs
 
 - [PRD](docs/prd.md) · [Architecture](docs/architecture.md) · [Backlog](docs/backlog.md)
-- ADRs: [0001 Playback](docs/adr/0001-playback-spotify-embed.md) · [0002 Auth](docs/adr/0002-auth-spotify-oauth-pkce.md) · [0003 Randomizer strategy](docs/adr/0003-randomizer-search-strategy.md) · [0004 Tech stack](docs/adr/0004-tech-stack.md)
+- [How a request flows through the app](docs/guides/request-flow.md) — step-by-step guide for humans
+- ADRs: [0001 Playback](docs/adr/0001-playback-spotify-embed.md) · [0002 Auth](docs/adr/0002-auth-spotify-oauth-pkce.md) · [0003 Randomizer strategy](docs/adr/0003-randomizer-search-strategy.md) · [0004 Tech stack](docs/adr/0004-tech-stack.md) · [0005 Feature folders](docs/adr/0005-frontend-feature-folders.md) · [0006 Routing](docs/adr/0006-routing-genre-pages.md) · [0007 API by slug](docs/adr/0007-api-by-slug.md)
 - Task board: [GitHub Projects](https://github.com/users/IvanSaNRoD/projects/1)
 
 ## Progress
