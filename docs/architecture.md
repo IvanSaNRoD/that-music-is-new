@@ -144,8 +144,8 @@ tests/msw/                    # MSW server + Spotify handlers for unit tests
 Import rules (ADR-0005): features use each other only through `features/<name>/index.ts`; `domain/` imports nothing from React/UI/server; `server/` is never imported by client code.
 
 ## Genre catalog script
-- Run manually (`node scripts/build-genres.mjs`) with `.env.local` credentials; not part of the build.
-- Paginates `GET /users/thesoundsofspotify/playlists` (~700 requests, throttled, honours `429`).
-- Keeps names starting with `The Sound of `, stores `{ genre, playlistId, total }`, sorted by genre.
+- Run manually (`npm run genres:build`, i.e. `node --env-file=.env.local scripts/build-genres.mjs`); not part of the build.
+- Paginates `GET /users/thesoundsofspotify/playlists` (limit 50 → ~142 requests at 1 req/s ≈ 2.5 min, honours `429` `Retry-After`; aborts without writing on 403/repeated errors).
+- Keeps names starting with `The Sound of ` (minus non-genres such as *The Sound of Everything*; drops *The Needle* country lists), stores `{ genre, playlistId, total }`, sorted by genre. 2026-11-15 run: 7,085 listed → 6,490 genres.
 - Output committed → app has no runtime dependency on the listing endpoint.
 - Playlists with fewer than 10 tracks are kept (shorter lists are fine); only empty playlists (`total = 0`) are dropped.

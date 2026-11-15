@@ -31,7 +31,7 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 ### E1 — Genre catalog
 | ID | Task | Est. | Risk | Depends | Notes / assumptions |
 |---|---|---|---|---|---|
-| E1.1 | `scripts/build-genres.mjs`: paginate `thesoundsofspotify`, keep "The Sound of …", drop `total = 0`, throttle + `429` | 3 | M | D1 | ~700 requests; Dev Mode rate limit unknown. |
+| E1.1 | `scripts/build-genres.mjs`: paginate `thesoundsofspotify`, keep "The Sound of …", drop `total = 0`, throttle + `429` | 3 | M | D1 | ~142 requests (limit 50) at 1 req/s; Dev Mode rate limit unknown. |
 | E1.2 | Generate + commit `config/genres.json`, sanity check (count, sample) | 0.5 | L | E1.1 | |
 
 ### E2 — Spotify client (server-only)
