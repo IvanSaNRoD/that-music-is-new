@@ -40,7 +40,7 @@ Rules:
 6. Placeholder data lives in `mocks/` and is deleted when the real source lands.
 7. A new top-level folder or a deviation from these rules requires a new ADR.
 
-Enforcement (planned, D2/D5): ESLint import boundaries (`eslint-plugin-boundaries` or `no-restricted-imports`) so violations fail lint and CI.
+Enforcement (D2): ESLint `no-restricted-imports` in `eslint.config.mjs` — deep imports into another feature, `server/` from client code, and React/Next/features/components/server/mocks from `domain/` fail lint (rules 2–4, 6). CI runs it from D5.
 
 ## Consequences
 - + Everything about a feature is in one place; new features add a folder instead of growing a flat list.
