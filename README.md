@@ -112,3 +112,4 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-15 | [#42](https://github.com/IvanSaNRoD/that-music-is-new/issues/42) | Mobile + touch design: one layout below 1024px, mini turntable + bottom bar on the genre page, touch targets ≥44px; documented in Penpot |
 | 2026-11-15 | [#5](https://github.com/IvanSaNRoD/that-music-is-new/issues/5) | Quality: Prettier (+ Tailwind class order), ESLint architecture boundaries (ADR-0005), Husky + lint-staged, commitlint |
 | 2026-11-15 | [#6](https://github.com/IvanSaNRoD/that-music-is-new/issues/6) | Tests: Vitest + Testing Library (unit/component), MSW (Spotify mocks), Playwright e2e on desktop + touch phone |
+| 2026-11-15 | [#7](https://github.com/IvanSaNRoD/that-music-is-new/issues/7) | Claude config: PR template, project gotchas in CLAUDE.md (one main agent, no subagents by default) |
