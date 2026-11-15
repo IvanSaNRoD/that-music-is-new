@@ -124,3 +124,7 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-15 | [v0.2.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.2.0) | Milestone: technical foundations + final design (desktop, mobile, touch) |
 | 2026-11-15 | [#11](https://github.com/IvanSaNRoD/that-music-is-new/issues/11) | Genre catalog script: paginates `thesoundsofspotify` at 1 req/s, honours `429`, keeps "The Sound of …" genres |
 | 2026-11-15 | [#12](https://github.com/IvanSaNRoD/that-music-is-new/issues/12) | `config/genres.json` generated and committed: 6,490 genres `{ genre, playlistId, total }` |
+| 2026-11-16 | [#13](https://github.com/IvanSaNRoD/that-music-is-new/issues/13) | Spotify token: Client Credentials, cached per instance, refreshed before expiry, shared in-flight request |
+| 2026-11-16 | [#14](https://github.com/IvanSaNRoD/that-music-is-new/issues/14) | `getPlaylistItems` with zod schemas; visitor's market (`is_playable`); malformed entries → `null`; 401 → one retry |
+| 2026-11-16 | [#15](https://github.com/IvanSaNRoD/that-music-is-new/issues/15) | Error mapping: Spotify `429` → `503` + `Retry-After`, other → `502` |
+| 2026-11-16 | [#16](https://github.com/IvanSaNRoD/that-music-is-new/issues/16) | MSW Spotify mocks: playlist items fixtures (playable, unplayable, local, removed, episodes) + 429/5xx/401 overrides |
