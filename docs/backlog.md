@@ -21,7 +21,7 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 | D1 | Scaffold: Next.js App Router, TS strict, Tailwind, shadcn/ui, folders per architecture | 2 | L | — | npm (ADR-0004). |
 | D2 | Quality: ESLint, Prettier, Husky + lint-staged, commitlint | 1.5 | L | D1 | |
 | D3 | Tests setup: Vitest + Testing Library, MSW, Playwright | 2 | M | D1 | MSW with Next.js server code may need config tweaks. |
-| D4 | Claude config: CLAUDE.md, subagents, PR template | 2 | L | D1 | |
+| D4 | Claude config: CLAUDE.md, PR template | 2 | L | D1 | No subagents by default (README › AI-assisted workflow, 2026-11-11). |
 | D5 | GitHub: protected `main`, Actions CI (lint · typecheck · unit · build · e2e) | 2 | M | D2, D3 | Repo already created in roadmap step 5. |
 | D6 | Vercel: link repo, env vars (`SPOTIFY_CLIENT_ID/SECRET`), preview deploys | 1 | L | D5 | |
 | D7 | **Milestone: walking skeleton** — empty page deployed, CI green | 0.5 | L | D6 | |
