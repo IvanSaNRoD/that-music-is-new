@@ -8,12 +8,12 @@ export default function GenreNotFound() {
       <PageRow>
         <section className="flex min-w-0 flex-1 flex-col items-start gap-4">
           <h1 className="font-display text-[48px] leading-none font-extrabold tracking-[-0.02em]">Not in the crate</h1>
-          <p className="text-muted-foreground max-w-[46ch]">
+          <p className="max-w-[46ch] text-muted-foreground">
             We couldn&apos;t find that genre. Roll a random one or dig through the crate.
           </p>
           <Link
             href="/"
-            className="bg-primary border-border-strong hover:bg-primary-hover focus-visible:outline-primary-ink rounded-xl border-[1.5px] px-5 py-2.5 text-[17px] font-bold transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+            className="rounded-xl border-[1.5px] border-border-strong bg-primary px-5 py-2.5 text-[17px] font-bold transition-colors hover:bg-primary-hover focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-ink"
           >
             Back to the crate
           </Link>

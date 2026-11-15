@@ -16,10 +16,10 @@ export function ResultFallback() {
         </div>
         <div className="flex min-w-0 flex-col gap-6 max-lg:contents">
           <div className="flex flex-col gap-3 max-lg:gap-2 max-lg:self-center">
-            <span className="bg-muted h-9 w-full max-w-72 rounded-lg motion-safe:animate-pulse lg:h-[61px]" />
-            <span className="bg-muted h-4 w-48 max-w-full rounded motion-safe:animate-pulse" />
+            <span className="h-9 w-full max-w-72 rounded-lg bg-muted motion-safe:animate-pulse lg:h-[61px]" />
+            <span className="h-4 w-48 max-w-full rounded bg-muted motion-safe:animate-pulse" />
           </div>
-          <span className="min-h-11 lg:hidden max-lg:col-span-2" aria-hidden="true" />
+          <span className="min-h-11 max-lg:col-span-2 lg:hidden" aria-hidden="true" />
           <div className="max-lg:col-span-2">
             <TrackSkeleton />
           </div>

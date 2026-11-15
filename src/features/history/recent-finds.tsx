@@ -25,11 +25,11 @@ export function RecentFinds() {
         Your finds
       </h2>
       {items.length === 0 ? (
-        <p className="text-muted-foreground text-sm">Play a track and this genre lands here.</p>
+        <p className="text-sm text-muted-foreground">Play a track and this genre lands here.</p>
       ) : (
         // Below lg: one row that scrolls sideways, bleeding to the screen edges (py/px keep the current-pill ring unclipped).
         <ul
-          className="flex gap-2 py-1 max-lg:-mx-6 max-lg:gap-3 max-lg:overflow-x-auto max-lg:px-6 max-lg:[scrollbar-width:none] lg:-m-1 lg:flex-wrap lg:p-1"
+          className="flex gap-2 py-1 max-lg:-mx-6 max-lg:[scrollbar-width:none] max-lg:gap-3 max-lg:overflow-x-auto max-lg:px-6 lg:-m-1 lg:flex-wrap lg:p-1"
           aria-live="polite"
         >
           {items.map(({ id }) => {
@@ -45,7 +45,7 @@ export function RecentFinds() {
                   href={`/${g.slug}`}
                   aria-current={current ? "page" : undefined}
                   style={{ "--find-bg": bg, "--find-fg": fg, "--find-hole": hole } as CSSProperties}
-                  className={`recent-finds-item flex font-semibold max-lg:w-[76px] max-lg:flex-col max-lg:gap-1.5 max-lg:rounded-lg max-lg:text-[13px] max-lg:leading-tight lg:border-border-strong lg:max-w-[16rem] lg:items-center lg:gap-2 lg:rounded-full lg:border-[1.5px] lg:bg-(--find-bg) lg:py-1 lg:pr-4 lg:pl-1 lg:text-[15px] lg:text-(--find-fg) lg:touch:py-[7px] ${current ? "lg:outline-border-strong lg:outline-2 lg:outline-offset-2" : ""} focus-visible:outline-primary-ink focus-visible:outline-2 focus-visible:outline-offset-2`}
+                  className={`recent-finds-item flex font-semibold max-lg:w-[76px] max-lg:flex-col max-lg:gap-1.5 max-lg:rounded-lg max-lg:text-[13px] max-lg:leading-tight lg:max-w-[16rem] lg:items-center lg:gap-2 lg:rounded-full lg:border-[1.5px] lg:border-border-strong lg:bg-(--find-bg) lg:py-1 lg:pr-4 lg:pl-1 lg:text-[15px] lg:text-(--find-fg) lg:touch:py-[7px] ${current ? "lg:outline-2 lg:outline-offset-2 lg:outline-border-strong" : ""} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-ink`}
                 >
                   <span className="recent-finds-cover lg:hidden" aria-hidden="true" />
                   <Vinyl size={28} rings={3} label={hole} className="recent-finds-disc max-lg:hidden" />

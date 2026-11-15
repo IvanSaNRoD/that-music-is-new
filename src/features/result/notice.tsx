@@ -9,15 +9,15 @@ type Action = { label: string; onClick: () => void; disabled?: boolean };
 // Not a live region: ResultView's page-level aria-live announces each state once.
 export function Notice({ title, body, action }: { title: string; body: ReactNode; action?: Action }) {
   return (
-    <div className="bg-card border-border-strong flex flex-col items-start gap-3 rounded-2xl border-[1.5px] p-8">
+    <div className="flex flex-col items-start gap-3 rounded-2xl border-[1.5px] border-border-strong bg-card p-8">
       <h2 className="font-display text-[26px] font-extrabold tracking-[-0.02em]">{title}</h2>
-      <p className="text-muted-foreground max-w-[46ch]">{body}</p>
+      <p className="max-w-[46ch] text-muted-foreground">{body}</p>
       {action && (
         <button
           type="button"
           disabled={action.disabled}
           onClick={action.onClick}
-          className={`bg-primary border-border-strong hover:bg-primary-hover mt-2 rounded-xl border-[1.5px] px-5 py-2.5 text-[17px] font-bold transition-colors disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}
+          className={`mt-2 rounded-xl border-[1.5px] border-border-strong bg-primary px-5 py-2.5 text-[17px] font-bold transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50 ${focusRing}`}
         >
           {action.label}
         </button>
