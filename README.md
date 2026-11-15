@@ -122,3 +122,5 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-15 | [#9](https://github.com/IvanSaNRoD/that-music-is-new/issues/9) | Deploy: Vercel (production + preview per PR), `.env.example`, Node 24 engine |
 | 2026-11-15 | [#10](https://github.com/IvanSaNRoD/that-music-is-new/issues/10) | Milestone: walking skeleton — deployed on Vercel, CI green on `main` (phase D done) |
 | 2026-11-15 | [v0.2.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.2.0) | Milestone: technical foundations + final design (desktop, mobile, touch) |
+| 2026-11-15 | [#11](https://github.com/IvanSaNRoD/that-music-is-new/issues/11) | Genre catalog script: paginates `thesoundsofspotify` at 1 req/s, honours `429`, keeps "The Sound of …" genres |
+| 2026-11-15 | [#12](https://github.com/IvanSaNRoD/that-music-is-new/issues/12) | `config/genres.json` generated and committed: 6,490 genres `{ genre, playlistId, total }` |
