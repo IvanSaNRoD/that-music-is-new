@@ -28,7 +28,7 @@ Spike (2026-11-09, Client Credentials, Dev Mode; base script `spikes/spike-clien
 2. **Randomizer** (pure domain functions + thin service, randomness injected `random: () => number` for deterministic tests):
    1. Pick 1 random entry from the catalog.
    2. One call: `GET /v1/playlists/{id}/items?limit=10&offset=random(0, max(0, total - 10))`.
-   3. Drop null/local/unavailable items, dedupe by track id, shuffle (Fisher–Yates), return up to 10 tracks + genre.
+   3. Drop null/local/unavailable items (unavailable = `is_playable: false` for the visitor's market, sent as `market` from `x-vercel-ip-country`, fallback `US` — added 2026-11-15), dedupe by track id, shuffle (Fisher–Yates), return up to 10 tracks + genre.
 3. **"Listen more on Spotify"** link → the playlist URL (`https://open.spotify.com/playlist/{id}`).
 4. Respect `429 Retry-After`. Client Credentials token is enough (no user login needed for the Randomizer).
 

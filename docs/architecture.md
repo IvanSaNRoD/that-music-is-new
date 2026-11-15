@@ -66,6 +66,8 @@ type GenreResult = {
 
 Errors: Spotify `429` → `503` + `Retry-After`; other Spotify/network errors → `502`. The UI shows an error state with retry.
 
+Market: Spotify only reports `is_playable` when the request has `market`. Users are anonymous, so routes pass the visitor's country from Vercel's `x-vercel-ip-country` header (fallback `US`); unplayable tracks are filtered out for that country.
+
 ## Randomizer flow
 
 ```mermaid
@@ -130,7 +132,7 @@ src/
   server/                     # server-only
     catalog.ts                # loads/validates genres.json
     randomizer.ts             # service: domain + catalog + spotify
-    spotify/ token.ts  playlists.ts  schemas.ts
+    spotify/ token.ts  playlists.ts  schemas.ts  errors.ts   # errors.ts: SpotifyError + toHttpError (429 → 503, other → 502)
   mocks/                      # design-phase placeholder data (removed when real data lands)
   lib/                        # tiny shared helpers
 tests/e2e/                    # Playwright: desktop + touch phone (Pixel 7)
