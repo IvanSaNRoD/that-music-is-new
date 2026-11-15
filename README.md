@@ -141,3 +141,7 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-16 | [#14](https://github.com/IvanSaNRoD/that-music-is-new/issues/14) | `getPlaylistItems` with zod schemas; visitor's market (`is_playable`); malformed entries → `null`; 401 → one retry |
 | 2026-11-16 | [#15](https://github.com/IvanSaNRoD/that-music-is-new/issues/15) | Error mapping: Spotify `429` → `503` + `Retry-After`, other → `502` |
 | 2026-11-16 | [#16](https://github.com/IvanSaNRoD/that-music-is-new/issues/16) | MSW Spotify mocks: playlist items fixtures (playable, unplayable, local, removed, episodes) + 429/5xx/401 overrides |
+| 2026-11-16 | [#17](https://github.com/IvanSaNRoD/that-music-is-new/issues/17) | Domain (TDD, parallel subagent): `pickGenre`, `randomOffset`, `filterPlayable`, `shuffle`, `toMarket` |
+| 2026-11-16 | [#18](https://github.com/IvanSaNRoD/that-music-is-new/issues/18) | Catalog: `genres.json` validated once, indexed by slug, slug-collision guard |
+| 2026-11-16 | [#19](https://github.com/IvanSaNRoD/that-music-is-new/issues/19) | Randomizer service: pick (no Spotify) + genre sample (one Spotify call, live total) |
+| 2026-11-16 | [#20](https://github.com/IvanSaNRoD/that-music-is-new/issues/20) | API by slug (ADR-0007): `/api/genres/random?exclude=`, `/api/genres/{slug}` — `no-store`, visitor market, 404/503/502/500 |
