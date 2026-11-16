@@ -152,3 +152,7 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-16 | [#23](https://github.com/IvanSaNRoD/that-music-is-new/issues/23) | Spotify Embed player: one 152px embed, track 01 cued, `loadEntity` + `play` in the click, "Dig deeper" fallback |
 | 2026-11-16 | [#24](https://github.com/IvanSaNRoD/that-music-is-new/issues/24) | Loading / empty / error / busy (Retry-After) states with retry; e2e in 3 layers against a fake Spotify |
 | 2026-11-16 | [v0.3.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.3.0) | Milestone: real genres, real music — catalog, Spotify client, API and UI on real data (E1–E4) |
+| 2026-11-16 | [#25](https://github.com/IvanSaNRoD/that-music-is-new/issues/25) | History kept between visits: `localStorage` store (`useSyncExternalStore`), zod-validated on read, works without storage, syncs across tabs |
+| 2026-11-16 | [#26](https://github.com/IvanSaNRoD/that-music-is-new/issues/26) | History panel: recent first, delete one with undo, clear all with confirmation — e2e: reload, delete, undo, clear |
+| 2026-11-16 | [#27](https://github.com/IvanSaNRoD/that-music-is-new/issues/27) | History row → `/{slug}` → genre page with a fresh sample (e2e) |
+| 2026-11-16 | [#54](https://github.com/IvanSaNRoD/that-music-is-new/issues/54) | Your finds: remove a find on the genre page (✕ on pills and sleeves) with undo, keyboard focus → Undo |
