@@ -158,3 +158,6 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-16 | [#54](https://github.com/IvanSaNRoD/that-music-is-new/issues/54) | Your finds: remove a find on the genre page (✕ on pills and sleeves) with undo, keyboard focus → Undo |
 | 2026-11-16 | [v0.4.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.4.0) | Milestone: your finds, kept — persistent History, remove finds on genre pages (E5) |
 | 2026-11-16 | [#31](https://github.com/IvanSaNRoD/that-music-is-new/issues/31) | SEO: titles + canonical per page, share images (site + per genre), vinyl favicon, own 404/500 pages, robots + sitemap of every genre |
+| 2026-11-16 | [#62](https://github.com/IvanSaNRoD/that-music-is-new/issues/62) | Research: autoplay track 01 — real-embed experiment + browser policies; rule in the PRD (autoplay only with listening intent), implementation #67 |
+| 2026-11-16 | [#58](https://github.com/IvanSaNRoD/that-music-is-new/issues/58) | Crate: long genre names no longer push the Play pill into the die-cut hole (fixed 44px name block, width-fitted short names, one-line tabs) |
+| 2026-11-16 | [#61](https://github.com/IvanSaNRoD/that-music-is-new/issues/61) | Turntable follows the Spotify Embed's real playback: spins only while Spotify confirms it plays (pause, end or blocked audio → still) |
