@@ -28,6 +28,7 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - Home page shows the Randomizer button; no login or account required.
 - Pressing the button shows: genre name, track count of its "The Sound of X" playlist, "Listen more on Spotify" link (playlist URL), and up to 10 tracks (title, artists).
 - Selecting a track loads it in a single Spotify Embed player (one player, not one per row).
+- **Autoplay (decided 2026-11-16, #62; implementation #67):** track 01 starts on its own only when the genre page was opened with listening intent in the same visit (Randomize, Space, Roll again, sleeve "Play 10 tracks"); never on a shared URL, reload, History row or "Your finds". If the browser blocks it (Safari/iOS; no playback progress within ~3s), track 01 stays cued, the turntable stays still and a hint asks to press play in the player.
 - "Roll again" replaces the current genre and tracks with a new random genre.
 - A loading state is shown while fetching; an error state with retry is shown if Spotify fails (incl. `429`).
 - A genre is saved to `localStorage` (genre name, playlist id, date) **when its tracks are played**, not when it is merely selected or randomized; it persists after reload.
@@ -38,11 +39,12 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 
 ### Entry points → effects (ADR-0006)
 
-| Entry | Goes to | Changes the crate | Adds to History |
-|---|---|---|---|
-| Randomize · Space · Roll again | `/{random genre}` (≠ current) | No | When a track is played |
-| Crate sleeve → Play | `/{that genre}` | Only the open sleeve | When a track is played |
-| History row | `/{that genre}` | No | Moves to top when a track is played |
+| Entry | Goes to | Changes the crate | Adds to History | Autoplays track 01 (#67) |
+|---|---|---|---|---|
+| Randomize · Space · Roll again | `/{random genre}` (≠ current) | No | When a track is played | Yes |
+| Crate sleeve → Play | `/{that genre}` | Only the open sleeve | When a track is played | Yes |
+| History row · "Your finds" | `/{that genre}` | No | Moves to top when a track is played | No |
+| Shared URL · reload | `/{that genre}` | No | When a track is played | No |
 
 - Genre URL slug: lowercase, accents stripped, `&` → `and`, other symbols/spaces → `-` (`R&B` → `/r-and-b`). Unknown slug → not-found page.
 
