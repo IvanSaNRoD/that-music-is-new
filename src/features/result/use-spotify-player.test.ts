@@ -164,6 +164,41 @@ describe("useSpotifyPlayer", () => {
     expect(result.current.paused).toBe(true);
   });
 
+  it("reports the end of a track once, not on a pause", async () => {
+    const onEnded = vi.fn();
+    const { api, calls } = fakeApi();
+    const hook = renderHook(() => useSpotifyPlayer({ loadApi: () => Promise.resolve(api), onEnded }));
+    hook.result.current.containerRef.current = document.createElement("div");
+    await waitFor(() => expect(hook.result.current.status).toBe("ready"));
+    act(() => hook.result.current.play("abc"));
+    const controller = fakeController();
+    act(() => calls[0].cb(controller));
+
+    act(() => controller.update({ isPaused: true, position: 12000 })); // the listener pauses mid-track
+    expect(onEnded).not.toHaveBeenCalled();
+
+    act(() => controller.update({ isPaused: false, position: 30000, duration: 30000 }));
+    act(() => controller.update({ isPaused: true, position: 30000, duration: 30000 })); // Spotify repeats the end
+    expect(onEnded).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports the end again for the next track", async () => {
+    const onEnded = vi.fn();
+    const { api, calls } = fakeApi();
+    const hook = renderHook(() => useSpotifyPlayer({ loadApi: () => Promise.resolve(api), onEnded }));
+    hook.result.current.containerRef.current = document.createElement("div");
+    await waitFor(() => expect(hook.result.current.status).toBe("ready"));
+    act(() => hook.result.current.play("abc"));
+    const controller = fakeController();
+    act(() => calls[0].cb(controller));
+    act(() => controller.update({ isPaused: false, position: 30000, duration: 30000 }));
+
+    act(() => hook.result.current.play("def"));
+    act(() => controller.update({ isPaused: false, position: 500, duration: 29000 }));
+    act(() => controller.update({ isPaused: false, position: 29000, duration: 29000 }));
+    expect(onEnded).toHaveBeenCalledTimes(2);
+  });
+
   it("is loading until the API resolves, then ready", async () => {
     const api = deferredApi();
     const { result } = renderHook(() => useSpotifyPlayer({ loadApi: api.loadApi }));

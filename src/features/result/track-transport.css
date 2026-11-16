@@ -1,0 +1,88 @@
+/* Track transport (#55): ⏮ / ⏭ as Kinari buttons with a Sumi outline (like the "Your finds" ✕ dot). */
+.track-transport {
+  display: flex;
+  align-items: center;
+}
+.track-transport-button {
+  position: relative;
+  display: grid;
+  place-items: center;
+  flex: none;
+  aspect-ratio: 1;
+  border-radius: 9999px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--background);
+  color: var(--foreground);
+  transition:
+    background-color 0.15s ease-out,
+    transform 0.1s ease-out;
+}
+.track-transport-button > svg {
+  width: 45%;
+  height: 45%;
+}
+.track-transport-button:hover:not(:disabled) {
+  background: var(--muted);
+}
+.track-transport-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+.track-transport-button:focus-visible {
+  outline: 2px solid var(--primary-ink);
+  outline-offset: 2px;
+}
+.track-transport-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+/* Plinth (≥lg): bottom-left corner of the 440×400 plinth, sized in % so it scales with the deck (36px at 440).
+   Geometry: the nearest edge stays ≈ 183/178 of the platter mat's radius away, so the spinning record is never
+   covered. Visible 36px (30px on the 360px deck); a 44px hit area on touch (::before). */
+.track-transport[data-variant="plinth"] {
+  position: absolute;
+  left: 3%;
+  bottom: 3%;
+  width: 17.9%; /* 2 × 8.2% + 1.5% gap, in % of the plinth */
+  gap: 8.4%; /* 1.5% of the plinth, in % of this row */
+}
+.track-transport[data-variant="plinth"] .track-transport-button {
+  width: 45.8%; /* 8.2% of the plinth */
+}
+@media (hover: none), (pointer: coarse) {
+  .track-transport[data-variant="plinth"] .track-transport-button::before {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: 44px;
+    height: 44px;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/* Phone bottom bar (<lg): one 44px row above the embed: ⏮  Track 03 of 10  ⏭. */
+.track-transport[data-variant="bar"] {
+  justify-content: space-between;
+  gap: 12px;
+}
+.track-transport[data-variant="bar"] .track-transport-button {
+  width: 44px;
+}
+.track-transport[data-variant="bar"] .track-transport-button > svg {
+  width: 18px;
+  height: 18px;
+}
+.track-transport-count {
+  font-family: var(--font-space-mono), monospace;
+  font-size: 13px;
+  color: var(--muted-foreground);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .track-transport-button {
+    transition: none;
+  }
+  .track-transport-button:active:not(:disabled) {
+    transform: none;
+  }
+}
