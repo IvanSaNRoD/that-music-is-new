@@ -82,7 +82,12 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
                 <span className="crate-tab" aria-hidden={open}>
                   {g.name}
                 </span>
-                <span className="crate-name" aria-hidden={!open}>
+                <span
+                  className="crate-name"
+                  data-length={nameLength(g.name)}
+                  style={{ "--name-chars": g.name.length } as CSSProperties}
+                  aria-hidden={!open}
+                >
                   {g.name}
                 </span>
                 <span className="crate-play inline-flex items-center gap-1.5" aria-hidden={!open}>
@@ -98,6 +103,9 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
     </section>
   );
 }
+
+/** Size step for the open sleeve's name (crate-flip.css): long names step down so the Play pill never moves. */
+const nameLength = (name: string) => (name.length <= 15 ? "short" : name.length <= 30 ? "medium" : "long");
 
 /** Stand-in sleeves while the crate loads (or failed): same geometry as 8 real ones, so nothing jumps. */
 function EmptySleeves({ pulsing }: { pulsing: boolean }) {
