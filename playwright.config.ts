@@ -4,6 +4,7 @@ import { defineConfig, devices } from "@playwright/test";
 // Desktop + a touch phone, because layout and touch rules differ below 1024px (DESIGN.md › Layout).
 export default defineConfig({
   testDir: "./tests/e2e",
+  globalSetup: "./tests/e2e/warmup.ts", // local `next dev` only: compile routes before tests (see the file)
   fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
@@ -13,6 +14,8 @@ export default defineConfig({
   // Local runs use `next dev`, which compiles a route on its first visit and may reload the page once:
   // give assertions more time there. CI serves a production build, where the 5s default is plenty.
   expect: { timeout: process.env.CI ? 5_000 : 15_000 },
+  // Same reason, per test: the first tests to open a route wait for its cold compile (genre page + metadata + OG).
+  timeout: process.env.CI ? 30_000 : 60_000,
   projects: [
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },
     { name: "mobile", use: { ...devices["Pixel 7"] } },

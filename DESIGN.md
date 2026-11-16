@@ -325,6 +325,14 @@ The compact History trail on a genre page, below a Pencil Rule hairline: "Your f
 ### Player slot
 The single Spotify Embed (ADR-0001), 152px tall (Spotify's compact track player; 80px is legacy), full width of the deck (440px / 360px) under the turntable, 16px radius. Before the first play: a placeholder of the same size (dashed 1.5px Matsuba outline, 36px vinyl, "Nothing playing yet.", Space Mono "Spotify player" label) so nothing shifts. The first played track creates the one embed (`useSpotifyPlayer`), later tracks load into it (`loadEntity` + `play` inside the click; browsers may still block autoplay, then the listener presses play in the embed). Anonymous listeners usually hear ~30s previews. Fallback when the embed script fails or times out (10s): the placeholder shows the now-playing title/artists and the hand-off pill "Dig deeper on Spotify ↗" (14px semibold; "Dig deeper ↗" visible on the 360px deck, same accessible name). Below 1024px it lives in the genre page bottom bar (see Layout). Last in the DOM (read after title, tracks and finds); the grid places it under the deck. Always occupies its slot (invisible outside the ready state), so the page height never changes between loading, ready and failure states.
 
+### Error page
+`(site)/error.tsx`, inside the site layout, same shape as "Not in the crate": "The needle skipped" (Inter Tight 48px), one Inter line in Matsuba ("Something went wrong on our side. Try again, or go back and dig through the crate."), primary "Try again" (Seiji, 16px radius, as the 404's button) + text link "Back to the crate". `global-error.tsx` (root layout failed) repeats it on a bare Kinari page with the Space Mono name above.
+
+### Share images and icons
+- **Open Graph (1200×630, `server/og.tsx`, drawn with next/og):** Kinari, Space Mono "THAT MUSIC IS NEW" top left (26px), Space Mono Matsuba line at the bottom (24–26px). Site card: the home headline "Hear a genre you’ve never heard of." (Inter Tight 104px) beside a 560px record cut by the right edge (the home's corner vinyl). Genre card: the genre name (Inter Tight 800, 128 / 96 / 80 / 60px by length, ≤ 4 lines, breaks long words) beside a 400px sleeve in the genre's tone (Genre Tone Rule; 3px Sumi outline, 20px radius, soft shadow, 200px die-cut hole + Sumi spindle) with its record pulled out towards the right edge; footer "Rare genre · 10 tracks to taste". Colours are hex copies of the tokens (Satori can't read CSS variables).
+- **Favicon:** `icon.svg`, the brand vinyl (Sumi disc, one Kinari groove, Seiji label). **apple-icon:** the vinyl on Kinari, 180px.
+- Captures: `docs/design/screenshots/og/`.
+
 ### Step cards
 Home only. Quiet and secondary: tonal Card Stock, no outline, 14px radius, 96px tall; equal grid columns on desktop (290px, max 26vw, on tablet), joined by 1px Matsuba connectors; a 40px Seiji badge (no outline) holds the number; title Inter Tight 18px.
 

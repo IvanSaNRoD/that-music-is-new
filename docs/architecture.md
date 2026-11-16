@@ -118,11 +118,18 @@ config/genres.json            # generated catalog (committed)
 scripts/build-genres.mjs      # one-time: thesoundsofspotify → genres.json
 src/
   app/                        # routing only (Next special files)
-    layout.tsx  globals.css   # root layout: html, fonts, design tokens
+    layout.tsx  globals.css   # root layout: html, fonts, design tokens, site metadata (title template, OG/Twitter base, metadataBase)
+    global-error.tsx          # last resort if the root layout fails (own <html>, fonts, styles)
+    icon.svg  apple-icon.tsx  # brand vinyl favicon + 180px touch icon (drawn by server/og.tsx)
+    opengraph-image.tsx       # site share card (server/og.tsx)
+    robots.ts  sitemap.ts     # robots (no /api/) + sitemap: home + every genre from the catalog
     (site)/layout.tsx         # shared shell: header, crate + history providers, decorative vinyl (ADR-0006)
     (site)/page.tsx           # / → features/home (Hero + crate)
-    (site)/[genre]/page.tsx   # /{slug} → features/result; unknown slug → not-found
+    (site)/[genre]/page.tsx   # /{slug} → features/result; unknown slug → not-found; generateMetadata (title, canonical, OG)
+    (site)/[genre]/opengraph-image.tsx  # per-genre share card: name + sleeve in its tone (server/og.tsx)
+    (site)/[genre]/[...rest]/page.tsx   # deeper URLs (/a/b) → the site's own 404 (instead of experimental global-not-found)
     (site)/not-found.tsx
+    (site)/error.tsx          # 500 inside the site layout: "The needle skipped" + Try again (retry)
     api/genres/crate/route.ts
     api/genres/random/route.ts
     api/genres/[slug]/route.ts
@@ -137,13 +144,14 @@ src/
     brand/                    # Vinyl, Sparkle
     layout/                   # SiteHeader
   domain/                     # pure, unit-tested (TDD) — no React, no I/O
-    slug.ts  pick-genre.ts  random-offset.ts  filter-tracks.ts  shuffle.ts  (+ types: genre, track, history)
+    slug.ts  pick-genre.ts  random-offset.ts  filter-tracks.ts  shuffle.ts  tone.ts  history.ts  (+ types: genre, track)
   server/                     # server-only
     catalog.ts                # loads/validates genres.json once: array (random pick) + Map slug → entry
     randomizer.ts             # service: domain + catalog + spotify
+    og.tsx  og-fonts/         # next/og images (OG cards, apple-icon); static TTFs (Inter Tight 800, Space Mono 400, SIL OFL) — Satori can't use next/font or CSS variables
     spotify/ token.ts  playlists.ts  schemas.ts  errors.ts   # errors.ts: SpotifyError + toHttpError (429 → 503, other → 502)
   mocks/                      # design-phase placeholder data; empty and removed since E5 (2026-11-16), recreate only for new design work
-  lib/                        # tiny shared helpers
+  lib/                        # tiny shared helpers (fonts.ts: next/font for layout + global-error; site.ts: SITE_NAME, siteUrl, OG base)
 tests/e2e/                    # Playwright: desktop + touch phone (Pixel 7); fixtures.ts, fake-spotify.ts
 tests/api/                    # route handlers called directly (Spotify via MSW); tests/fixtures/catalog.ts = test catalog
 tests/msw/                    # MSW server + Spotify handlers for unit tests
