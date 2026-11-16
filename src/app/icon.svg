@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Brand vinyl (components/brand/vinyl.tsx): Sumi disc, Kinari groove, Seiji label, Sumi spindle hole. -->
+  <circle cx="50" cy="50" r="49" fill="#1C1C1C"/>
+  <circle cx="50" cy="50" r="36" fill="none" stroke="#F3EBDA" stroke-opacity="0.3" stroke-width="2"/>
+  <circle cx="50" cy="50" r="22" fill="#8DB6A5"/>
+  <circle cx="50" cy="50" r="5" fill="#1C1C1C"/>
+</svg>

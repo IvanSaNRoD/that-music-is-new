@@ -1,32 +1,27 @@
-import type { Metadata } from "next";
-import { Inter, Inter_Tight, Space_Mono } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { fontVariables } from "@/lib/fonts";
+import { OPEN_GRAPH_BASE, SITE_NAME, siteUrl } from "@/lib/site";
 import "./globals.css";
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const interTight = Inter_Tight({
-  variable: "--font-inter-tight",
-  subsets: ["latin"],
-});
-
-// Space Mono is not a variable font → weights must be listed.
-const spaceMono = Space_Mono({
-  variable: "--font-space-mono",
-  subsets: ["latin"],
-  weight: ["400", "700"],
-});
+const DESCRIPTION =
+  "One click picks a random rare genre from near 7,000 and plays 10 of its tracks. Keep a trail of your finds.";
 
 export const metadata: Metadata = {
-  title: "That Music Is New",
-  description: "Discover a random rare music genre and listen to its tracks.",
+  metadataBase: new URL(siteUrl()),
+  title: { default: `${SITE_NAME} — hear a genre you’ve never heard of`, template: `%s · ${SITE_NAME}` },
+  description: DESCRIPTION,
+  applicationName: SITE_NAME,
+  // No canonical / og:url here: children would inherit "/" (pages set their own).
+  openGraph: OPEN_GRAPH_BASE,
+  twitter: { card: "summary_large_image" },
 };
+
+// Browser UI (mobile address bar) in Kinari, the page colour.
+export const viewport: Viewport = { themeColor: "#f3ebda" };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html lang="en" className={`${inter.variable} ${interTight.variable} ${spaceMono.variable} h-full`}>
+    <html lang="en" className={`${fontVariables} h-full`}>
       <body className="flex min-h-full flex-col">{children}</body>
     </html>
   );
