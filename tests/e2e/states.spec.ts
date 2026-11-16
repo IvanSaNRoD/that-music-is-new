@@ -11,6 +11,30 @@ test.describe("crate", () => {
     await expect(crate.getByRole("button", { name: "Trip Hop" })).toBeAttached();
   });
 
+  // The longest real catalog names (#58): the open sleeve's Play pill must stay clear of the die-cut hole.
+  for (const name of [
+    "Auteur-Compositeur-Interprète Québécois",
+    "Historically Informed Performance",
+    "Progressive Bluegrass",
+  ]) {
+    test(`keeps the Play pill above the die-cut hole for "${name}"`, async ({ page }, info) => {
+      // Desktop also at 1024px: the narrowest crate column (≈210px), where the pill used to wrap.
+      if (info.project.name === "desktop") await page.setViewportSize({ width: 1024, height: 800 });
+      await mockCrate(page, [{ genre: name, slug: "long-name-e2e" }, ...sampleCrate]);
+      await page.goto("/");
+
+      const sleeve = page.getByRole("button", { name: `Play 10 tracks of ${name}` });
+      const play = sleeve.locator(".crate-play");
+      const hole = sleeve.locator(".crate-hole");
+      await expect(play).toBeVisible();
+      await expect(async () => {
+        const [p, h, s] = await Promise.all([play.boundingBox(), hole.boundingBox(), sleeve.boundingBox()]);
+        expect(p!.y + p!.height).toBeLessThanOrEqual(h!.y); // pill ends above the hole
+        expect(p!.x + p!.width).toBeLessThanOrEqual(s!.x + s!.width); // and inside the sleeve
+      }).toPass();
+    });
+  }
+
   test("offers a retry when the crate can't be filled", async ({ page }) => {
     await mockCrate(page, { status: 500 });
     await page.goto("/");

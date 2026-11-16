@@ -31,6 +31,7 @@
   flex-direction: column;
   gap: 6px;
   transition: height 0.6s var(--ease-lift);
+  container-type: inline-size; /* the open name's size follows the sleeve width (cqi) */
 }
 .crate-sleeve[aria-expanded="true"] {
   height: 180px; /* visible 166px */
@@ -45,6 +46,10 @@
   inset: 0 16px auto;
   padding: 3px 0;
   font: 700 13px/26px var(--font-inter);
+  /* One line: long names end in an ellipsis (the full name is the sleeve's aria-label). */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
   transition: opacity 0.2s ease-out;
 }
 /* Open-state content is always rendered and revealed by the growing height (overflow clips it). */
@@ -61,18 +66,36 @@
   opacity: 1;
   transition-delay: 0.1s;
 }
+/* The name always takes 44px, so the Play pill never moves: pill bottom ≈ 106px, die-cut hole top 110px
+   (#58). 44px = 1 line up to 40px, or 2 lines of 22px.
+   Short names (≤ 15 chars): one line, sized to fit the sleeve width (≈ 0.62em per character), 18–40px. */
 .crate-name {
+  flex: none;
+  height: 44px;
   margin-top: 14px;
-  /* Phones: scales down and stops at 2 lines so the Play pill never drops into the die-cut hole. */
-  font: 800 clamp(26px, 8vw, 40px)/1 var(--font-inter-tight);
+  font: 800 clamp(18px, calc(100cqi / (var(--name-chars) * 0.62)), 40px) / 44px var(--font-inter-tight);
   letter-spacing: -0.02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis; /* safety net only */
+}
+/* Longer names: two lines of exactly 22px (= 44px, nothing peeks below), long words may break. */
+.crate-name[data-length="medium"],
+.crate-name[data-length="long"] {
+  font-size: 22px;
+  line-height: 22px;
+  white-space: normal;
+  overflow-wrap: anywhere;
   display: -webkit-box;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
-  overflow: hidden;
+}
+.crate-name[data-length="long"] {
+  font-size: 18px;
 }
 .crate-play {
   margin-top: 8px;
+  white-space: nowrap; /* never two lines: a taller pill would reach the die-cut hole (1024px crate ≈ 210px) */
   align-self: flex-start;
   border-radius: 9999px;
   padding: 8px 16px;
