@@ -22,7 +22,17 @@ function fakeApi() {
 }
 
 function fakeController() {
-  return { loadEntity: vi.fn(), play: vi.fn(), pause: vi.fn(), destroy: vi.fn(), addListener: vi.fn() };
+  const listeners = new Map<string, (e: unknown) => void>();
+  return {
+    loadEntity: vi.fn(),
+    play: vi.fn(),
+    pause: vi.fn(),
+    destroy: vi.fn(),
+    addListener: vi.fn((event: string, fn: (e: unknown) => void) => listeners.set(event, fn)),
+    /** What Spotify sends after a playback change (docs: playback_update → { data: { isPaused, … } }). */
+    update: (data: { isPaused: boolean; position?: number; duration?: number }) =>
+      listeners.get("playback_update")?.({ data: { isBuffering: false, position: 1000, duration: 30000, ...data } }),
+  };
 }
 
 /** Renders the hook with a ready API and a container attached (as React would via `ref`). */
@@ -125,6 +135,33 @@ describe("useSpotifyPlayer", () => {
     await waitFor(() => expect(result.current.status).toBe("ready"));
     act(() => result.current.play("abc"));
     expect(calls[0].options).toEqual({ uri: "spotify:track:abc", width: "100%", height: 80 });
+  });
+
+  it("is paused until Spotify reports that the track is really playing", async () => {
+    const { result, calls } = await renderReady();
+    expect(result.current.paused).toBe(true);
+    act(() => result.current.play("abc"));
+    const controller = fakeController();
+    act(() => calls[0].cb(controller));
+    expect(result.current.paused).toBe(true); // play() asked, not confirmed (the browser may block it)
+
+    act(() => controller.update({ isPaused: false }));
+    expect(result.current.paused).toBe(false);
+  });
+
+  it("is paused again when the listener pauses in the embed or the track reaches its end", async () => {
+    const { result, calls } = await renderReady();
+    act(() => result.current.play("abc"));
+    const controller = fakeController();
+    act(() => calls[0].cb(controller));
+    act(() => controller.update({ isPaused: false }));
+
+    act(() => controller.update({ isPaused: true }));
+    expect(result.current.paused).toBe(true);
+
+    act(() => controller.update({ isPaused: false }));
+    act(() => controller.update({ isPaused: false, position: 30000, duration: 30000 })); // preview over
+    expect(result.current.paused).toBe(true);
   });
 
   it("is loading until the API resolves, then ready", async () => {
