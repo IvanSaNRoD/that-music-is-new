@@ -17,13 +17,13 @@ export function HistoryColumn() {
   return (
     <HistoryPanel
       items={history.items}
+      loaded={history.loaded}
       selected={crate.selected}
       onOpen={(slug) => router.push(`/${slug}`)}
       onRemove={history.remove}
       onClear={history.clear}
       lastRemoved={history.lastRemoved}
       onUndo={history.undoRemove}
-      onDismissUndo={history.dismissUndo}
     />
   );
 }
