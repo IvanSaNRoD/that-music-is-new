@@ -257,7 +257,7 @@ Touch (`touch:` variant = `(hover: none), (pointer: coarse)`, at any width, so i
 
 Unchanged by design: the corner vinyl and the invisible steps spacer exist only ≥1024px.
 
-**Status:** final on desktop: home (2026-11-12/13) and genre page with its loading, error, busy and empty states (2026-11-13, turntable). Mobile/tablet + touch implemented 2026-11-15 (issue #42). History-clear stays inline on the home. Penpot page "Screens" holds only early, non-authoritative drafts.
+**Status:** final on desktop: home (2026-11-12/13) and genre page with its loading, error, busy and empty states (2026-11-13, turntable). Mobile/tablet + touch implemented 2026-11-15 (issue #42). History-clear stays inline on the home. Penpot page "Screens" holds only early, non-authoritative drafts. E4 (2026-11-16): real data wired — crate loading/error states, 152px Spotify Embed player (cued track 01, "Dig deeper" fallback), phone bottom bar = player only; documented in Penpot (sections "E4 — real data" on *Desktop (final)* and *Mobile (final)*, captures `docs/design/screenshots/*/1?-e4-*.jpg`).
 
 Spacing rhythm uses 8px steps (8 / 16 / 24 / 32 / 48 / 56).
 
