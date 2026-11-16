@@ -8,8 +8,14 @@ import { blurIfPointer } from "@/lib/utils";
 
 const UNDO_MS = 6000;
 
+/** "2026-11-16" → "16 Nov" (parsed as a local day, not UTC midnight). */
+const shortDate = (iso: string) =>
+  new Date(`${iso}T00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+
 type HistoryPanelProps = {
   items: HistoryItem[];
+  /** False until History is read from storage (server render, hydration): no empty-state flash. */
+  loaded: boolean;
   selected?: string;
   onOpen: (id: string) => void;
   onRemove: (id: string) => void;
@@ -24,6 +30,7 @@ const linkButton =
 
 export function HistoryPanel({
   items,
+  loaded,
   selected,
   onOpen,
   onRemove,
@@ -54,7 +61,9 @@ export function HistoryPanel({
         <History size={24} strokeWidth={2.25} aria-hidden="true" />
       </div>
 
-      {items.length === 0 ? (
+      {!loaded ? (
+        <div className="flex-1" />
+      ) : items.length === 0 ? (
         <p className="flex-1 border-t border-divider px-5 py-6 text-sm text-muted-foreground">
           Nothing here yet. Play a genre and it lands here.
         </p>
@@ -82,7 +91,7 @@ export function HistoryPanel({
                   <span className="flex min-w-0 flex-1 flex-col gap-0.5">
                     <span className="truncate text-[17px] font-bold">{g.name}</span>
                     <span className="font-mono text-[13px] whitespace-nowrap text-muted-foreground">
-                      10 tracks · {date}
+                      10 tracks · {shortDate(date)}
                     </span>
                   </span>
                   <ChevronRight

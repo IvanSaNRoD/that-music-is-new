@@ -106,7 +106,7 @@ sequenceDiagram
 Sleeve Play, History row, shared URL/reload and retry skip the first request: they go straight to `/{slug}`.
 
 ## Client state
-- `useGenreHistory()` hook (`features/history`): `{ genre, slug, discoveredAt }[]` in `localStorage`, most recent first, validated with zod on read (corrupt data → empty list). Actions: add (dedupe by `slug`, ADR-0007), remove one, clear all.
+- `useGenreHistory()` hook (`features/history`): `{ id: slug, name, date: "YYYY-MM-DD" }[]` under `localStorage` key `tmin:history`, most recent first, max 5. Read once per page load with `useSyncExternalStore` (server/hydration render = empty, so markup matches; `loaded` tells "not read yet" from "empty"), re-read when another tab changes it. Validated on read by `parseHistory` (`domain/history.ts`, zod): invalid entries dropped one by one, corrupt JSON → empty list. Without `localStorage` it keeps working in memory (not persisted). Actions: add (dedupe by `slug`, ADR-0007), remove one (with undo), clear all.
 - Current result and selected track: React state on the page. No state library.
 
 ## Folder structure
@@ -142,7 +142,7 @@ src/
     catalog.ts                # loads/validates genres.json once: array (random pick) + Map slug → entry
     randomizer.ts             # service: domain + catalog + spotify
     spotify/ token.ts  playlists.ts  schemas.ts  errors.ts   # errors.ts: SpotifyError + toHttpError (429 → 503, other → 502)
-  mocks/                      # design-phase placeholder data (removed when real data lands)
+  mocks/                      # design-phase placeholder data; empty and removed since E5 (2026-11-16), recreate only for new design work
   lib/                        # tiny shared helpers
 tests/e2e/                    # Playwright: desktop + touch phone (Pixel 7); fixtures.ts, fake-spotify.ts
 tests/api/                    # route handlers called directly (Spotify via MSW); tests/fixtures/catalog.ts = test catalog

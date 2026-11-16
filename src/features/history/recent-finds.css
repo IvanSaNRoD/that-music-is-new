@@ -1,10 +1,67 @@
-/* Pulled like a record from the crate. */
-.recent-finds-item {
-  transition: transform 0.2s var(--ease-lift);
+/* Pulled like a record from the crate (the ✕ rides along). */
+.recent-finds-item,
+.recent-finds-remove {
+  transition:
+    transform 0.2s var(--ease-lift),
+    opacity 0.15s ease-out;
 }
 @media (hover: hover) {
-  .recent-finds-item:hover {
+  .recent-finds-entry:hover .recent-finds-item,
+  .recent-finds-entry:hover .recent-finds-remove {
     transform: translateY(-2px);
+  }
+}
+
+/* ✕ — below lg: a price-tag dot on the sleeve's top-right corner (22px dot, 32px target ≥ WCAG 2.5.8;
+   44px would cover a third of the 76px sleeve). */
+.recent-finds-remove {
+  position: absolute;
+  top: 0;
+  left: 44px; /* 76px sleeve − 32px target */
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  color: var(--foreground);
+  isolation: isolate; /* keeps the ::before dot above the sleeve */
+}
+.recent-finds-remove > svg {
+  width: 12px;
+  height: 12px;
+}
+.recent-finds-remove::before {
+  content: "";
+  position: absolute;
+  inset: 5px;
+  z-index: -1;
+  border-radius: 9999px;
+  border: 1.5px solid var(--border-strong);
+  background: var(--background);
+}
+/* lg: inside the pill's reserved right end (pr-10), in the tone's ink; 44px tall target on touch. */
+@media (width >= 64rem) {
+  .recent-finds-remove {
+    inset: 0 2px 0 auto;
+    left: auto;
+    width: 36px;
+    height: auto;
+    color: var(--find-fg);
+  }
+  .recent-finds-remove > svg {
+    width: 14px;
+    height: 14px;
+  }
+  .recent-finds-remove::before {
+    inset: auto 6px;
+    top: 50%;
+    height: 24px;
+    transform: translateY(-50%);
+    border: 0;
+    background: transparent;
+  }
+  .recent-finds-remove:hover::before {
+    background: color-mix(in srgb, var(--find-fg) 14%, transparent);
   }
 }
 
@@ -68,7 +125,9 @@
     animation: none;
   }
   .recent-finds-item,
-  .recent-finds-item:hover {
+  .recent-finds-remove,
+  .recent-finds-entry:hover .recent-finds-item,
+  .recent-finds-entry:hover .recent-finds-remove {
     transition: none;
     transform: none;
   }

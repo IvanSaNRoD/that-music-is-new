@@ -32,7 +32,7 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - A loading state is shown while fetching; an error state with retry is shown if Spotify fails (incl. `429`).
 - A genre is saved to `localStorage` (genre name, playlist id, date) **when its tracks are played**, not when it is merely selected or randomized; it persists after reload.
 - Clicking a history entry loads a new sample of up to 10 tracks from that genre's playlist (same view as a Randomizer result); it does not duplicate the history entry.
-- History shows the **last 5 played** genres, most recent first (no duplicates; replaying moves an entry to the top); each entry has a delete action; a "clear all" action empties the list (with confirmation).
+- History shows the **last 5 played** genres, most recent first (no duplicates; replaying moves an entry to the top); each entry has a delete action (with undo, on the home History and on a genre page's "Your finds"); a "clear all" action empties the list (with confirmation, home only).
 - If `localStorage` is unavailable, the Randomizer still works (history simply not persisted).
 - Responsive (mobile and desktop) and keyboard accessible.
 
@@ -61,3 +61,4 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - Select genre subgroups (e.g. by family/region) before randomizing. Notes (2026-11-15, E1): Spotify gives no category, only the playlist name (6,490 genres), so the hard part is the taxonomy, not the script. Options: keyword rules on names (fast, leaves many unclassified: "C86", "ZXC"), LLM classification + manual review, or Every Noise's map (was down). Store it as a separate `config/genre-groups.json` (`playlistId → group`) so `genres.json` and its script stay unchanged.
 - Multi-genre mixes / genre blocks.
 - Login to save the list as a playlist (`POST /me/playlists`), full in-app playback (Web Playback SDK).
+- **Favourite genres** (added 2026-11-16, future iteration): mark a genre as a favourite (e.g. a heart on the genre page, the crate sleeve and History rows) and revisit the favourites later from their own list, kept apart from History (History = what you played, capped; favourites = what you chose to keep, no cap). Without login they live in `localStorage` like History (keyed by slug, name stored, zod-validated on read); with a Spotify login (#59) they could sync or become a Spotify playlist. To decide when designed: where the list lives (home column, crate, own page `/favourites`), limits, import/export, and how it fits the Record Crate world (a "keepers" shelf).

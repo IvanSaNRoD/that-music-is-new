@@ -17,6 +17,7 @@ export function HistoryColumn() {
   return (
     <HistoryPanel
       items={history.items}
+      loaded={history.loaded}
       selected={crate.selected}
       onOpen={(slug) => router.push(`/${slug}`)}
       onRemove={history.remove}
