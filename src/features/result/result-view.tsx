@@ -69,6 +69,9 @@ export function ResultView({ genre }: ResultViewProps) {
   }, [status]);
 
   const playing = tracks.find((t) => t.id === playingId) ?? null;
+  // The record spins only while Spotify confirms playback (#61): paused, finished or blocked by the browser → still.
+  // Without the embed (fallback: script failed) there is no playback signal, so the chosen track keeps it spinning.
+  const sounding = playing !== null && (player.status === "failed" || !player.paused);
   const ready = status === "ready";
   // The genre's "The Sound of …" playlist (from the API); search is only a fallback before it arrives.
   const spotifyUrl =
@@ -108,7 +111,7 @@ export function ResultView({ genre }: ResultViewProps) {
           </Link>
           <Turntable
             label={hole}
-            spinning={status === "loading" || playing !== null}
+            spinning={status === "loading" || sounding}
             armDown={playing !== null}
             trackCount={tracks.length}
             track={playing ? tracks.indexOf(playing) : null}

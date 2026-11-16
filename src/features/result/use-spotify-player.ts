@@ -5,6 +5,13 @@ import { type EmbedController, type IFrameAPI, loadIframeApi, trackUri } from ".
 
 export type PlayerStatus = "loading" | "ready" | "failed";
 
+/** Spotify iFrame API `playback_update` event (developer.spotify.com › Embeds › iFrame API). */
+type PlaybackUpdate = { data: { isPaused: boolean; isBuffering: boolean; position: number; duration: number } };
+
+/** Paused, or at the end of the track (a finished preview may not report isPaused). */
+const isStopped = ({ isPaused, position, duration }: PlaybackUpdate["data"]) =>
+  isPaused || (duration > 0 && position >= duration);
+
 /**
  * One Spotify embed controller per mount, living in `containerRef`.
  * A play before the API (or the controller) is ready is queued; the latest track wins.
@@ -21,6 +28,8 @@ export function useSpotifyPlayer(options: { loadApi?: () => Promise<IFrameAPI>; 
   const mountedRef = useRef(false);
   const heightRef = useRef(height); // initial value only: the one controller is created once
   const [status, setStatus] = useState<PlayerStatus>("loading");
+  // Spotify's word, not ours: false only once the embed reports playback (a blocked play() never does).
+  const [paused, setPaused] = useState(true);
 
   /** Plays the queued track on the existing controller, or creates the one controller (with the queued or cued track). */
   const flushRef = useRef(() => {
@@ -48,6 +57,7 @@ export function useSpotifyPlayer(options: { loadApi?: () => Promise<IFrameAPI>; 
       // Unmounted (or StrictMode cleanup) before Spotify answered: don't leak the iframe.
       if (!mountedRef.current) return created.destroy();
       controllerRef.current = created;
+      created.addListener("playback_update", (e) => setPaused(isStopped((e as PlaybackUpdate).data)));
       if (queued) created.play(); // a cue only prepares the embed
       flushRef.current(); // a click made while the controller was being created
     });
@@ -84,5 +94,5 @@ export function useSpotifyPlayer(options: { loadApi?: () => Promise<IFrameAPI>; 
     flushRef.current();
   }
 
-  return { containerRef, status, cue, play };
+  return { containerRef, status, paused, cue, play };
 }

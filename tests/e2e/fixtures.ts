@@ -62,8 +62,12 @@ export const mockCrate = (page: Page, r: CrateEntry[] | MockReply) =>
 /**
  * Stand-in for Spotify's iFrame API script: same contract (onSpotifyIframeApiReady → createController), but the
  * controller just points an iframe at /embed/track/{id}, so specs can assert which track the player loaded.
+ * Like the real embed it reports playback through "playback_update": play() → playing, pause() → paused.
+ * Specs drive it with window.__fakeEmbed: pause() (the listener pauses in the embed) and blocked = true (the
+ * browser refuses to start audio: play() reports nothing, as Safari / strict autoplay policies do).
  */
 const FAKE_IFRAME_API = `
+  window.__fakeEmbed = window.__fakeEmbed || { blocked: false };
   window.onSpotifyIframeApiReady?.({
     createController(el, options, cb) {
       const frame = document.createElement("iframe");
@@ -71,7 +75,17 @@ const FAKE_IFRAME_API = `
       const show = (uri) => { frame.src = "https://open.spotify.com/embed/track/" + uri.split(":").pop(); };
       show(options.uri);
       el.replaceWith(frame);
-      cb({ loadEntity: show, play() {}, pause() {}, destroy() { frame.remove(); }, addListener() {} });
+      const listeners = {};
+      const update = (isPaused) =>
+        listeners.playback_update?.({ data: { isPaused, isBuffering: false, position: 1000, duration: 30000 } });
+      window.__fakeEmbed.pause = () => update(true);
+      cb({
+        loadEntity: show,
+        play() { if (!window.__fakeEmbed.blocked) setTimeout(() => update(false), 50); },
+        pause() { update(true); },
+        destroy() { frame.remove(); },
+        addListener(event, fn) { listeners[event] = fn; },
+      });
     },
   });
 `;
