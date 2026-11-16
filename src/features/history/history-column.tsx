@@ -24,7 +24,6 @@ export function HistoryColumn() {
       onClear={history.clear}
       lastRemoved={history.lastRemoved}
       onUndo={history.undoRemove}
-      onDismissUndo={history.dismissUndo}
     />
   );
 }

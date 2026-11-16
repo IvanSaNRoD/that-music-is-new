@@ -6,10 +6,9 @@ import { useParams } from "next/navigation";
 import { X } from "lucide-react";
 import { Vinyl } from "@/components/brand/vinyl";
 import { toneFor } from "@/features/crate";
+import { lastInputWasKeyboard } from "@/lib/input-modality";
 import { useHistoryState } from "./history-provider";
 import "./recent-finds.css";
-
-const UNDO_MS = 6000; // same as the home History panel
 
 /**
  * Compact History trail for the genre page: one click back to a recent find, and visible proof that
@@ -17,20 +16,13 @@ const UNDO_MS = 6000; // same as the home History panel
  * A find can be dropped (✕, with undo); clearing all stays on the home page.
  */
 export function RecentFinds() {
-  const { items, loaded, remove, lastRemoved, undoRemove, dismissUndo } = useHistoryState();
+  const { items, loaded, remove, lastRemoved, undoRemove } = useHistoryState();
   const params = useParams<{ genre?: string }>();
   const undoRef = useRef<HTMLButtonElement>(null);
   const focusUndo = useRef(false); // set by a keyboard ✕
   // Entries present once History is read don't animate; only a genre added while here drops in.
   const [initial, setInitial] = useState<Set<string> | null>(null);
   if (loaded && !initial) setInitial(new Set(items.map((x) => x.id)));
-
-  // The undo offer expires after a few seconds.
-  useEffect(() => {
-    if (!lastRemoved) return;
-    const t = setTimeout(dismissUndo, UNDO_MS);
-    return () => clearTimeout(t);
-  }, [lastRemoved, dismissUndo]);
 
   // Keyboard removal: the ✕ disappears, so focus lands on Undo instead of the page body.
   useEffect(() => {
@@ -43,7 +35,10 @@ export function RecentFinds() {
       <h2 id="recent-finds-title" className="font-display text-[18px] font-extrabold tracking-[-0.02em]">
         Your finds
       </h2>
-      {!loaded ? null : items.length === 0 ? (
+      {!loaded ? (
+        // Not read yet (server render, hydration): hold the trail's height so nothing jumps when it appears.
+        <div className="h-11 max-lg:h-28" />
+      ) : items.length === 0 ? (
         <p className="text-sm text-muted-foreground">Play a track and this genre lands here.</p>
       ) : (
         // Below lg: one row that scrolls sideways, bleeding to the screen edges (py/px keep the current-pill ring unclipped).
@@ -75,8 +70,9 @@ export function RecentFinds() {
                     lg: inside the pill's reserved right end, in the tone's ink. <lg: a price-tag dot on the sleeve corner. */}
                 <button
                   type="button"
-                  onClick={(e) => {
-                    focusUndo.current = e.detail === 0;
+                  onClick={() => {
+                    // Last input, not event.detail: assistive tech may synthesize the click with detail ≥ 1.
+                    focusUndo.current = lastInputWasKeyboard();
                     remove(id);
                   }}
                   aria-label={`Remove ${g.name} from your finds`}

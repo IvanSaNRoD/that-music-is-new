@@ -1,16 +1,18 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ChevronRight, History, X } from "lucide-react";
 import { Vinyl } from "@/components/brand/vinyl";
 import type { HistoryItem } from "@/domain/history";
 import { blurIfPointer } from "@/lib/utils";
 
-const UNDO_MS = 6000;
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-/** "2026-11-16" → "16 Nov" (parsed as a local day, not UTC midnight). */
-const shortDate = (iso: string) =>
-  new Date(`${iso}T00:00`).toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+/** "2026-11-16" → "16 Nov". Fixed 3-letter months: en-GB's Intl gives "Sept". */
+const shortDate = (iso: string) => {
+  const [, m, d] = iso.split("-").map(Number);
+  return `${d} ${MONTHS[m - 1]}`;
+};
 
 type HistoryPanelProps = {
   items: HistoryItem[];
@@ -22,7 +24,6 @@ type HistoryPanelProps = {
   onClear: () => void;
   lastRemoved: HistoryItem | null;
   onUndo: () => void;
-  onDismissUndo: () => void;
 };
 
 const linkButton =
@@ -37,17 +38,9 @@ export function HistoryPanel({
   onClear,
   lastRemoved,
   onUndo,
-  onDismissUndo,
 }: HistoryPanelProps) {
   // Inline confirmation for the destructive "Clear all" (PRD: clear all needs confirmation).
   const [confirming, setConfirming] = useState(false);
-
-  // The undo offer for a single ✕ expires after a few seconds.
-  useEffect(() => {
-    if (!lastRemoved) return;
-    const t = setTimeout(onDismissUndo, UNDO_MS);
-    return () => clearTimeout(t);
-  }, [lastRemoved, onDismissUndo]);
 
   return (
     <section

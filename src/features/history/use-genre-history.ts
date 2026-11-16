@@ -1,10 +1,11 @@
 "use client";
 
-import { useCallback, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
 import type { Genre } from "@/domain/genre";
 import { HISTORY_MAX, type HistoryItem, parseHistory } from "@/domain/history";
 
 const KEY = "tmin:history";
+const UNDO_MS = 6000; // how long a single ✕ can be undone
 const NONE: HistoryItem[] = [];
 const noop = () => () => {};
 
@@ -72,8 +73,17 @@ export function useGenreHistory() {
   // Last removed entry + its position, so a single ✕ can be undone.
   const [lastRemoved, setLastRemoved] = useState<{ item: HistoryItem; index: number } | null>(null);
 
+  // One timer for the whole app (home panel and genre page): the offer can't outlive it or restart on navigation.
+  useEffect(() => {
+    if (!lastRemoved) return;
+    const t = setTimeout(() => setLastRemoved(null), UNDO_MS);
+    return () => clearTimeout(t);
+  }, [lastRemoved]);
+
   // A genre enters History only when its tracks are played, not when a sleeve is opened.
+  // Playing withdraws the undo offer: its saved position would be stale and could push another entry out.
   const add = useCallback(({ name, slug }: Genre) => {
+    setLastRemoved(null);
     const h = getSnapshot();
     write([{ id: slug, name, date: today() }, ...h.filter((x) => x.id !== slug)].slice(0, HISTORY_MAX));
   }, []);
@@ -95,12 +105,10 @@ export function useGenreHistory() {
     setLastRemoved(null);
   }, [lastRemoved]);
 
-  const dismissUndo = useCallback(() => setLastRemoved(null), []);
-
   const clear = useCallback(() => {
     write(NONE);
     setLastRemoved(null);
   }, []);
 
-  return { items: list, loaded, lastRemoved: lastRemoved?.item ?? null, add, remove, undoRemove, dismissUndo, clear };
+  return { items: list, loaded, lastRemoved: lastRemoved?.item ?? null, add, remove, undoRemove, clear };
 }

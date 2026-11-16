@@ -19,7 +19,10 @@ beforeEach(() => {
   vi.setSystemTime(new Date(2026, 10, 16, 12));
 });
 
-afterEach(() => vi.restoreAllMocks());
+afterEach(() => {
+  vi.restoreAllMocks();
+  vi.useRealTimers();
+});
 
 describe("useGenreHistory", () => {
   it("adds a played genre with today's date", async () => {
@@ -76,6 +79,37 @@ describe("useGenreHistory", () => {
 
     expect(history.current.lastRemoved).toBeNull();
     expect((await load()).current.items.map((x) => x.name)).toEqual(["Afrobeat", "Krautrock", "Zeuhl"]);
+  });
+
+  it("withdraws the undo offer after 6 seconds", async () => {
+    vi.useFakeTimers();
+    const history = await load();
+    act(() => history.current.add(genre("Zeuhl")));
+
+    act(() => history.current.remove("zeuhl"));
+    act(() => vi.advanceTimersByTime(5_900));
+    expect(history.current.lastRemoved?.name).toBe("Zeuhl");
+    act(() => vi.advanceTimersByTime(200));
+    expect(history.current.lastRemoved).toBeNull();
+  });
+
+  it("withdraws the undo offer when another genre is played, so undo never pushes an entry out", async () => {
+    const history = await load();
+    for (const name of ["Zeuhl", "Krautrock", "Afrobeat", "Bossa Nova", "Indie Folk"]) {
+      act(() => history.current.add(genre(name)));
+    }
+    act(() => history.current.remove("bossa-nova"));
+
+    act(() => history.current.add(genre("Zydeco")));
+
+    expect(history.current.lastRemoved).toBeNull();
+    expect(history.current.items.map((x) => x.name)).toEqual([
+      "Zydeco",
+      "Indie Folk",
+      "Afrobeat",
+      "Krautrock",
+      "Zeuhl",
+    ]);
   });
 
   it("clears all History for good", async () => {
