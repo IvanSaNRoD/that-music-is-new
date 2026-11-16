@@ -151,3 +151,4 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-16 | [#22](https://github.com/IvanSaNRoD/that-music-is-new/issues/22) | Genre page on the real catalog (on demand): tracks, live track count, playlist link |
 | 2026-11-16 | [#23](https://github.com/IvanSaNRoD/that-music-is-new/issues/23) | Spotify Embed player: one 152px embed, track 01 cued, `loadEntity` + `play` in the click, "Dig deeper" fallback |
 | 2026-11-16 | [#24](https://github.com/IvanSaNRoD/that-music-is-new/issues/24) | Loading / empty / error / busy (Retry-After) states with retry; e2e in 3 layers against a fake Spotify |
+| 2026-11-16 | [v0.3.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.3.0) | Milestone: real genres, real music — catalog, Spotify client, API and UI on real data (E1–E4) |
