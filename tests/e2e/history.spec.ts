@@ -29,7 +29,7 @@ test("a played genre is still in History after a reload", async ({ page }) => {
 
   await page.goto("/");
   await expect(history(page).getByRole("button", { name: /^Acid Jazz/ })).toBeVisible();
-  await expect(history(page).getByText(/^10 tracks · d{1,2} [A-Z][a-z]{2}$/)).toBeVisible();
+  await expect(history(page).getByText(/^10 tracks · \d{1,2} [A-Z][a-z]{2}$/)).toBeVisible();
 
   await history(page)
     .getByRole("button", { name: /^Acid Jazz/ })
