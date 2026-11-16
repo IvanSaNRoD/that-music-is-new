@@ -48,7 +48,7 @@ A door into rare music genres. One click gives a random genre from ~7,000 and up
 ## Evidence on Hand
 
 - Learning / portfolio project: no customers, testimonials, usage metrics, pricing or press exist. Never fabricate them.
-- Genre data comes from Spotify; placeholder catalog in `src/domain/genres.ts` until the API integration lands.
+- Genre data comes from Spotify: `config/genres.json` (6,490 "The Sound of …" genres, built by `npm run genres:build`, ADR-0003/0007).
 
 ## Product Principles
 

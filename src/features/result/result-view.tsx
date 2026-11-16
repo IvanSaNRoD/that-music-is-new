@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Shuffle } from "lucide-react";
 import type { Genre } from "@/domain/genre";
@@ -14,23 +14,37 @@ import { PlayerSlot } from "./player-slot";
 import { TrackList, TrackSkeleton } from "./track-list";
 import { Turntable } from "./turntable";
 import { useResult } from "./use-result";
+import { useSpotifyPlayer } from "./use-spotify-player";
 import "./result-view.css";
 
 const focusRing = "focus-visible:outline-primary-ink focus-visible:outline-2 focus-visible:outline-offset-2";
 
-type ResultViewProps = { genre: Genre; catalogIndex: number };
+type ResultViewProps = { genre: Genre };
 
 /** Genre page body: the record lands on a turntable; tracks + recent finds beside it. Spec: docs/design/result-screen-brief.md. */
-export function ResultView({ genre, catalogIndex }: ResultViewProps) {
+export function ResultView({ genre }: ResultViewProps) {
   const history = useHistoryState();
   const randomize = useRandomize();
-  const { status, trackCount, tracks, playingId, retryAfter, retry, playTrack } = useResult(
-    genre,
-    catalogIndex,
-    history.add,
+  const { add: addToHistory } = history;
+  const onFirstPlay = useCallback(() => addToHistory(genre), [addToHistory, genre]);
+  const { status, total, tracks, playlistUrl, playingId, retryAfter, retry, playTrack } = useResult(
+    genre.slug,
+    onFirstPlay,
   );
+  const player = useSpotifyPlayer();
+  const firstTrack = tracks[0]?.id;
+  const { cue } = player;
+  // Cue track 01 in the embed as soon as the tracks arrive, so the first click plays inside the gesture.
+  useEffect(() => {
+    if (firstTrack) cue(firstTrack);
+  }, [firstTrack, cue]);
+  // Inside the click: the embed's play() must stay close to the user gesture (autoplay rules).
+  const play = (trackId: string) => {
+    playTrack(trackId);
+    player.play(trackId);
+  };
   // Genre Tone Rule: the genre's sleeve tone travels with it (turntable, playing row). AA-safe pairs.
-  const [toneBg, toneFg, hole] = toneFor(catalogIndex);
+  const [toneBg, toneFg, hole] = toneFor(genre.slug);
   // Light tones (Seiji 1.89:1, Aged Paper 1.15:1 against the page) can't mark a row by fill alone:
   // their playing row gets a Sumi edge, and the cue tint is mixed from Sumi instead of the tone.
   const lightTone = toneBg === "var(--primary)" || toneBg === "var(--muted)";
@@ -55,8 +69,10 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
   }, [status]);
 
   const playing = tracks.find((t) => t.id === playingId) ?? null;
-  // PLACEHOLDER: Spotify search until the catalog provides the playlist URL (E1).
-  const spotifyUrl = `https://open.spotify.com/search/${encodeURIComponent(`The Sound of ${genre.name}`)}`;
+  const ready = status === "ready";
+  // The genre's "The Sound of …" playlist (from the API); search is only a fallback before it arrives.
+  const spotifyUrl =
+    playlistUrl ?? `https://open.spotify.com/search/${encodeURIComponent(`The Sound of ${genre.name}`)}`;
   // Long names (e.g. "Musica Popular Brasileira Contemporanea") step down so the title stays within ~2 lines.
   // Below lg the title shares a row with the mini deck, so it scales with the viewport (never overflows at 320px).
   const titleSize =
@@ -77,8 +93,11 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
       {/* DOM order = reading order: Back → deck (decorative) → title, tracks, finds → player.
           ≥lg: deck | info columns, the grid puts the player under the deck.
           <lg: the column wrappers dissolve (display: contents) into one grid: mini deck beside the title,
-          everything else full width, player + Roll again in a bar fixed to the bottom. */}
-      <div className="grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 max-lg:pb-[calc(120px+env(safe-area-inset-bottom))] lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]">
+          everything else full width, a bar fixed to the bottom: the 152px player when ready (Roll again then sits
+          beside "Listen more"), Roll again full width otherwise. */}
+      <div
+        className={`grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 ${ready ? "max-lg:pb-[calc(192px+env(safe-area-inset-bottom))]" : "max-lg:pb-[calc(120px+env(safe-area-inset-bottom))]"} lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]`}
+      >
         <div className="flex flex-col items-start gap-4 max-lg:contents">
           <Link
             href="/"
@@ -115,9 +134,9 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
                 <span className="font-mono">
                   {status === "loading" ? (
                     "Pulling the record…"
-                  ) : trackCount > 0 ? (
+                  ) : total > 0 ? (
                     <>
-                      {trackCount} tracks<span className="max-lg:hidden"> in the playlist</span>
+                      {total} tracks<span className="max-lg:hidden"> in the playlist</span>
                     </>
                   ) : (
                     " "
@@ -143,12 +162,13 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
                 </a>
               )}
               {/* <lg: Roll again lives in the bottom bar (thumb reach). */}
-              <RollAgain onRoll={randomize} className="max-lg:hidden" />
+              {/* <lg: here only while a player fills the bottom bar (152px embed needs the full width). */}
+              <RollAgain onRoll={randomize} className={ready ? "" : "max-lg:hidden"} />
             </div>
           </div>
 
           <div key={status} className="result-body max-lg:col-span-2">
-            {status === "ready" && <TrackList tracks={tracks} playingId={playingId} onPlay={playTrack} />}
+            {status === "ready" && <TrackList tracks={tracks} playingId={playingId} onPlay={play} />}
             {status === "loading" && <TrackSkeleton />}
             {status === "empty" && (
               <Notice title="This record is blank" body="None of this playlist's tracks can be played here." />
@@ -179,9 +199,14 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
               className={`min-w-0 flex-1 ${status === "ready" ? "" : "invisible max-lg:hidden"}`}
               aria-hidden={status !== "ready" || undefined}
             >
-              <PlayerSlot track={playing} spotifyUrl={spotifyUrl} />
+              <PlayerSlot
+                track={playing}
+                spotifyUrl={spotifyUrl}
+                containerRef={player.containerRef}
+                playerStatus={player.status}
+              />
             </div>
-            <RollAgain onRoll={randomize} bar={status === "ready" ? "short" : "full"} className="lg:hidden" />
+            {!ready && <RollAgain onRoll={randomize} bar="full" className="lg:hidden" />}
           </div>
         </div>
       </div>
@@ -189,18 +214,9 @@ export function ResultView({ genre, catalogIndex }: ResultViewProps) {
   );
 }
 
-/** Secondary on purpose (DESIGN.md › Buttons). `bar`: 56px tall in the bottom bar, always labelled (a bare shuffle reads as "shuffle tracks");
- * "short" (beside the player): below 640px it reads "Roll" (the step-1 verb) so the now-playing title keeps its width;
- * "full" (no player, outside ready): fills the bar, full label. */
-function RollAgain({
-  onRoll,
-  bar,
-  className = "",
-}: {
-  onRoll: () => void;
-  bar?: "short" | "full";
-  className?: string;
-}) {
+/** Secondary on purpose (DESIGN.md › Buttons). `bar="full"`: 56px tall and full width in the bottom bar (outside ready),
+ * always labelled ("Roll again"; a bare shuffle icon reads as "shuffle tracks"). */
+function RollAgain({ onRoll, bar, className = "" }: { onRoll: () => void; bar?: "full"; className?: string }) {
   return (
     <button
       type="button"
@@ -208,12 +224,10 @@ function RollAgain({
         blurIfPointer(e);
         onRoll();
       }}
-      className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border-[1.5px] border-border-strong text-[17px] font-bold transition-colors hover:bg-muted/50 active:translate-y-px ${bar ? `h-14 bg-background px-5 ${bar === "full" ? "flex-1" : "max-sm:px-4"}` : "px-5 py-2.5"} ${focusRing} ${className}`}
+      className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-xl border-[1.5px] border-border-strong text-[17px] font-bold transition-colors hover:bg-muted/50 active:translate-y-px ${bar ? "h-14 flex-1 bg-background px-5" : "px-5 py-2.5"} ${focusRing} ${className}`}
     >
       <Shuffle size={20} strokeWidth={2.5} aria-hidden="true" />
-      <span>
-        Roll<span className={bar === "short" ? "max-sm:sr-only" : undefined}> again</span>
-      </span>
+      <span>Roll again</span>
     </button>
   );
 }

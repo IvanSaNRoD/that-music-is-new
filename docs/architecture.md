@@ -50,6 +50,7 @@ Entry points: Randomize/Space/Roll again → random `/{slug}`; sleeve Play → t
 | Endpoint | Purpose | Spotify calls |
 |---|---|---|
 | `GET /api/genres/random?exclude={slug}` | Pick a random catalog genre ≠ `exclude` (Randomize · Space · Roll again). Returns `{ genre, slug }`; the client navigates to `/{slug}`. | 0 |
+| `GET /api/genres/crate` | 8 random genres for the home crate; Restock calls it again. Returns `{ genre, slug }[]`. | 0 |
 | `GET /api/genres/{slug}` | Genre + up to 10 tracks, for every way of opening a genre (after Randomize, sleeve Play, History, shared URL/reload, retry). `slug` must exist in the catalog, otherwise `404` (no open proxy to Spotify). | 1 |
 
 Both are dynamic and send `Cache-Control: no-store` (results are random). `{slug}` returns:
@@ -122,6 +123,7 @@ src/
     (site)/page.tsx           # / → features/home (Hero + crate)
     (site)/[genre]/page.tsx   # /{slug} → features/result; unknown slug → not-found
     (site)/not-found.tsx
+    api/genres/crate/route.ts
     api/genres/random/route.ts
     api/genres/[slug]/route.ts
   features/                   # UI + client state, one folder per feature
@@ -142,12 +144,19 @@ src/
     spotify/ token.ts  playlists.ts  schemas.ts  errors.ts   # errors.ts: SpotifyError + toHttpError (429 → 503, other → 502)
   mocks/                      # design-phase placeholder data (removed when real data lands)
   lib/                        # tiny shared helpers
-tests/e2e/                    # Playwright: desktop + touch phone (Pixel 7)
+tests/e2e/                    # Playwright: desktop + touch phone (Pixel 7); fixtures.ts, fake-spotify.ts
+tests/api/                    # route handlers called directly (Spotify via MSW); tests/fixtures/catalog.ts = test catalog
 tests/msw/                    # MSW server + Spotify handlers for unit tests
 # Unit/component tests sit next to their file: src/**/<name>.test.ts(x) (Vitest + Testing Library, jsdom).
 # Async Server Components are covered by e2e only (Vitest can't render them).
-# Open (Phase E): server-side fetch runs inside the Next process, so MSW in vitest.setup.ts does not reach it
-# during e2e; decide how e2e mocks Spotify (e.g. a test-only base URL served by MSW) when server/spotify lands.
+# e2e never calls real Spotify (decided 2026-11-16, E4), 3 layers:
+#   1. tests/api (Vitest): routes + Spotify client against MSW.
+#   2. UI specs mock OUR API from the browser (page.route helpers in tests/e2e/fixtures.ts): states, deterministic.
+#   3. Full stack: Playwright starts tests/e2e/fake-spotify.ts (port 4010) and Next with SPOTIFY_ACCOUNTS_URL /
+#      SPOTIFY_API_URL pointing at it (read per request in server/spotify). Next's experimental testmode rejected
+#      (undocumented; its MSW glue breaks on MSW 3).
+#   open.spotify.com is blocked in every e2e; its iFrame API script is replaced by a fake that loads /embed/track/{id}.
+# Logic tests use tests/fixtures/catalog.ts; only server/catalog.test.ts reads the real genres.json (invariants).
 ```
 
 Import rules (ADR-0005): features use each other only through `features/<name>/index.ts`; `domain/` imports nothing from React/UI/server; `server/` is never imported by client code.

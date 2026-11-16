@@ -4,7 +4,8 @@ import { retryAfterSeconds, SpotifyError } from "./errors";
 import { type PlaylistEntry, playlistItemsSchema } from "./schemas";
 import { getToken, invalidateToken } from "./token";
 
-const API_URL = "https://api.spotify.com/v1";
+// Read per request: e2e points it at a local fake Spotify (tests/e2e/fake-spotify.ts).
+const apiUrl = () => process.env.SPOTIFY_API_URL || "https://api.spotify.com/v1"; // empty → real Spotify
 const TIMEOUT_MS = 8_000;
 
 export type PlaylistItemsQuery = {
@@ -37,7 +38,7 @@ export async function getPlaylistItems(query: PlaylistItemsQuery): Promise<Playl
 async function request({ playlistId, offset, limit, market }: PlaylistItemsQuery, token: string) {
   const params = new URLSearchParams({ offset: String(offset), limit: String(limit), market });
   try {
-    return await fetch(`${API_URL}/playlists/${encodeURIComponent(playlistId)}/items?${params}`, {
+    return await fetch(`${apiUrl()}/playlists/${encodeURIComponent(playlistId)}/items?${params}`, {
       headers: { Authorization: `Bearer ${token}` },
       cache: "no-store",
       signal: AbortSignal.timeout(TIMEOUT_MS),

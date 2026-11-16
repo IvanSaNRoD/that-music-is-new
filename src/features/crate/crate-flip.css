@@ -135,3 +135,21 @@
     transition: none;
   }
 }
+
+/* Loading / error: empty Aged Paper sleeves keep the crate's geometry (first one stands open). */
+.crate-sleeve-empty {
+  cursor: default;
+  background: var(--muted);
+}
+.crate-sleeve-empty[data-open] {
+  height: 180px;
+}
+.crate-message {
+  position: absolute;
+  inset: 0 14px auto;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 22px 20px 0;
+}

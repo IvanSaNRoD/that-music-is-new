@@ -79,6 +79,8 @@ Where subagents/extra reviews *are* used:
 | `/impeccable critique` | Every design review | Two isolated subagents (design review ∥ detector/browser evidence) so findings don't anchor each other |
 | Isolated review subagent | Before the E2 PR | Fresh eyes on the diff: found 2 tests passing for the wrong reason (order-dependent 401 retry, untested episode branch) |
 | Parallel domain subagent | E3 (training exercise, 2026-11-16) | Pure domain functions (#17) own their files, so one subagent wrote them test-first while the main agent built catalog, service and routes; the contract (types + signatures) was fixed first |
+| Research subagents (read-only) | E4 planning (2026-11-16) | Two in parallel answered the open risks before coding: how the Spotify iFrame API really works (152px, `loadEntity`, autoplay) and how to keep e2e off real Spotify (3 layers; Next's experimental testmode rejected) |
+| Parallel build subagents | E4 (2026-11-16) | One built the embed wrapper (TDD), one the e2e infrastructure (fake Spotify server, fixtures); the main agent wired data and UI. Contracts (types, env names, hook API) fixed first |
 | Parallel work (optional) | E2 Spotify client ∥ E4 UI with mock data | Independent; only if pace needs it |
 
 ### Skills

@@ -1,53 +1,44 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import type { Genre } from "@/domain/genre";
+import type { GenreResult } from "@/domain/genre";
 import type { Track } from "@/domain/track";
-import { sampleFor } from "@/mocks/tracks";
 
 export type ResultStatus = "loading" | "ready" | "empty" | "error" | "busy";
 
-const FAKE_LATENCY_MS = 900;
-
 /**
- * Preview helper (design phase only): force a state with `?state=loading|empty|error|busy`.
- * Replaced by the real data source in E3/E4.
+ * Data + playback state for one genre page: GET /api/genres/{slug} (ADR-0007 request 2).
+ * The page keys this by genre, so a new genre always starts fresh in "loading".
  */
-function forcedState(): ResultStatus | null {
-  const s = new URLSearchParams(window.location.search).get("state");
-  return s === "loading" || s === "empty" || s === "error" || s === "busy" ? s : null;
-}
-
-/**
- * Data + playback state for one genre page. The page keys this by genre, so a new genre
- * always starts fresh in "loading".
- */
-export function useResult(genre: Genre, catalogIndex: number, onFirstPlay: (genreId: string) => void) {
+export function useResult(slug: string, onFirstPlay: (slug: string) => void) {
   const [status, setStatus] = useState<ResultStatus>("loading");
-  const [trackCount, setTrackCount] = useState(0);
-  const [tracks, setTracks] = useState<Track[]>([]);
-  const [playingId, setPlayingId] = useState<string | null>(null);
+  const [result, setResult] = useState<GenreResult | null>(null);
   const [retryAfter, setRetryAfter] = useState(0);
   const [attempt, setAttempt] = useState(0);
+  const [playingId, setPlayingId] = useState<string | null>(null);
   const counted = useRef(false); // genre already added to History for this page
 
   useEffect(() => {
-    const forced = forcedState();
-    if (forced === "loading") return;
-    const t = setTimeout(() => {
-      const sample = sampleFor(genre, catalogIndex);
-      if (forced === "error") return setStatus("error");
-      if (forced === "busy") {
-        setRetryAfter(8);
-        return setStatus("busy");
+    const controller = new AbortController(); // a retry or leaving the page drops this attempt's answer
+    void (async () => {
+      try {
+        const res = await fetch(`/api/genres/${encodeURIComponent(slug)}`, { signal: controller.signal });
+        if (controller.signal.aborted) return;
+        if (res.status === 503) {
+          setRetryAfter(Number(res.headers.get("retry-after")) || 1);
+          return setStatus("busy");
+        }
+        if (!res.ok) return setStatus("error");
+        const body: GenreResult = await res.json();
+        if (controller.signal.aborted) return;
+        setResult(body);
+        setStatus(body.tracks.length > 0 ? "ready" : "empty");
+      } catch {
+        if (!controller.signal.aborted) setStatus("error");
       }
-      setTrackCount(sample.trackCount);
-      if (forced === "empty") return setStatus("empty");
-      setTracks(sample.tracks);
-      setStatus("ready");
-    }, FAKE_LATENCY_MS);
-    return () => clearTimeout(t);
-  }, [genre, catalogIndex, attempt]);
+    })();
+    return () => controller.abort();
+  }, [slug, attempt]);
 
   const retry = useCallback(() => {
     setStatus("loading");
@@ -60,11 +51,21 @@ export function useResult(genre: Genre, catalogIndex: number, onFirstPlay: (genr
       // History rule: the first track played adds the genre (once per page visit).
       if (!counted.current) {
         counted.current = true;
-        onFirstPlay(genre.id);
+        onFirstPlay(slug);
       }
     },
-    [genre.id, onFirstPlay],
+    [slug, onFirstPlay],
   );
 
-  return { status, trackCount, tracks, playingId, retryAfter, retry, playTrack };
+  const tracks: Track[] = result?.tracks ?? [];
+  return {
+    status,
+    tracks,
+    total: result?.total ?? 0,
+    playlistUrl: result?.playlistUrl,
+    retryAfter,
+    retry,
+    playingId,
+    playTrack,
+  };
 }

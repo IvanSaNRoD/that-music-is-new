@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useCrateState } from "@/features/crate";
-import { GENRES } from "@/mocks/genres";
 import { HistoryPanel } from "./history-panel";
 import { useHistoryState } from "./history-provider";
 
@@ -17,13 +16,9 @@ export function HistoryColumn() {
 
   return (
     <HistoryPanel
-      catalog={GENRES}
       items={history.items}
       selected={crate.selected}
-      onOpen={(id) => {
-        const g = GENRES.find((x) => x.id === id);
-        if (g) router.push(`/${g.slug}`);
-      }}
+      onOpen={(slug) => router.push(`/${slug}`)}
       onRemove={history.remove}
       onClear={history.clear}
       lastRemoved={history.lastRemoved}

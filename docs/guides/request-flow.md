@@ -31,6 +31,18 @@ The first time a route needs the catalog, `src/server/catalog.ts`:
 
 Cost: ~10 ms once per server instance; every later request reuses it.
 
+## Request 0 — The home page fills the crate
+
+**Starts in the browser.** `CrateProvider` (shared layout, so the crate survives navigation) runs `useCrate()` (`src/features/crate/use-crate.ts`).
+
+```
+GET /api/genres/crate
+```
+
+**Runs on the server:** `src/app/api/genres/crate/route.ts` → `pickCrate(8)` (`src/server/randomizer.ts`) shuffles the catalog and keeps 8 → `200 [{ "genre": "Drone Rock", "slug": "drone-rock" }, …]` with `no-store`.
+
+**Spotify calls: 0.** While it loads, the crate shows 8 empty sleeves; if it fails, "Couldn't fill the crate" + Try again. **Restock** = the same request again. Each sleeve's colour comes from its slug (`toneFor`), so a genre keeps its colour on its own page.
+
 ## Request 1 — Randomize ("surprise me")
 
 **Starts in the browser.** Randomize button, `Space` or "Roll again" → `useRandomize()` (`src/features/randomizer/use-randomize.ts`).
@@ -102,6 +114,17 @@ GET /api/genres/acid-jazz
 5. **Respond** `200` with `Cache-Control: no-store`.
 
 **Spotify calls: 1.** Time: dominated by Spotify (~200–400 ms, estimate); everything else is microseconds.
+
+## Playing a track (no request to our server)
+
+Clicking a track row runs `play(trackId)` in `result-view.tsx`:
+
+1. `useResult` marks it as playing; the first play of the visit adds the genre to History.
+2. `useSpotifyPlayer` (`src/features/result/use-spotify-player.ts`) talks to **Spotify's own player** in the browser:
+   - The Spotify script (`open.spotify.com/embed/iframe-api/v1`) was loaded once when the page opened (`spotify-embed.ts`).
+   - First track: it creates the one embed (an iframe, 152px tall) in the player slot.
+   - Next tracks: `loadEntity("spotify:track:ID")` + `play()` on the same embed.
+3. The audio comes straight from Spotify to the browser (anonymous listeners usually hear ~30s previews). If the script can't load, the slot shows "Dig deeper on Spotify" instead.
 
 ## When something goes wrong (request 2)
 

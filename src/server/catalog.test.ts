@@ -2,18 +2,18 @@
 import { describe, expect, it } from "vitest";
 import { buildCatalog, getCatalog } from "./catalog";
 
-describe("getCatalog", () => {
-  it("loads every genre of config/genres.json", () => {
-    expect(getCatalog().entries).toHaveLength(6490);
+// The only test that reads the real config/genres.json: it guards the committed data in CI
+// (invariants only — no names, order or counts, so regenerating the catalog doesn't break it).
+describe("getCatalog (real config/genres.json)", () => {
+  it("is a non-empty catalog with one entry per slug", () => {
+    const { entries, bySlug } = getCatalog();
+    expect(entries.length).toBeGreaterThan(0);
+    expect(bySlug.size).toBe(entries.length);
   });
 
-  it("finds a genre by its slug", () => {
-    expect(getCatalog().bySlug.get("acid-jazz")).toEqual({
-      genre: "Acid Jazz",
-      slug: "acid-jazz",
-      playlistId: "7vyHBfRfPOT8Sxy87P5osJ",
-      total: expect.any(Number),
-    });
+  it("finds every entry by its slug", () => {
+    const { entries, bySlug } = getCatalog();
+    expect(entries.every((entry) => bySlug.get(entry.slug) === entry)).toBe(true);
   });
 
   it("is built once per server instance", () => {

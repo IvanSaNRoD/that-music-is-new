@@ -90,6 +90,24 @@ describe("getToken", () => {
     expect(await getToken()).toBe("test-token");
   });
 
+  it("requests the token from SPOTIFY_ACCOUNTS_URL when set (e2e fake Spotify)", async () => {
+    vi.stubEnv("SPOTIFY_ACCOUNTS_URL", "http://fake-accounts.test");
+    server.use(
+      http.post("http://fake-accounts.test/api/token", () =>
+        HttpResponse.json({ access_token: "fake-token", token_type: "Bearer", expires_in: 3600 }),
+      ),
+    );
+    const { getToken } = await loadToken();
+
+    expect(await getToken()).toBe("fake-token");
+  });
+
+  it("uses the real accounts service when SPOTIFY_ACCOUNTS_URL is set but empty", async () => {
+    vi.stubEnv("SPOTIFY_ACCOUNTS_URL", "");
+    const { getToken } = await loadToken();
+    expect(await getToken()).toBe("test-token"); // default MSW handler on accounts.spotify.com
+  });
+
   it("maps 429 to SpotifyError rate-limited with Retry-After", async () => {
     const { getToken } = await loadToken();
     server.use(http.post(TOKEN_URL, () => new HttpResponse(null, { status: 429, headers: { "Retry-After": "7" } })));

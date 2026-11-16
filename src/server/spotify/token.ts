@@ -2,7 +2,8 @@ import "server-only";
 import { retryAfterSeconds, SpotifyError } from "./errors";
 import { tokenSchema } from "./schemas";
 
-const TOKEN_URL = "https://accounts.spotify.com/api/token";
+// Read per request: e2e points it at a local fake Spotify (tests/e2e/fake-spotify.ts).
+const accountsUrl = () => process.env.SPOTIFY_ACCOUNTS_URL || "https://accounts.spotify.com"; // empty → real Spotify
 /** Refresh this long before Spotify's expiry so a token never dies mid-request. */
 const EXPIRY_MARGIN_MS = 60_000;
 const TIMEOUT_MS = 8_000;
@@ -33,7 +34,7 @@ async function requestToken(): Promise<string> {
 
   let res: Response;
   try {
-    res = await fetch(TOKEN_URL, {
+    res = await fetch(`${accountsUrl()}/api/token`, {
       method: "POST",
       headers: {
         Authorization: "Basic " + Buffer.from(`${id}:${secret}`).toString("base64"),

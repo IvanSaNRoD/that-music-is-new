@@ -13,6 +13,7 @@
 ## Decision
 1. **`GET /api/genres/random?exclude={slug}`** → `{ genre, slug }`. Picks from the catalog only, **no Spotify call**. `exclude` = genre on screen (ADR-0006: Randomize goes to a genre ≠ current). The client then navigates to `/{slug}`.
 2. **`GET /api/genres/{slug}`** → `GenreResult` (genre, slug, playlistId, playlistUrl, total, ≤ 10 tracks). Server maps slug → catalog entry, then makes **one** Spotify call with the stored `playlistId` (ADR-0003). Unknown slug → `404` (still no open proxy to Spotify).
+2b. **`GET /api/genres/crate`** → 8 random `{ genre, slug }` from the catalog (no Spotify call); Restock calls it again (added 2026-11-16, E4).
 3. Every entry point (Randomize, sleeve Play, History, shared URL / reload, retry) ends in request 2 → exactly **one Spotify call per genre view**.
 4. History stores the slug (`{ genre, slug, discoveredAt }`), the same key as the URL and the API.
 5. Both responses `Cache-Control: no-store`; market from `x-vercel-ip-country` (fallback `US`).

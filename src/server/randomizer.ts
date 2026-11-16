@@ -15,6 +15,13 @@ export function pickRandomGenre(exclude?: string, random: () => number = Math.ra
   return { genre, slug };
 }
 
+/** The crate (ADR-0007): `count` different random genres — no Spotify call. */
+export function pickCrate(count: number, random: () => number = Math.random) {
+  return shuffle(getCatalog().entries, random)
+    .slice(0, count)
+    .map(({ genre, slug }) => ({ genre, slug }));
+}
+
 /**
  * Request 2 (ADR-0003 step 2, ADR-0007): up to 10 playable tracks of a genre, from one Spotify call.
  * `null` = slug not in the catalog. Spotify failures throw `SpotifyError` (mapped by the route).

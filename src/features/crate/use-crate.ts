@@ -1,37 +1,43 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import type { Genre } from "@/domain/genre";
 
-export const CRATE_SIZE = 8;
-
-const shuffle = <T>(list: T[]) => {
-  const a = [...list];
-  for (let i = a.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [a[i], a[j]] = [a[j], a[i]];
-  }
-  return a;
-};
+type ApiGenre = { genre: string; slug: string };
 
 /**
- * Crate state: the 8 genres standing in the crate and the open sleeve.
+ * Crate state: the genres standing in the crate (8 random ones from GET /api/genres/crate) and the open sleeve.
  * Only crate actions change it (open a sleeve, Restock) — Randomize and History never do (ADR-0006).
- * Initial values are deterministic so server and client render the same markup.
  */
-export function useCrate(catalog: Genre[]) {
-  const [stock, setStock] = useState(() => catalog.slice(0, CRATE_SIZE).map((g) => g.id));
-  const [selected, setSelected] = useState(stock[0]);
+export function useCrate() {
+  const [genres, setGenres] = useState<Genre[]>([]);
+  const [selected, setSelected] = useState<string | undefined>(undefined);
+  const [status, setStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [round, setRound] = useState(0); // each Restock asks for a new crate
 
-  const pick = useCallback((id: string) => setSelected(id), []);
+  useEffect(() => {
+    const controller = new AbortController(); // a newer Restock drops this crate's answer
+    void (async () => {
+      try {
+        const res = await fetch("/api/genres/crate", { signal: controller.signal });
+        if (!res.ok) throw new Error(`Crate request failed: ${res.status}`);
+        const body: ApiGenre[] = await res.json();
+        const next = body.map((g) => ({ name: g.genre, slug: g.slug }));
+        setGenres(next);
+        setSelected(next[0]?.slug);
+        setStatus("ready");
+      } catch {
+        if (!controller.signal.aborted) setStatus("error");
+      }
+    })();
+    return () => controller.abort();
+  }, [round]);
 
+  const pick = useCallback((slug: string) => setSelected(slug), []);
   const restock = useCallback(() => {
-    const next = shuffle(catalog)
-      .slice(0, CRATE_SIZE)
-      .map((g) => g.id);
-    setStock(next);
-    setSelected(next[0]);
-  }, [catalog]);
+    setStatus("loading");
+    setRound((n) => n + 1);
+  }, []);
 
-  return { stock, selected, pick, restock };
+  return { genres, selected, status, pick, restock };
 }

@@ -197,7 +197,7 @@
       },
       "mono": {
         "displayName": "Mono",
-        "purpose": "Catalog data: origin, era, counts, dates, shortcuts, logo."
+        "purpose": "Catalog data: counts, dates, shortcuts, logo."
       },
       "mono-small": {
         "displayName": "Mono small",
@@ -390,7 +390,7 @@
   ],
   "narrative": {
     "northStar": "The Record Crate",
-    "overview": "A second-hand record shop on warm paper. The page is kinari stock, every container is outlined in sumi ink like a printed object, and the music lives in things you can pull out: sleeves standing in a crate, vinyl discs, a stack of finds. Discovery should feel physical and a little analog, never like a streaming dashboard.\n\nDensity is calm: three columns on the desktop home (pitch, crate, history) and two on a genre page (turntable, tracks) inside a 1440px container, generous gutters, one loud headline. Color is restrained: paper neutrals carry the page, Seiji green is the single accent, and the record sleeves are the one place where the full palette shows at once. Type pairs a heavy, tight grotesk for voice with a monospace for catalog data (origins, eras, dates, counts), the way a shop labels its bins.",
+    "overview": "A second-hand record shop on warm paper. The page is kinari stock, every container is outlined in sumi ink like a printed object, and the music lives in things you can pull out: sleeves standing in a crate, vinyl discs, a stack of finds. Discovery should feel physical and a little analog, never like a streaming dashboard.\n\nDensity is calm: three columns on the desktop home (pitch, crate, history) and two on a genre page (turntable, tracks) inside a 1440px container, generous gutters, one loud headline. Color is restrained: paper neutrals carry the page, Seiji green is the single accent, and the record sleeves are the one place where the full palette shows at once. Type pairs a heavy, tight grotesk for voice with a monospace for catalog data (counts, dates, shortcuts), the way a shop labels its bins.",
     "keyCharacteristics": [
       "Warm paper background with a fine paper grain, ink outlines (1.5px Sumi) instead of shadows.",
       "One accent (Seiji) for the primary action; Seiji Ink for text-level links and focus.",
@@ -412,7 +412,7 @@
       },
       {
         "name": "The Sleeve Palette Rule",
-        "body": "Record sleeves rotate through five AA-safe pairs by catalog index % 5: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper), outlined 1px Sumi, with a Sumi spindle dot.",
+        "body": "Record sleeves rotate through five AA-safe pairs by slug (sum of its character codes % 5, `toneFor`), so a genre keeps its tone everywhere: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper), outlined 1px Sumi, with a Sumi spindle dot.",
         "section": "colors"
       },
       {
@@ -422,7 +422,7 @@
       },
       {
         "name": "The Catalog Label Rule",
-        "body": "Facts about music (origin, era, track count, date) are set in Space Mono. Persuasion and names are set in Inter / Inter Tight.",
+        "body": "Facts about music (track count, date) are set in Space Mono. Genres carry only a name: no country or decade anywhere (2026-11-16). Persuasion and names are set in Inter / Inter Tight.",
         "section": "typography"
       },
       {
@@ -434,7 +434,7 @@
     "dos": [
       "**Do** outline primary containers with 1.5px Sumi and keep them flat; let secondary ones sit as tonal Card Stock.",
       "**Do** use Seiji as a fill and Seiji Ink whenever the accent must be read.",
-      "**Do** set catalog data (origin, era, counts, dates, shortcuts) in Space Mono.",
+      "**Do** set catalog data (counts, dates, shortcuts) in Space Mono.",
       "**Do** draw music objects (vinyl, sleeves, crate) as exact vector geometry.",
       "**Do** verify every text pair at WCAG AA and keep visible Seiji Ink focus rings.",
       "**Do** keep the paper grain subtle: texture you notice up close, never a pattern that competes with text.",

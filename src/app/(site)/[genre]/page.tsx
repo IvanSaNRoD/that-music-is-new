@@ -1,14 +1,15 @@
 import { Suspense } from "react";
 import { notFound } from "next/navigation";
 import { PageRow } from "@/components/layout/page-row";
-import { findBySlug } from "@/domain/slug";
 import { HowItWorks } from "@/features/home";
 import { ResultFallback, ResultView } from "@/features/result";
-import { GENRES } from "@/mocks/genres";
+import { getCatalog } from "@/server/catalog";
 
-// Known genres are prerendered; unknown slugs → not-found. Revisit for the ~7,000-genre catalog (ADR-0006).
+// Genre pages render on demand (6,490 genres). Cache Components requires at least one prerendered param,
+// so the catalog's first genre validates the route at build time (generate-static-params.md › With Cache
+// Components). Taken from the catalog, not hard-coded, so a regenerated catalog never breaks the build.
 export function generateStaticParams() {
-  return GENRES.map((g) => ({ genre: g.slug }));
+  return [{ genre: getCatalog().entries[0].slug }];
 }
 
 // Instant navigation: the URL param is read inside <Suspense>, so the shell (header, fallback)
@@ -29,8 +30,9 @@ export default function GenrePage({ params }: PageProps<"/[genre]">) {
 
 async function GenreResult({ params }: { params: PageProps<"/[genre]">["params"] }) {
   const { genre: slug } = await params;
-  const genre = findBySlug(GENRES, slug);
-  if (!genre) notFound();
+  const entry = getCatalog().bySlug.get(slug);
+  if (!entry) notFound();
+  const genre = { name: entry.genre, slug: entry.slug };
   // key → a new genre always starts a fresh result (loading → ready)
-  return <ResultView key={genre.id} genre={genre} catalogIndex={GENRES.indexOf(genre)} />;
+  return <ResultView key={genre.slug} genre={genre} />;
 }
