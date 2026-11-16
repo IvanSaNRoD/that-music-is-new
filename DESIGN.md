@@ -330,6 +330,7 @@ The single Spotify Embed (ADR-0001), 152px tall (Spotify's compact track player;
 
 ### Share images and icons
 - **Open Graph (1200×630, `server/og.tsx`, drawn with next/og):** Kinari, Space Mono "THAT MUSIC IS NEW" top left (26px), Space Mono Matsuba line at the bottom (24–26px). Site card: the home headline "Hear a genre you’ve never heard of." (Inter Tight 104px) beside a 560px record cut by the right edge (the home's corner vinyl). Genre card: the genre name (Inter Tight 800, 128 / 96 / 80 / 60px by length, ≤ 4 lines, breaks long words) beside a 400px sleeve in the genre's tone (Genre Tone Rule; 3px Sumi outline, 20px radius, soft shadow, 200px die-cut hole + Sumi spindle) with its record pulled out towards the right edge; footer "Rare genre · 10 tracks to taste". Colours are hex copies of the tokens (Satori can't read CSS variables).
+- **Browser UI colour:** `viewport.themeColor` = Kinari `#f3ebda` (root layout; a hex because the meta tag can't use CSS variables).
 - **Favicon:** `icon.svg`, the brand vinyl (Sumi disc, one Kinari groove, Seiji label). **apple-icon:** the vinyl on Kinari, 180px.
 - Captures: `docs/design/screenshots/og/`.
 

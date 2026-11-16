@@ -121,7 +121,7 @@ src/
     layout.tsx  globals.css   # root layout: html, fonts, design tokens, site metadata (title template, OG/Twitter base, metadataBase)
     global-error.tsx          # last resort if the root layout fails (own <html>, fonts, styles)
     icon.svg  apple-icon.tsx  # brand vinyl favicon + 180px touch icon (drawn by server/og.tsx)
-    opengraph-image.tsx       # site share card (server/og.tsx)
+    (site)/opengraph-image.tsx  # site share card (server/og.tsx); same segment as the home page, whose openGraph would otherwise drop it
     robots.ts  sitemap.ts     # robots (no /api/) + sitemap: home + every genre from the catalog
     (site)/layout.tsx         # shared shell: header, crate + history providers, decorative vinyl (ADR-0006)
     (site)/page.tsx           # / → features/home (Hero + crate)

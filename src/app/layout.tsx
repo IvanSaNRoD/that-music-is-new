@@ -11,8 +11,8 @@ export const metadata: Metadata = {
   title: { default: `${SITE_NAME} — hear a genre you’ve never heard of`, template: `%s · ${SITE_NAME}` },
   description: DESCRIPTION,
   applicationName: SITE_NAME,
-  alternates: { canonical: "/" },
-  openGraph: { ...OPEN_GRAPH_BASE, url: "/" },
+  // No canonical / og:url here: children would inherit "/" (pages set their own).
+  openGraph: OPEN_GRAPH_BASE,
   twitter: { card: "summary_large_image" },
 };
 

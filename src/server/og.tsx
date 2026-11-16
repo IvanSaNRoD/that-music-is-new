@@ -34,10 +34,19 @@ const loadFonts = () =>
     ["InterTight-ExtraBold.ttf", "SpaceMono-Regular.ttf"].map((f) =>
       readFile(join(process.cwd(), "src/server/og-fonts", f)),
     ),
-  ).then(([tight, mono]) => [
-    { name: "Inter Tight", data: tight, weight: 800, style: "normal" },
-    { name: "Space Mono", data: mono, weight: 400, style: "normal" },
-  ]));
+  )
+    .then(([tight, mono]): Font[] => [
+      { name: "Inter Tight", data: tight, weight: 800, style: "normal" },
+      { name: "Space Mono", data: mono, weight: 400, style: "normal" },
+    ])
+    .catch((e) => {
+      fonts = undefined; // a failed read must not break every later image of this instance
+      throw e;
+    }));
+
+// next/og defaults to max-age=0. The image URL carries a content hash (?…), so it can be cached for good
+// (Vercel CDN, social crawlers) instead of re-running Satori on every request.
+const CACHE = { "Cache-Control": "public, max-age=31536000, immutable" };
 
 /** The brand vinyl (components/brand/vinyl.tsx geometry): Sumi disc, Kinari grooves, label, Sumi spindle hole. */
 function Vinyl({ size, label = C.seiji, grooves = 4 }: { size: number; label?: string; grooves?: number }) {
@@ -82,7 +91,7 @@ export async function siteImage(genreCount: number) {
         <div style={mono}>{`${genreCount.toLocaleString("en-US")} rare genres · 10 tracks each`}</div>
       </div>
     </div>,
-    { ...OG_SIZE, fonts: await loadFonts() },
+    { ...OG_SIZE, fonts: await loadFonts(), headers: CACHE },
   );
 }
 
@@ -151,7 +160,7 @@ export async function genreImage(name: string, slug: string) {
         <div style={{ ...mono, fontSize: 24 }}>Rare genre · 10 tracks to taste</div>
       </div>
     </div>,
-    { ...OG_SIZE, fonts: await loadFonts() },
+    { ...OG_SIZE, fonts: await loadFonts(), headers: CACHE },
   );
 }
 
@@ -170,6 +179,6 @@ export function appleIcon() {
     >
       <Vinyl size={148} grooves={3} />
     </div>,
-    { width: 180, height: 180 },
+    { width: 180, height: 180, headers: CACHE },
   );
 }
