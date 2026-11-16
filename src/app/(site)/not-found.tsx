@@ -1,6 +1,10 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { PageRow } from "@/components/layout/page-row";
 import { HowItWorks } from "@/features/home";
+
+// Used by production 404 responses (deeper URLs); see [genre]/[...rest]/page.tsx for why it is repeated there.
+export const metadata: Metadata = { title: "Not in the crate", robots: { index: false } };
 
 export default function GenreNotFound() {
   return (
