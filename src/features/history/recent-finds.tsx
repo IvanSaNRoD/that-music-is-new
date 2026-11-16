@@ -89,7 +89,8 @@ export function RecentFinds() {
           })}
         </ul>
       )}
-      <div aria-live="polite">
+      {/* Height always reserved: the undo line appearing must not move the finds under the pointer. */}
+      <div aria-live="polite" className="min-h-7 touch:min-h-11">
         {lastRemoved && (
           <p className="flex items-center gap-3 text-sm">
             <span className="min-w-0 truncate text-muted-foreground">

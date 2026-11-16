@@ -53,6 +53,20 @@ test("removes a find on the genre page, with undo", async ({ page }) => {
   await expect(finds(page).getByRole("link", { name: "Krautrock" })).toHaveCount(0);
 });
 
+test("the undo line doesn't move the finds under the pointer", async ({ page }) => {
+  await page.goto("/acid-jazz");
+  await seedHistory(page, ["Krautrock", "Zeuhl"]); // the measured find sits before the removed one
+  const krautrock = finds(page).getByRole("link", { name: "Krautrock" });
+  // Page-relative: clicking the ✕ may scroll the viewport.
+  const top = () => krautrock.evaluate((el) => el.getBoundingClientRect().top + window.scrollY);
+  const before = await top();
+
+  await finds(page).getByRole("button", { name: "Remove Zeuhl from your finds" }).click();
+  await expect(finds(page).getByRole("button", { name: "Undo" })).toBeVisible();
+
+  expect(await top()).toBeCloseTo(before, 0);
+});
+
 test("a keyboard ✕ moves focus to Undo", async ({ page }) => {
   await page.goto("/acid-jazz");
   await seedHistory(page, ["Zeuhl"]);
