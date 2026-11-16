@@ -157,3 +157,4 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-16 | [#27](https://github.com/IvanSaNRoD/that-music-is-new/issues/27) | History row → `/{slug}` → genre page with a fresh sample (e2e) |
 | 2026-11-16 | [#54](https://github.com/IvanSaNRoD/that-music-is-new/issues/54) | Your finds: remove a find on the genre page (✕ on pills and sleeves) with undo, keyboard focus → Undo |
 | 2026-11-16 | [v0.4.0](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.4.0) | Milestone: your finds, kept — persistent History, remove finds on genre pages (E5) |
+| 2026-11-16 | [#31](https://github.com/IvanSaNRoD/that-music-is-new/issues/31) | SEO: titles + canonical per page, share images (site + per genre), vinyl favicon, own 404/500 pages, robots + sitemap of every genre |
