@@ -1,12 +1,10 @@
 import type { Track } from "./track";
 
+/** A genre as the UI knows it: display name + URL slug (ADR-0006/0007). No country or decade, by design. */
 export type Genre = {
-  id: string;
-  /** URL segment, see domain/slug.ts (ADR-0006). */
-  slug: string;
   name: string;
-  origin: string;
-  era: string;
+  /** URL segment and API key, see domain/slug.ts. */
+  slug: string;
 };
 
 /** One genre of the real catalog (config/genres.json + slug, ADR-0007). */

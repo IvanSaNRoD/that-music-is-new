@@ -3,9 +3,13 @@
 import { http, HttpResponse } from "msw/http";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { GET as getGenre } from "@/app/api/genres/[slug]/route";
+import { GET as getCrate } from "@/app/api/genres/crate/route";
 import { GET as getRandom } from "@/app/api/genres/random/route";
 import { spotifyRateLimited, spotifyServerError } from "../msw/handlers";
 import { server } from "../msw/server";
+
+// Fixture catalog (Acid Jazz, Trip Hop, Zydeco) instead of the real data file.
+vi.mock("../../config/genres.json", async () => ({ default: (await import("../fixtures/catalog")).catalogRows }));
 
 const ITEMS_URL = "https://api.spotify.com/v1/playlists/:playlistId/items";
 
@@ -23,9 +27,9 @@ describe("GET /api/genres/random", () => {
     // Randomness is a system boundary: pin it so the excluded first genre would be the pick.
     const random = vi.spyOn(Math, "random").mockReturnValue(0);
     try {
-      const res = await getRandom(new Request("http://localhost/api/genres/random?exclude=2-step"));
+      const res = await getRandom(new Request("http://localhost/api/genres/random?exclude=acid-jazz"));
       expect(res.status).toBe(200);
-      expect(await res.json()).toEqual({ genre: "21st Century Classical", slug: "21st-century-classical" });
+      expect(await res.json()).toEqual({ genre: "Trip Hop", slug: "trip-hop" });
     } finally {
       random.mockRestore();
     }
@@ -34,6 +38,20 @@ describe("GET /api/genres/random", () => {
   it("is never cached (each roll must differ)", async () => {
     const res = await getRandom(new Request("http://localhost/api/genres/random"));
     expect(res.headers.get("cache-control")).toBe("no-store");
+  });
+});
+
+describe("GET /api/genres/crate", () => {
+  it("returns up to 8 different genres (all 3 of the fixture catalog)", async () => {
+    const res = await getCrate();
+
+    expect(res.status).toBe(200);
+    const body: { slug: string }[] = await res.json();
+    expect(body.map((g) => g.slug).sort()).toEqual(["acid-jazz", "trip-hop", "zydeco"]);
+  });
+
+  it("is never cached (each Restock must differ)", async () => {
+    expect((await getCrate()).headers.get("cache-control")).toBe("no-store");
   });
 });
 

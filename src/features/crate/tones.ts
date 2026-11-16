@@ -1,4 +1,4 @@
-// Sleeve [bg, text, hole] by catalog index % 5 — text pairs WCAG AA; no white/card sleeve (blends into the panel).
+// Sleeve [bg, text, hole] by slug (sum of char codes % 5) — text pairs WCAG AA; no white/card sleeve (blends into the panel).
 // "hole" = the die-cut circle showing the record label; picked to contrast with the sleeve.
 export const TONES = [
   ["var(--primary)", "var(--foreground)", "var(--background)"],
@@ -8,4 +8,9 @@ export const TONES = [
   ["var(--muted-foreground)", "var(--background)", "var(--primary)"],
 ] as const;
 
-export const toneFor = (catalogIndex: number) => TONES[catalogIndex % TONES.length];
+/** Deterministic tone for a genre: the same slug always gets the same sleeve colour (server and client agree). */
+export function toneFor(slug: string) {
+  let sum = 0;
+  for (const char of slug) sum += char.charCodeAt(0);
+  return TONES[sum % TONES.length];
+}

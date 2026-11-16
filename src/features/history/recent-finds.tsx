@@ -5,7 +5,6 @@ import Link from "next/link";
 import { useParams } from "next/navigation";
 import { Vinyl } from "@/components/brand/vinyl";
 import { toneFor } from "@/features/crate";
-import { GENRES } from "@/mocks/genres";
 import { useHistoryState } from "./history-provider";
 import "./recent-finds.css";
 
@@ -32,12 +31,10 @@ export function RecentFinds() {
           className="flex gap-2 py-1 max-lg:-mx-6 max-lg:[scrollbar-width:none] max-lg:gap-3 max-lg:overflow-x-auto max-lg:px-6 lg:-m-1 lg:flex-wrap lg:p-1"
           aria-live="polite"
         >
-          {items.map(({ id }) => {
-            const index = GENRES.findIndex((g) => g.id === id);
-            const g = GENRES[index];
-            if (!g) return null;
+          {items.map(({ id, name }) => {
+            const g = { name, slug: id };
             const current = g.slug === params.genre;
-            const [bg, fg, hole] = toneFor(index);
+            const [bg, fg, hole] = toneFor(g.slug);
             return (
               <li key={id} className={`shrink-0 ${initial.has(id) ? "" : "recent-finds-new"}`}>
                 {/* Below lg: a mini sleeve (tone + die-cut hole) with the name under it, like the crate. lg+: tone pill. */}

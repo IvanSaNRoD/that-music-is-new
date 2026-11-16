@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 
 const genreUrl = /\/[a-z0-9-]+$/;
 
@@ -18,9 +18,11 @@ test("Randomize opens a genre page with tracks and Roll again", async ({ page })
   // Desktop: next to the title; mobile: in the bottom bar. Exactly one is rendered visibly.
   await expect(page.getByRole("button", { name: "Roll again" })).toBeVisible();
 
-  // Playing a track hands off to Spotify with a full, spaced accessible name.
-  await page.getByText("Sample track 01").click();
-  await expect(
-    page.getByRole("link", { name: "Dig deeper on Spotify (opens in a new tab)", exact: true }),
-  ).toBeVisible();
+  // Track 01 is cued in the one Spotify Embed as soon as the list arrives (fake iFrame API, see fixtures)…
+  const embed = page.locator('iframe[title="Spotify Embed"]');
+  await expect(embed).toHaveAttribute("src", /\/embed\/track\/track-\d$/);
+  // …and clicking another track loads that one into the same embed.
+  await page.getByText("Sample track 02").click();
+  await expect(embed).toHaveAttribute("src", "https://open.spotify.com/embed/track/track-2");
+  await expect(page.locator('iframe[title="Spotify Embed"]')).toHaveCount(1);
 });

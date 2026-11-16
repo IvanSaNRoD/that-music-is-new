@@ -1,21 +1,30 @@
 "use client";
 
-import { useCallback } from "react";
+import { useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { GENRES } from "@/mocks/genres";
 
 /**
- * Randomize: pick any genre from the whole catalog (not the one on screen) and go to its page.
+ * Randomize: ask the API for a random genre and go to its page (ADR-0007 request 1).
  * Independent from the crate — it never changes which sleeves are in it (ADR-0006).
  */
 export function useRandomize() {
   const router = useRouter();
-  const params = useParams<{ genre?: string }>();
-  const current = params.genre;
+  const current = useParams<{ genre?: string }>().genre;
+  const inFlight = useRef(false);
 
-  return useCallback(() => {
-    const pool = GENRES.filter((g) => g.slug !== current);
-    const next = pool[Math.floor(Math.random() * pool.length)];
-    router.push(`/${next.slug}`);
+  return useCallback(async () => {
+    if (inFlight.current) return; // double click / held Space: one roll at a time
+    inFlight.current = true;
+    const query = current ? `?${new URLSearchParams({ exclude: current })}` : "";
+    try {
+      const res = await fetch(`/api/genres/random${query}`);
+      if (!res.ok) return;
+      const { slug }: { slug: string } = await res.json();
+      router.push(`/${slug}`);
+    } catch {
+      // Network failure: stay on the current page; the user can press Randomize again.
+    } finally {
+      inFlight.current = false;
+    }
   }, [router, current]);
 }

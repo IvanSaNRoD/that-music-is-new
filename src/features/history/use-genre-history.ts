@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
+import type { Genre } from "@/domain/genre";
 import type { HistoryItem } from "@/domain/history";
 
 const HISTORY_MAX = 5; // last 5 played; older entries TBD (docs/prd.md › Open questions)
@@ -14,8 +15,8 @@ export function useGenreHistory(initial: HistoryItem[] = []) {
   const [lastRemoved, setLastRemoved] = useState<{ item: HistoryItem; index: number } | null>(null);
 
   // A genre enters History only when its tracks are played, not when a sleeve is opened.
-  const add = useCallback((id: string) => {
-    setItems((h) => [{ id, date: today() }, ...h.filter((x) => x.id !== id)].slice(0, HISTORY_MAX));
+  const add = useCallback(({ name, slug }: Genre) => {
+    setItems((h) => [{ id: slug, name, date: today() }, ...h.filter((x) => x.id !== slug)].slice(0, HISTORY_MAX));
   }, []);
 
   const remove = useCallback((id: string) => {

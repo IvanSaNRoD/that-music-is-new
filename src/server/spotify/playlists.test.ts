@@ -32,6 +32,28 @@ describe("getPlaylistItems", () => {
     expect(seen!.headers.get("authorization")).toBe("Bearer test-token");
   });
 
+  it("calls SPOTIFY_API_URL when set (e2e fake Spotify)", async () => {
+    vi.stubEnv("SPOTIFY_API_URL", "http://fake-api.test/v1");
+    server.use(
+      http.get("http://fake-api.test/v1/playlists/:playlistId/items", () => HttpResponse.json({ total: 7, items: [] })),
+    );
+
+    try {
+      expect((await getPlaylistItems(query)).total).toBe(7);
+    } finally {
+      vi.stubEnv("SPOTIFY_API_URL", undefined);
+    }
+  });
+
+  it("uses the real Spotify API when SPOTIFY_API_URL is set but empty", async () => {
+    vi.stubEnv("SPOTIFY_API_URL", "");
+    try {
+      expect((await getPlaylistItems(query)).total).toBe(172); // default MSW handler on api.spotify.com
+    } finally {
+      vi.stubEnv("SPOTIFY_API_URL", undefined);
+    }
+  });
+
   it("maps entries to track candidates; unreadable entries become null", async () => {
     const page = await getPlaylistItems(query);
 

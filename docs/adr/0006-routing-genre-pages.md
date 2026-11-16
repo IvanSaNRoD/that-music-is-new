@@ -28,7 +28,7 @@
 
    The handoff rule "random genre replaces the top sleeve" is removed.
 5. **Back**: "Back to the crate" links to `/`; browser Back/Forward work natively.
-6. **Prerendering**: `generateStaticParams` over the placeholder catalog. For the ~7,000-genre catalog, revisit (prerender none/some + Suspense or `loading.tsx`) when E1/E3 land.
+6. **Prerendering**: `generateStaticParams` over the placeholder catalog. For the ~7,000-genre catalog, revisit (prerender none/some + Suspense or `loading.tsx`) when E1/E3 land. *Resolved 2026-11-16 (E4): genre pages render on demand from the real catalog (`getCatalog().bySlug`, unknown → `notFound()`); Cache Components requires at least one prerendered param, so only the catalog's first genre is prerendered (taken from the catalog, never hard-coded).*
 7. **Randomize** becomes its own feature (`features/randomizer`: `useRandomize` + global `RandomizeShortcut`), independent from the crate.
 
 ## Consequences

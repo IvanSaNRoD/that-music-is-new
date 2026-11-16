@@ -3,16 +3,14 @@
 import { useEffect, useState } from "react";
 import { ChevronRight, History, X } from "lucide-react";
 import { Vinyl } from "@/components/brand/vinyl";
-import type { Genre } from "@/domain/genre";
 import type { HistoryItem } from "@/domain/history";
 import { blurIfPointer } from "@/lib/utils";
 
 const UNDO_MS = 6000;
 
 type HistoryPanelProps = {
-  catalog: Genre[];
   items: HistoryItem[];
-  selected: string;
+  selected?: string;
   onOpen: (id: string) => void;
   onRemove: (id: string) => void;
   onClear: () => void;
@@ -25,7 +23,6 @@ const linkButton =
   "text-primary-ink focus-visible:outline-primary-ink touch:min-h-11 inline-flex items-center rounded text-[15px] font-semibold underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2";
 
 export function HistoryPanel({
-  catalog,
   items,
   selected,
   onOpen,
@@ -37,7 +34,6 @@ export function HistoryPanel({
 }: HistoryPanelProps) {
   // Inline confirmation for the destructive "Clear all" (PRD: clear all needs confirmation).
   const [confirming, setConfirming] = useState(false);
-  const nameOf = (id: string) => catalog.find((x) => x.id === id)?.name ?? id;
 
   // The undo offer for a single ✕ expires after a few seconds.
   useEffect(() => {
@@ -64,9 +60,8 @@ export function HistoryPanel({
         </p>
       ) : (
         <ul className="flex-1">
-          {items.map(({ id, date }) => {
-            const g = catalog.find((x) => x.id === id);
-            if (!g) return null;
+          {items.map(({ id, name, date }) => {
+            const g = { name, slug: id };
             const isSelected = id === selected;
             return (
               <li
@@ -115,7 +110,7 @@ export function HistoryPanel({
         {lastRemoved ? (
           <p className="flex items-center justify-between gap-3 text-sm">
             <span className="truncate text-muted-foreground">
-              Removed <span className="font-semibold text-foreground">{nameOf(lastRemoved.id)}</span>
+              Removed <span className="font-semibold text-foreground">{lastRemoved.name}</span>
             </span>
             <button type="button" onClick={onUndo} className={linkButton}>
               Undo
