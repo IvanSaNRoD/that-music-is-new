@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { ChevronRight, History, X } from "lucide-react";
 import { Vinyl } from "@/components/brand/vinyl";
 import type { HistoryItem } from "@/domain/history";
+import { lastInputWasKeyboard } from "@/lib/input-modality";
 import { blurIfPointer } from "@/lib/utils";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
@@ -41,6 +42,14 @@ export function HistoryPanel({
 }: HistoryPanelProps) {
   // Inline confirmation for the destructive "Clear all" (PRD: clear all needs confirmation).
   const [confirming, setConfirming] = useState(false);
+  // A keyboard ✕ takes its row (and itself) away: focus moves to Undo instead of falling to <body> (#65,
+  // same as "Your finds", #54). Pointer clicks leave focus alone so Space keeps randomizing.
+  const undoRef = useRef<HTMLButtonElement>(null);
+  const focusUndo = useRef(false);
+  useEffect(() => {
+    if (focusUndo.current && lastRemoved) undoRef.current?.focus();
+    focusUndo.current = false;
+  }, [lastRemoved]);
 
   return (
     <section
@@ -96,7 +105,10 @@ export function HistoryPanel({
                 {/* ✕ on hover / keyboard focus with a pointer; always visible (44px) on touch; always reachable by Tab. */}
                 <button
                   type="button"
-                  onClick={() => onRemove(id)}
+                  onClick={() => {
+                    focusUndo.current = lastInputWasKeyboard();
+                    onRemove(id);
+                  }}
                   aria-label={`Remove ${g.name} from history`}
                   className="absolute top-1/2 right-3 -translate-y-1/2 rounded-full p-1.5 opacity-0 transition-opacity group-focus-within:opacity-100 group-hover:opacity-100 hover:bg-background focus-visible:outline-2 focus-visible:outline-primary-ink touch:right-2 touch:p-3.5 touch:opacity-100"
                 >
@@ -114,7 +126,7 @@ export function HistoryPanel({
             <span className="truncate text-muted-foreground">
               Removed <span className="font-semibold text-foreground">{lastRemoved.name}</span>
             </span>
-            <button type="button" onClick={onUndo} className={linkButton}>
+            <button ref={undoRef} type="button" onClick={onUndo} className={linkButton}>
               Undo
             </button>
           </p>
