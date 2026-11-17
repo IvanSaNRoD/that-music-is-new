@@ -1,4 +1,5 @@
 // UI states with OUR API mocked from the browser (layer 2 of the e2e strategy): deterministic, no server data.
+import type { Page } from "@playwright/test";
 import { expect, mockCrate, mockGenre, mockRandom, sampleCrate, sampleGenre, test } from "./fixtures";
 
 test.describe("crate", () => {
@@ -35,6 +36,48 @@ test.describe("crate", () => {
     });
   }
 
+  // #57: while the crate request is in flight the crate says so and never looks empty.
+  /** Holds GET /api/genres/crate until `release()` answers it with `body`. */
+  async function holdCrate(page: Page, body: unknown) {
+    let release!: () => void;
+    const held = new Promise<void>((r) => (release = r));
+    await page.route(
+      (url) => url.pathname === "/api/genres/crate",
+      async (route) => {
+        await held;
+        await route.fulfill({ json: body, headers: { "Cache-Control": "no-store" } });
+      },
+    );
+    return release;
+  }
+
+  test("says it is digging while the first crate loads", async ({ page }) => {
+    const release = await holdCrate(page, sampleCrate);
+    await page.goto("/");
+
+    const crate = page.getByRole("region", { name: "Genre crate" });
+    await expect(crate.locator(".crate-message").getByText("Digging through the bins…", { exact: true })).toBeVisible();
+    await expect(crate.locator("[aria-busy=true]")).toBeAttached();
+    release();
+    await expect(crate.getByRole("button", { name: "Play 10 tracks of Acid Jazz" })).toBeVisible();
+    await expect(crate.getByText("Digging through the bins…")).toHaveCount(0);
+  });
+
+  test("keeps the old sleeves while Restock brings new ones", async ({ page }) => {
+    await mockCrate(page, sampleCrate);
+    await page.goto("/");
+    const crate = page.getByRole("region", { name: "Genre crate" });
+    await expect(crate.getByRole("button", { name: "Play 10 tracks of Acid Jazz" })).toBeVisible();
+
+    // The later route wins over mockCrate's (Playwright tries routes newest first).
+    const release = await holdCrate(page, [{ genre: "Zydeco", slug: "zydeco" }]);
+    await crate.getByRole("button", { name: "Restock" }).click();
+    await expect(crate.locator("[aria-busy=true]")).toBeAttached();
+    await expect(crate.getByText("Acid Jazz", { exact: true }).first()).toBeVisible(); // still there, dimmed
+    release();
+    await expect(crate.getByRole("button", { name: "Play 10 tracks of Zydeco" })).toBeVisible();
+  });
+
   test("offers a retry when the crate can't be filled", async ({ page }) => {
     await mockCrate(page, { status: 500 });
     await page.goto("/");
@@ -44,6 +87,16 @@ test.describe("crate", () => {
     await mockCrate(page, sampleCrate);
     await page.getByRole("button", { name: "Try again" }).click();
     await expect(page.getByRole("button", { name: "Play 10 tracks of Acid Jazz" })).toBeVisible();
+  });
+  test("keeps keyboard focus on Restock after Try again (#57)", async ({ page }) => {
+    await mockCrate(page, { status: 500 });
+    await page.goto("/");
+    const crate = page.getByRole("region", { name: "Genre crate" });
+    await crate.getByRole("button", { name: "Try again" }).focus();
+
+    await mockCrate(page, sampleCrate);
+    await page.keyboard.press("Enter");
+    await expect(crate.getByRole("button", { name: "Restock" })).toBeFocused();
   });
 });
 

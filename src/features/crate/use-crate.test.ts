@@ -55,6 +55,17 @@ describe("useCrate", () => {
     expect(result.current.genres).toEqual([]);
   });
 
+  it("empties the crate when a Restock fails, so a retry starts from blank sleeves (#57)", async () => {
+    server.use(http.get("*/api/genres/crate", () => HttpResponse.json(crate("Acid Jazz"))));
+    const { result } = renderHook(() => useCrate());
+    await waitFor(() => expect(result.current.status).toBe("ready"));
+
+    server.use(http.get("*/api/genres/crate", () => new HttpResponse(null, { status: 500 })));
+    act(() => result.current.restock());
+    await waitFor(() => expect(result.current.status).toBe("error"));
+    expect(result.current.genres).toEqual([]);
+  });
+
   it("keeps the latest crate when an earlier, slower one answers late", async () => {
     let calls = 0;
     server.use(

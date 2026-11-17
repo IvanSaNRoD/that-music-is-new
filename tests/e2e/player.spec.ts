@@ -1,8 +1,11 @@
 // The turntable follows the Spotify Embed's real playback (#61), driven through the fake iFrame API (fixtures.ts).
 import { expect, mockCrate, mockGenre, mockRandom, sampleCrate, sampleGenre, test } from "./fixtures";
 
-const record = (page: import("@playwright/test").Page) => page.locator(".turntable-spin");
-const arm = (page: import("@playwright/test").Page) => page.locator(".turntable-arm");
+// Only the genre page's turntable: the <Suspense> fallback (result-fallback.tsx) draws an empty one too, and
+// in a production build it can linger in the DOM for a moment after the page is revealed (CI flake).
+const outsideFallback = ":not([aria-label='Loading genre'] *)";
+const record = (page: import("@playwright/test").Page) => page.locator(`.turntable-spin${outsideFallback}`);
+const arm = (page: import("@playwright/test").Page) => page.locator(`.turntable-arm${outsideFallback}`);
 
 test.beforeEach(async ({ page }) => {
   await mockGenre(page, "acid-jazz", sampleGenre);

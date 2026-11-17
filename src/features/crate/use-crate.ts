@@ -27,7 +27,9 @@ export function useCrate() {
         setSelected(next[0]?.slug);
         setStatus("ready");
       } catch {
-        if (!controller.signal.aborted) setStatus("error");
+        if (controller.signal.aborted) return;
+        setGenres([]); // a retry starts from blank sleeves, not a stale crate (#57)
+        setStatus("error");
       }
     })();
     return () => controller.abort();
