@@ -28,6 +28,7 @@ If the user finds a genre interesting, they continue exploring on Spotify.
 - Home page shows the Randomizer button; no login or account required.
 - Pressing the button shows: genre name, track count of its "The Sound of X" playlist, "Listen more on Spotify" link (playlist URL), and up to 10 tracks (title, artists).
 - Selecting a track loads it in a single Spotify Embed player (one player, not one per row).
+- **Previous / next and auto-advance (#55):** ⏮ / ⏭ move through the genre's tracks in list order, with no wrap-around (⏮ disabled on the first, ⏭ on the last). When a track ends the next one plays; after the last one, playback stops (no loop back to track 01).
 - **Autoplay (decided 2026-11-16, #62; implementation #67):** track 01 starts on its own only when the genre page was opened with listening intent in the same visit (Randomize, Space, Roll again, sleeve "Play 10 tracks"); never on a shared URL, reload, History row or "Your finds". If the browser blocks it (Safari/iOS; no playback progress within ~3s), track 01 stays cued, the turntable stays still and a hint asks to press play in the player.
 - "Roll again" replaces the current genre and tracks with a new random genre.
 - A loading state is shown while fetching; an error state with retry is shown if Spotify fails (incl. `429`).

@@ -11,6 +11,7 @@ import { lastInputWasKeyboard } from "@/lib/input-modality";
 import { blurIfPointer } from "@/lib/utils";
 import { BusyNotice, Notice } from "./notice";
 import { PlayerSlot } from "./player-slot";
+import { TrackTransport } from "./track-transport";
 import { TrackList, TrackSkeleton } from "./track-list";
 import { Turntable } from "./turntable";
 import { useResult } from "./use-result";
@@ -31,7 +32,8 @@ export function ResultView({ genre }: ResultViewProps) {
     genre.slug,
     onFirstPlay,
   );
-  const player = useSpotifyPlayer();
+  // Auto-advance (#55): when a track ends, the next one plays; after the last one, nothing (no loop).
+  const player = useSpotifyPlayer({ onEnded: () => playAt(index + 1) });
   const firstTrack = tracks[0]?.id;
   const { cue } = player;
   // Cue track 01 in the embed as soon as the tracks arrive, so the first click plays inside the gesture.
@@ -39,10 +41,19 @@ export function ResultView({ genre }: ResultViewProps) {
     if (firstTrack) cue(firstTrack);
   }, [firstTrack, cue]);
   // Inside the click: the embed's play() must stay close to the user gesture (autoplay rules).
-  const play = (trackId: string) => {
+  function play(trackId: string) {
     playTrack(trackId);
     player.play(trackId);
-  };
+  }
+  // Playing track, or track 01 (cued) before the first play: ⏮ / ⏭ count from it.
+  const index = Math.max(
+    0,
+    tracks.findIndex((t) => t.id === playingId),
+  );
+  function playAt(i: number) {
+    const track = tracks[i];
+    if (track) play(track.id);
+  }
   // Genre Tone Rule: the genre's sleeve tone travels with it (turntable, playing row). AA-safe pairs.
   const [toneBg, toneFg, hole] = toneFor(genre.slug);
   // Light tones (Seiji 1.89:1, Aged Paper 1.15:1 against the page) can't mark a row by fill alone:
@@ -99,7 +110,7 @@ export function ResultView({ genre }: ResultViewProps) {
           everything else full width, a bar fixed to the bottom: the 152px player when ready (Roll again then sits
           beside "Listen more"), Roll again full width otherwise. */}
       <div
-        className={`grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 ${ready ? "max-lg:pb-[calc(192px+env(safe-area-inset-bottom))]" : "max-lg:pb-[calc(120px+env(safe-area-inset-bottom))]"} lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]`}
+        className={`grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 ${ready ? "max-lg:pb-[calc(244px+env(safe-area-inset-bottom))]" : "max-lg:pb-[calc(120px+env(safe-area-inset-bottom))]"} lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]`}
       >
         <div className="flex flex-col items-start gap-4 max-lg:contents">
           <Link
@@ -109,16 +120,31 @@ export function ResultView({ genre }: ResultViewProps) {
             <ArrowLeft size={18} strokeWidth={2.5} aria-hidden="true" />
             Back to the crate
           </Link>
-          <Turntable
-            label={hole}
-            spinning={status === "loading" || sounding}
-            armDown={playing !== null}
-            trackCount={tracks.length}
-            track={playing ? tracks.indexOf(playing) : null}
-            record={status !== "error" && status !== "busy"}
-            arrive
-            compact
-          />
+          {/* ≥lg: the transport sits on the plinth (positioned over it, outside the decorative turntable).
+              <lg the wrapper dissolves and the transport lives in the bottom bar. */}
+          <div className="relative w-full max-w-[440px] max-lg:contents">
+            <Turntable
+              label={hole}
+              spinning={status === "loading" || sounding}
+              armDown={playing !== null}
+              trackCount={tracks.length}
+              track={playing ? tracks.indexOf(playing) : null}
+              record={status !== "error" && status !== "busy"}
+              arrive
+              compact
+            />
+            {ready && (
+              <div className="max-lg:hidden">
+                <TrackTransport
+                  variant="plinth"
+                  index={index}
+                  count={tracks.length}
+                  onPrev={() => playAt(index - 1)}
+                  onNext={() => playAt(index + 1)}
+                />
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex min-w-0 flex-col gap-6 max-lg:contents lg:col-start-2 lg:row-span-2 lg:row-start-1">
@@ -165,8 +191,9 @@ export function ResultView({ genre }: ResultViewProps) {
                 </a>
               )}
               {/* <lg: Roll again lives in the bottom bar (thumb reach). */}
-              {/* <lg: here only while a player fills the bottom bar (152px embed needs the full width). */}
-              <RollAgain onRoll={randomize} className={ready ? "" : "max-lg:hidden"} />
+              {/* <lg: here only while a player fills the bottom bar (152px embed needs the full width), on its own
+                  row at full width under "Listen more on Spotify". */}
+              <RollAgain onRoll={randomize} className={ready ? "max-lg:w-full" : "max-lg:hidden"} />
             </div>
           </div>
 
@@ -194,14 +221,25 @@ export function ResultView({ genre }: ResultViewProps) {
         {/* ≥lg: under the deck. <lg: bottom bar (player + Roll again), safe-area aware.
             The player always keeps its slot (hidden outside "ready") so states never change the geometry. */}
         <div
-          data-bottom-bar
+          data-bottom-bar={ready ? "player" : "roll"}
           className="max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-40 max-lg:border-t-[1.5px] max-lg:border-border-strong max-lg:bg-background max-lg:pb-[env(safe-area-inset-bottom)] lg:col-start-1 lg:row-start-2 lg:self-start"
         >
           <div className="max-lg:mx-auto max-lg:flex max-lg:max-w-[720px] max-lg:items-center max-lg:gap-3 max-lg:px-6 max-lg:py-3">
             <div
-              className={`min-w-0 flex-1 ${status === "ready" ? "" : "invisible max-lg:hidden"}`}
+              className={`flex min-w-0 flex-1 flex-col gap-2 ${status === "ready" ? "" : "invisible max-lg:hidden"}`}
               aria-hidden={status !== "ready" || undefined}
             >
+              {ready && (
+                <div className="lg:hidden">
+                  <TrackTransport
+                    variant="bar"
+                    index={index}
+                    count={tracks.length}
+                    onPrev={() => playAt(index - 1)}
+                    onNext={() => playAt(index + 1)}
+                  />
+                </div>
+              )}
               <PlayerSlot
                 track={playing}
                 spotifyUrl={spotifyUrl}

@@ -9,16 +9,23 @@ export type PlayerStatus = "loading" | "ready" | "failed";
 type PlaybackUpdate = { data: { isPaused: boolean; isBuffering: boolean; position: number; duration: number } };
 
 /** Paused, or at the end of the track (a finished preview may not report isPaused). */
-const isStopped = ({ isPaused, position, duration }: PlaybackUpdate["data"]) =>
-  isPaused || (duration > 0 && position >= duration);
+const atEnd = ({ position, duration }: PlaybackUpdate["data"]) => duration > 0 && position >= duration;
+const isStopped = (data: PlaybackUpdate["data"]) => data.isPaused || atEnd(data);
 
 /**
  * One Spotify embed controller per mount, living in `containerRef`.
  * A play before the API (or the controller) is ready is queued; the latest track wins.
  * Pass a stable `loadApi` (module-level), or the API load re-runs on every render.
  */
-export function useSpotifyPlayer(options: { loadApi?: () => Promise<IFrameAPI>; height?: number } = {}) {
-  const { loadApi = loadIframeApi, height = 152 } = options;
+export function useSpotifyPlayer(
+  options: {
+    loadApi?: () => Promise<IFrameAPI>;
+    height?: number;
+    /** The playing track reached its end (once per track; not on a pause). For auto-advance (#55). */
+    onEnded?: () => void;
+  } = {},
+) {
+  const { loadApi = loadIframeApi, height = 152, onEnded } = options;
   const containerRef = useRef<HTMLDivElement | null>(null);
   const apiRef = useRef<IFrameAPI | null>(null);
   const controllerRef = useRef<EmbedController | null>(null);
@@ -27,6 +34,11 @@ export function useSpotifyPlayer(options: { loadApi?: () => Promise<IFrameAPI>; 
   const cuedRef = useRef<string | null>(null); // shown in the embed without playing
   const mountedRef = useRef(false);
   const heightRef = useRef(height); // initial value only: the one controller is created once
+  const onEndedRef = useRef(onEnded); // latest callback, read by the one listener
+  const endedRef = useRef(false); // this track's end was already reported (Spotify repeats the last update)
+  useEffect(() => {
+    onEndedRef.current = onEnded;
+  }, [onEnded]);
   const [status, setStatus] = useState<PlayerStatus>("loading");
   // Spotify's word, not ours: false only once the embed reports playback (a blocked play() never does).
   const [paused, setPaused] = useState(true);
@@ -57,7 +69,16 @@ export function useSpotifyPlayer(options: { loadApi?: () => Promise<IFrameAPI>; 
       // Unmounted (or StrictMode cleanup) before Spotify answered: don't leak the iframe.
       if (!mountedRef.current) return created.destroy();
       controllerRef.current = created;
-      created.addListener("playback_update", (e) => setPaused(isStopped((e as PlaybackUpdate).data)));
+      created.addListener("playback_update", (e) => {
+        const data = (e as PlaybackUpdate).data;
+        setPaused(isStopped(data));
+        if (!atEnd(data))
+          endedRef.current = false; // a track is (again) before its end
+        else if (!endedRef.current) {
+          endedRef.current = true;
+          onEndedRef.current?.();
+        }
+      });
       if (queued) created.play(); // a cue only prepares the embed
       flushRef.current(); // a click made while the controller was being created
     });
