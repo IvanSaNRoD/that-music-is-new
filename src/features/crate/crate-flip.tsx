@@ -1,6 +1,9 @@
-import type { CSSProperties } from "react";
+"use client";
+
+import { useRef, useState, type CSSProperties } from "react";
 import { Play } from "lucide-react";
 import type { Genre } from "@/domain/genre";
+import { lastInputWasKeyboard } from "@/lib/input-modality";
 import { blurIfPointer } from "@/lib/utils";
 import "./crate-flip.css";
 import { toneFor } from "./tones";
@@ -15,15 +18,24 @@ type CrateFlipProps = {
 };
 
 export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPlay }: CrateFlipProps) {
+  const loading = status === "loading";
+  // Restock: the old sleeves stay (dimmed, inert) until the new ones arrive, so the crate never looks empty (#57).
+  const restocking = loading && genres.length > 0;
+  // Sleeves drop in only when fresh genres arrive while this crate is on screen, not when the home remounts it
+  // with the crate kept in CrateProvider (state adjusted during render, React's "storing info from previous renders").
+  const [sawLoading, setSawLoading] = useState(loading);
+  if (loading && !sawLoading) setSawLoading(true);
+  const restockRef = useRef<HTMLButtonElement>(null);
+
   return (
     <section
       aria-label="Genre crate"
-      aria-busy={status === "loading"}
       className="flex min-h-[500px] min-w-0 flex-1 flex-col gap-3.5 overflow-hidden rounded-2xl border-[1.5px] border-border-strong bg-card p-[26px] lg:ml-[3%]"
     >
       <div className="flex items-center justify-between gap-3">
         <h2 className="font-display text-[30px] font-extrabold tracking-[-0.02em] whitespace-nowrap">The crate</h2>
         <button
+          ref={restockRef}
           type="button"
           onClick={(e) => {
             blurIfPointer(e);
@@ -36,12 +48,26 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
       </div>
 
       <p className="sr-only" aria-live="polite">
-        {status === "loading" && "Filling the crate…"}
+        {loading && LOADING_MESSAGE}
         {status === "error" && "Couldn't fill the crate."}
       </p>
 
-      <div className="crate-stack">
-        {status !== "ready" && <EmptySleeves pulsing={status === "loading"} />}
+      {/* aria-busy on the stack only: the live region above stays outside it, so screen readers announce it. */}
+      <div
+        className="crate-stack"
+        aria-busy={loading}
+        data-loading={loading || undefined}
+        data-arrive={sawLoading || undefined}
+      >
+        {status !== "ready" && !restocking && <EmptySleeves />}
+        {loading && !restocking && (
+          <div className="crate-message" aria-hidden="true">
+            <p className="font-display text-[18px] leading-tight font-extrabold tracking-[-0.02em]">
+              {LOADING_MESSAGE}
+            </p>
+            <p className="text-[15px] text-muted-foreground">Pulling eight rare genres for you.</p>
+          </div>
+        )}
         {status === "error" && (
           <div className="crate-message">
             <p className="font-display text-[18px] leading-tight font-extrabold tracking-[-0.02em]">
@@ -53,6 +79,8 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
               onClick={(e) => {
                 blurIfPointer(e);
                 onRestock();
+                // This button leaves with the error: keyboard focus moves to Restock instead of the page body.
+                if (lastInputWasKeyboard()) restockRef.current?.focus();
               }}
               className="mt-1 self-start rounded-full border-[1.5px] border-border-strong px-4 py-1.5 text-sm font-semibold transition-colors hover:bg-muted/50 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-ink touch:min-h-11"
             >
@@ -60,8 +88,8 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
             </button>
           </div>
         )}
-        {status === "ready" &&
-          genres.map((g) => {
+        {(status === "ready" || restocking) &&
+          genres.map((g, i) => {
             const [bg, fg, hole] = toneFor(g.slug);
             const open = g.slug === selected;
             return (
@@ -69,9 +97,10 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
                 key={g.slug}
                 type="button"
                 className="crate-sleeve"
+                inert={restocking}
                 aria-expanded={open}
                 aria-label={open ? `Play 10 tracks of ${g.name}` : g.name}
-                style={{ "--sleeve-bg": bg, "--sleeve-fg": fg, "--sleeve-hole": hole } as CSSProperties}
+                style={{ "--sleeve-bg": bg, "--sleeve-fg": fg, "--sleeve-hole": hole, "--i": i } as CSSProperties}
                 onClick={(e) => {
                   blurIfPointer(e);
                   if (open) onPlay?.(g);
@@ -104,16 +133,19 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
   );
 }
 
+const LOADING_MESSAGE = "Digging through the bins…";
+
 /** Size step for the open sleeve's name (crate-flip.css): long names step down so the Play pill never moves. */
 const nameLength = (name: string) => (name.length <= 15 ? "short" : name.length <= 30 ? "medium" : "long");
 
-/** Stand-in sleeves while the crate loads (or failed): same geometry as 8 real ones, so nothing jumps. */
-function EmptySleeves({ pulsing }: { pulsing: boolean }) {
+/** Stand-in sleeves while the crate first loads (or failed): same geometry as 8 real ones, so nothing jumps. */
+function EmptySleeves() {
   return Array.from({ length: 8 }, (_, i) => (
     <span
       key={i}
       aria-hidden="true"
-      className={`crate-sleeve crate-sleeve-empty ${pulsing ? "motion-safe:animate-pulse" : ""}`}
+      className="crate-sleeve crate-sleeve-empty"
+      style={{ "--i": i } as CSSProperties}
       data-open={i === 0 || undefined}
     />
   ));

@@ -176,3 +176,58 @@
   gap: 6px;
   padding: 22px 20px 0;
 }
+
+/* Loading (#57) — riffle: a wave lifts each sleeve in turn, like fingers flicking through a bin. On Restock the
+   old sleeves stay, dimmed and inert, and riffle the same way. Only while the request is in flight. */
+.crate-stack[data-loading] .crate-sleeve {
+  animation: crate-riffle 1.4s ease-in-out calc(var(--i, 0) * 90ms) infinite;
+}
+/* The open blank sleeve carries the message: it stays put so the text never drifts off it. */
+.crate-stack[data-loading] .crate-sleeve-empty[data-open] {
+  animation: none;
+}
+.crate-stack[data-loading] .crate-sleeve:not(.crate-sleeve-empty) {
+  opacity: 0.55;
+  transition: opacity 0.2s ease-out;
+}
+@keyframes crate-riffle {
+  0%,
+  45%,
+  100% {
+    transform: translateY(0);
+  }
+  20% {
+    transform: translateY(-5px);
+  }
+}
+
+/* Arrival: fresh genres are filed into the crate one by one (front sleeve last lands last: ≈ 0.73s in all). */
+.crate-stack[data-arrive]:not([data-loading]) .crate-sleeve:not(.crate-sleeve-empty) {
+  animation: crate-drop 0.45s var(--ease-lift) calc(var(--i, 0) * 40ms) backwards;
+}
+@keyframes crate-drop {
+  from {
+    transform: translateY(-28px);
+    opacity: 0;
+  }
+}
+
+/* Reduced motion: nothing moves. Loading breathes in opacity, arrival is a plain fade. */
+@media (prefers-reduced-motion: reduce) {
+  .crate-stack[data-loading] .crate-sleeve:not([data-open]) {
+    animation: crate-breathe 1.6s ease-in-out infinite;
+  }
+  .crate-stack[data-arrive]:not([data-loading]) .crate-sleeve:not(.crate-sleeve-empty) {
+    animation: crate-fade 0.3s ease-out backwards;
+  }
+}
+@keyframes crate-breathe {
+  50% {
+    opacity: 0.35; /* reads on the full blank sleeves and on the 55% Restock ones alike */
+  }
+}
+@keyframes crate-fade {
+  from {
+    opacity: 0;
+  }
+}
