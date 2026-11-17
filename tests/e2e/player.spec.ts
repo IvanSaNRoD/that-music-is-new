@@ -60,3 +60,14 @@ test("when a track ends the next one plays; after the last one it stops", async 
   await expect(record(page)).toHaveAttribute("data-spinning", "false");
   await expect(embedTrack(page)).toHaveAttribute("src", /track-2$/); // no loop back to track 01
 });
+
+test("on phones, Roll again spans the full column width once the player is ready", async ({ page }, info) => {
+  test.skip(info.project.name !== "mobile", "phone layout only (< 1024px)");
+  await page.goto("/acid-jazz");
+  await expect(page.getByText("Sample track 02")).toBeVisible();
+
+  const roll = page.getByRole("button", { name: "Roll again" });
+  const column = page.getByRole("link", { name: "Back to the crate" }).locator("xpath=ancestor::section[1]");
+  const [r, c] = await Promise.all([roll.boundingBox(), column.boundingBox()]);
+  expect(Math.round(r!.width)).toBe(Math.round(c!.width));
+});

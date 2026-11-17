@@ -191,8 +191,9 @@ export function ResultView({ genre }: ResultViewProps) {
                 </a>
               )}
               {/* <lg: Roll again lives in the bottom bar (thumb reach). */}
-              {/* <lg: here only while a player fills the bottom bar (152px embed needs the full width). */}
-              <RollAgain onRoll={randomize} className={ready ? "" : "max-lg:hidden"} />
+              {/* <lg: here only while a player fills the bottom bar (152px embed needs the full width), on its own
+                  row at full width under "Listen more on Spotify". */}
+              <RollAgain onRoll={randomize} className={ready ? "max-lg:w-full" : "max-lg:hidden"} />
             </div>
           </div>
 
