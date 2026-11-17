@@ -151,7 +151,8 @@ src/
     og.tsx  og-fonts/         # next/og images (OG cards, apple-icon); static TTFs (Inter Tight 800, Space Mono 400, SIL OFL) — Satori can't use next/font or CSS variables
     spotify/ token.ts  playlists.ts  schemas.ts  errors.ts   # errors.ts: SpotifyError + toHttpError (429 → 503, other → 502)
   mocks/                      # design-phase placeholder data; empty and removed since E5 (2026-11-16), recreate only for new design work
-  lib/                        # tiny shared helpers (fonts.ts: next/font for layout + global-error; site.ts: SITE_NAME, siteUrl, OG base)
+  lib/                        # tiny shared helpers (fonts.ts: next/font for layout + global-error; site.ts: SITE_NAME, siteUrl, OG base;
+                              #   listen-intent.ts: one-shot in-memory "wants to listen" flag, randomizer/home → result, #67)
 tests/e2e/                    # Playwright: desktop + touch phone (Pixel 7); fixtures.ts, fake-spotify.ts
 tests/api/                    # route handlers called directly (Spotify via MSW); tests/fixtures/catalog.ts = test catalog
 tests/msw/                    # MSW server + Spotify handlers for unit tests

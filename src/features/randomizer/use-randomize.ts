@@ -2,6 +2,7 @@
 
 import { useCallback, useRef } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { markListenIntent } from "@/lib/listen-intent";
 
 /**
  * Randomize: ask the API for a random genre and go to its page (ADR-0007 request 1).
@@ -20,6 +21,7 @@ export function useRandomize() {
       const res = await fetch(`/api/genres/random${query}`);
       if (!res.ok) return;
       const { slug }: { slug: string } = await res.json();
+      markListenIntent(); // Randomize / Space / Roll again: the genre page autoplays track 01 (#67)
       router.push(`/${slug}`);
     } catch {
       // Network failure: stay on the current page; the user can press Randomize again.

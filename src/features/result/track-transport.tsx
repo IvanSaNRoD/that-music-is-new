@@ -10,12 +10,14 @@ type TrackTransportProps = {
   onNext: () => void;
   /** "plinth": two buttons on the turntable's plinth (≥lg). "bar": the phone bottom bar row, with "Track 03 of 10". */
   variant: "plinth" | "bar";
+  /** The browser refused the audio (#67): the bar row asks to press play instead of showing the count. */
+  blocked?: boolean;
 };
 
 const pad = (n: number) => String(n).padStart(2, "0");
 
 /** ⏮ / ⏭ through the genre's tracks (#55): no wrap-around, so the ends are disabled. */
-export function TrackTransport({ index, count, onPrev, onNext, variant }: TrackTransportProps) {
+export function TrackTransport({ index, count, onPrev, onNext, variant, blocked = false }: TrackTransportProps) {
   const button = (label: string, onClick: () => void, disabled: boolean, icon: React.ReactNode) => (
     <button
       type="button"
@@ -35,7 +37,7 @@ export function TrackTransport({ index, count, onPrev, onNext, variant }: TrackT
       {button("Previous track", onPrev, index <= 0, <SkipBack aria-hidden="true" fill="currentColor" />)}
       {variant === "bar" && (
         <span className="track-transport-count">
-          Track {pad(index + 1)} of {pad(count)}
+          {blocked ? "Press play in the player" : `Track ${pad(index + 1)} of ${pad(count)}`}
         </span>
       )}
       {button("Next track", onNext, index >= count - 1, <SkipForward aria-hidden="true" fill="currentColor" />)}

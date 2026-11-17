@@ -5,6 +5,9 @@ import { type EmbedController, type IFrameAPI, loadIframeApi, trackUri } from ".
 
 export type PlayerStatus = "loading" | "ready" | "failed";
 
+/** Time Spotify gets to confirm a play() before we call it blocked (it usually answers in ~100ms). */
+const BLOCKED_MS = 3000;
+
 /** Spotify iFrame API `playback_update` event (developer.spotify.com › Embeds › iFrame API). */
 type PlaybackUpdate = { data: { isPaused: boolean; isBuffering: boolean; position: number; duration: number } };
 
@@ -42,6 +45,9 @@ export function useSpotifyPlayer(
   const [status, setStatus] = useState<PlayerStatus>("loading");
   // Spotify's word, not ours: false only once the embed reports playback (a blocked play() never does).
   const [paused, setPaused] = useState(true);
+  // A play() Spotify doesn't confirm within BLOCKED_MS: the browser refused the audio (Safari, iOS; #62, #67).
+  const [blocked, setBlocked] = useState(false);
+  const blockedTimer = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   /** Plays the queued track on the existing controller, or creates the one controller (with the queued or cued track). */
   const flushRef = useRef(() => {
@@ -72,6 +78,10 @@ export function useSpotifyPlayer(
       created.addListener("playback_update", (e) => {
         const data = (e as PlaybackUpdate).data;
         setPaused(isStopped(data));
+        if (!data.isPaused) {
+          clearTimeout(blockedTimer.current); // confirmed: it really plays
+          setBlocked(false);
+        }
         if (!atEnd(data))
           endedRef.current = false; // a track is (again) before its end
         else if (!endedRef.current) {
@@ -88,6 +98,7 @@ export function useSpotifyPlayer(
     mountedRef.current = true;
     return () => {
       mountedRef.current = false;
+      clearTimeout(blockedTimer.current);
       controllerRef.current?.destroy();
       controllerRef.current = null;
     };
@@ -113,7 +124,10 @@ export function useSpotifyPlayer(
   function play(trackId: string) {
     pendingRef.current = trackId;
     flushRef.current();
+    setBlocked(false);
+    clearTimeout(blockedTimer.current);
+    blockedTimer.current = setTimeout(() => setBlocked(true), BLOCKED_MS);
   }
 
-  return { containerRef, status, paused, cue, play };
+  return { containerRef, status, paused, blocked, cue, play };
 }

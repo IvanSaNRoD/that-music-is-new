@@ -199,6 +199,43 @@ describe("useSpotifyPlayer", () => {
     expect(onEnded).toHaveBeenCalledTimes(2);
   });
 
+  it("is blocked when a play() isn't confirmed by Spotify within 3s (the browser refused the audio)", async () => {
+    const { result, calls } = await renderReady();
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      act(() => result.current.play("abc"));
+      const controller = fakeController();
+      act(() => calls[0].cb(controller));
+      expect(result.current.blocked).toBe(false);
+
+      act(() => vi.advanceTimersByTime(3000));
+      expect(result.current.blocked).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
+  it("is not blocked once Spotify confirms the play, and a new play() clears an earlier block", async () => {
+    const { result, calls } = await renderReady();
+    vi.useFakeTimers({ toFake: ["setTimeout", "clearTimeout"] });
+    try {
+      act(() => result.current.play("abc"));
+      const controller = fakeController();
+      act(() => calls[0].cb(controller));
+      act(() => controller.update({ isPaused: false }));
+      act(() => vi.advanceTimersByTime(3000));
+      expect(result.current.blocked).toBe(false);
+
+      act(() => result.current.play("def"));
+      act(() => vi.advanceTimersByTime(3000)); // this one is refused
+      expect(result.current.blocked).toBe(true);
+      act(() => result.current.play("ghi"));
+      expect(result.current.blocked).toBe(false);
+    } finally {
+      vi.useRealTimers();
+    }
+  });
+
   it("is loading until the API resolves, then ready", async () => {
     const api = deferredApi();
     const { result } = renderHook(() => useSpotifyPlayer({ loadApi: api.loadApi }));
