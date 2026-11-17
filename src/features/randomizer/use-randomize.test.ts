@@ -3,13 +3,19 @@ import { http, HttpResponse } from "msw/http";
 import { act } from "react";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { server } from "../../../tests/msw/server";
-import { useRandomize } from "./use-randomize";
+import { useRandomize, useRandomizeFailed } from "./use-randomize";
 
 // Next's router is a framework boundary: fake it and record navigations.
 const nav = vi.hoisted(() => ({ push: vi.fn(), params: {} as { genre?: string } }));
 vi.mock("next/navigation", () => ({ useRouter: () => ({ push: nav.push }), useParams: () => nav.params }));
 
-beforeEach(() => {
+beforeEach(async () => {
+  // The failure flag is shared page state: start every test from a successful roll (#53).
+  server.use(http.get("*/api/genres/random", () => HttpResponse.json({ genre: "Zydeco", slug: "zydeco" })));
+  const { result, unmount } = renderHook(() => useRandomize());
+  await act(() => result.current());
+  unmount();
+  server.resetHandlers();
   nav.push.mockReset();
   nav.params = {};
 });
@@ -59,5 +65,27 @@ describe("useRandomize", () => {
     await act(() => Promise.all([result.current(), result.current()]));
     expect(requests).toBe(1);
     expect(nav.push).toHaveBeenCalledTimes(1);
+  });
+
+  it("reports a failed roll to every listener on the page (#53)", async () => {
+    server.use(http.get("*/api/genres/random", () => new HttpResponse(null, { status: 500 })));
+    const roll = renderHook(() => useRandomize());
+    const status = renderHook(() => useRandomizeFailed());
+    expect(status.result.current).toBe(false);
+
+    await act(() => roll.result.current());
+    expect(status.result.current).toBe(true);
+  });
+
+  it("clears the failure on the next successful roll (#53)", async () => {
+    server.use(http.get("*/api/genres/random", () => HttpResponse.error()));
+    const roll = renderHook(() => useRandomize());
+    const status = renderHook(() => useRandomizeFailed());
+    await act(() => roll.result.current());
+    expect(status.result.current).toBe(true);
+
+    server.use(http.get("*/api/genres/random", () => HttpResponse.json({ genre: "Zydeco", slug: "zydeco" })));
+    await act(() => roll.result.current());
+    expect(status.result.current).toBe(false);
   });
 });

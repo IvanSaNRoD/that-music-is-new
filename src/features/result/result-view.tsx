@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowUpRight, Shuffle } from "lucide-react";
 import type { Genre } from "@/domain/genre";
 import { toneFor } from "@/features/crate";
 import { RecentFinds, useHistoryState } from "@/features/history";
-import { useRandomize } from "@/features/randomizer";
+import { RandomizeFailedNote, useRandomize } from "@/features/randomizer";
 import { lastInputWasKeyboard } from "@/lib/input-modality";
 import { clearListenIntent, hasListenIntent } from "@/lib/listen-intent";
 import { blurIfPointer } from "@/lib/utils";
@@ -209,6 +209,8 @@ export function ResultView({ genre }: ResultViewProps) {
               {/* <lg: here only while a player fills the bottom bar (152px embed needs the full width), on its own
                   row at full width under "Listen more on Spotify". */}
               <RollAgain onRoll={randomize} className={ready ? "max-lg:w-full" : "max-lg:hidden"} />
+              {/* A failed roll (#53), on its own line under the actions; <lg outside ready it sits over the bottom bar. */}
+              <RandomizeFailedNote className={`basis-full ${ready ? "" : "max-lg:hidden"}`} />
             </div>
           </div>
 
@@ -264,6 +266,9 @@ export function ResultView({ genre }: ResultViewProps) {
               />
             </div>
             {!ready && <RollAgain onRoll={randomize} bar="full" className="lg:hidden" />}
+            {!ready && (
+              <RandomizeFailedNote className="absolute inset-x-0 bottom-full border-t-[1.5px] border-border-strong bg-background px-6 py-2 lg:hidden" />
+            )}
           </div>
         </div>
       </div>

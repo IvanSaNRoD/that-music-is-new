@@ -2,11 +2,13 @@
 
 import { useEffect } from "react";
 import { installInputModality } from "@/lib/input-modality";
+import { RandomizeFailedAnnouncer } from "./randomize-status";
 import { useRandomize } from "./use-randomize";
 
 /**
  * Global Space = Randomize on hover-capable (desktop) devices. Ignored while focus is on a field, button
  * or link, so native Space activation keeps working; pointer clicks drop focus (lib/utils › blurIfPointer).
+ * Also hosts the page's one polite announcement of a failed roll (#53).
  */
 export function RandomizeShortcut() {
   const randomize = useRandomize();
@@ -27,5 +29,5 @@ export function RandomizeShortcut() {
     return () => window.removeEventListener("keydown", onKey);
   }, [randomize]);
 
-  return null;
+  return <RandomizeFailedAnnouncer />;
 }

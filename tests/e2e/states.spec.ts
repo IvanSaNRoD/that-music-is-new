@@ -1,5 +1,5 @@
 // UI states with OUR API mocked from the browser (layer 2 of the e2e strategy): deterministic, no server data.
-import { expect, mockCrate, mockGenre, sampleCrate, sampleGenre, test } from "./fixtures";
+import { expect, mockCrate, mockGenre, mockRandom, sampleCrate, sampleGenre, test } from "./fixtures";
 
 test.describe("crate", () => {
   test("shows the genres the API sends", async ({ page }) => {
@@ -94,5 +94,38 @@ test.describe("genre page", () => {
   test("answers 404 for a genre that isn't in the catalog", async ({ page }) => {
     await page.goto("/no-such-genre-e2e");
     await expect(page.getByRole("heading", { level: 1, name: "Not in the crate" })).toBeVisible();
+  });
+});
+
+// #53: a failed roll is said next to the CTA (and announced once), and the next good roll clears it.
+test.describe("randomize failure", () => {
+  const note = /Couldn’t reach the crate — try again/;
+
+  test("tells the listener on the home and stays put", async ({ page }) => {
+    await mockCrate(page, sampleCrate);
+    await mockRandom(page, { status: 500 });
+    await page.goto("/");
+
+    await page.getByRole("button", { name: "Randomize" }).click();
+    await expect(page.locator("p:not([role=status])").filter({ hasText: note, visible: true })).toBeVisible();
+    await expect(page.getByRole("status").filter({ hasText: note })).toBeAttached();
+    await expect(page).toHaveURL("/");
+
+    await page.unroute((url) => url.pathname === "/api/genres/random");
+    await mockRandom(page, sampleGenre);
+    await mockGenre(page, "acid-jazz", sampleGenre);
+    await page.getByRole("button", { name: "Randomize" }).click();
+    await expect(page).toHaveURL("/acid-jazz");
+    await expect(page.getByText(note)).toHaveCount(0);
+  });
+
+  test("tells the listener next to Roll again on a genre page", async ({ page }) => {
+    await mockGenre(page, "acid-jazz", { status: 500 }); // error state: on phones Roll again sits in the bottom bar
+    await mockRandom(page, { status: 500 });
+    await page.goto("/acid-jazz");
+
+    await page.getByRole("button", { name: "Roll again" }).click();
+    await expect(page.locator("p:not([role=status])").filter({ hasText: note, visible: true })).toBeVisible();
+    await expect(page).toHaveURL("/acid-jazz");
   });
 });

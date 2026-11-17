@@ -1,5 +1,6 @@
 import { Shuffle } from "lucide-react";
 import { Sparkle } from "@/components/brand/sparkle";
+import { RandomizeFailedNote } from "@/features/randomizer";
 
 export function Hero({ onRandomize }: { onRandomize: () => void }) {
   return (
@@ -47,6 +48,7 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
           </span>
         </span>
       </div>
+      <RandomizeFailedNote className="-mt-4" />
     </section>
   );
 }
