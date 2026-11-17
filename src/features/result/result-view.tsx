@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useRef, type CSSProperties } from "react";
+import { useCallback, useEffect, useRef, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import { ArrowLeft, ArrowUpRight, Shuffle } from "lucide-react";
 import type { Genre } from "@/domain/genre";
@@ -8,6 +8,7 @@ import { toneFor } from "@/features/crate";
 import { RecentFinds, useHistoryState } from "@/features/history";
 import { useRandomize } from "@/features/randomizer";
 import { lastInputWasKeyboard } from "@/lib/input-modality";
+import { clearListenIntent, hasListenIntent } from "@/lib/listen-intent";
 import { blurIfPointer } from "@/lib/utils";
 import { BusyNotice, Notice } from "./notice";
 import { PlayerSlot } from "./player-slot";
@@ -35,11 +36,21 @@ export function ResultView({ genre }: ResultViewProps) {
   // Auto-advance (#55): when a track ends, the next one plays; after the last one, nothing (no loop).
   const player = useSpotifyPlayer({ onEnded: () => playAt(index + 1) });
   const firstTrack = tracks[0]?.id;
-  const { cue } = player;
-  // Cue track 01 in the embed as soon as the tracks arrive, so the first click plays inside the gesture.
+  const { cue, play: playEmbed } = player;
+  // Opened with listening intent (Randomize, Roll again, sleeve Play; #67)? Read once, cleared on mount.
+  const [autoplay] = useState(hasListenIntent);
+  const autoplayed = useRef(false);
+  useEffect(clearListenIntent, []);
+  // Track 01 as soon as the tracks arrive: autoplayed with intent, otherwise cued so the first click plays
+  // inside the gesture. Browsers that refuse the audio leave it cued: `player.blocked` shows the hint.
   useEffect(() => {
-    if (firstTrack) cue(firstTrack);
-  }, [firstTrack, cue]);
+    if (!firstTrack) return;
+    if (!autoplay) return cue(firstTrack);
+    if (autoplayed.current) return; // once (StrictMode runs effects twice; `player` changes every render)
+    autoplayed.current = true;
+    playTrack(firstTrack);
+    playEmbed(firstTrack);
+  }, [firstTrack, cue, autoplay, playTrack, playEmbed]);
   // Inside the click: the embed's play() must stay close to the user gesture (autoplay rules).
   function play(trackId: string) {
     playTrack(trackId);
@@ -102,6 +113,7 @@ export function ResultView({ genre }: ResultViewProps) {
         {status === "empty" && `${genre.name}: no playable tracks.`}
         {status === "error" && `Couldn't load ${genre.name}.`}
         {status === "busy" && `Spotify is busy. Try ${genre.name} again in ${retryAfter} seconds.`}
+        {status === "ready" && player.blocked && " Your browser didn't start the music: press play in the player."}
       </p>
 
       {/* DOM order = reading order: Back → deck (decorative) → title, tracks, finds → player.
@@ -174,6 +186,9 @@ export function ResultView({ genre }: ResultViewProps) {
                 {status === "ready" && !playing && (
                   <span className="max-lg:hidden"> · pick one to start listening</span>
                 )}
+                {status === "ready" && playing && player.blocked && (
+                  <span className="max-lg:hidden"> · press play in the player</span>
+                )}
               </p>
             </div>
             {/* <lg: its own row, 44px tall even while loading so nothing shifts when the link appears. */}
@@ -233,6 +248,7 @@ export function ResultView({ genre }: ResultViewProps) {
                 <div className="lg:hidden">
                   <TrackTransport
                     variant="bar"
+                    blocked={player.blocked && playing !== null}
                     index={index}
                     count={tracks.length}
                     onPrev={() => playAt(index - 1)}

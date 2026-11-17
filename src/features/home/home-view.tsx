@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { CrateFlip, useCrateState } from "@/features/crate";
 import { HistoryColumn } from "@/features/history";
 import { useRandomize } from "@/features/randomizer";
+import { markListenIntent } from "@/lib/listen-intent";
 import { Hero } from "./hero";
 
 /** Home page body: Hero + crate + History. Randomize and Play on a sleeve both navigate to /{genre}. */
@@ -21,7 +22,10 @@ export function HomeView() {
         selected={crate.selected}
         onSelect={crate.pick}
         onRestock={crate.restock}
-        onPlay={(g) => router.push(`/${g.slug}`)}
+        onPlay={(g) => {
+          markListenIntent(); // "Play 10 tracks": the genre page autoplays track 01 (#67)
+          router.push(`/${g.slug}`);
+        }}
       />
       <HistoryColumn />
     </>

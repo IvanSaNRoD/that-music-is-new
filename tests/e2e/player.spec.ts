@@ -1,5 +1,5 @@
 // The turntable follows the Spotify Embed's real playback (#61), driven through the fake iFrame API (fixtures.ts).
-import { expect, mockGenre, sampleGenre, test } from "./fixtures";
+import { expect, mockCrate, mockGenre, mockRandom, sampleCrate, sampleGenre, test } from "./fixtures";
 
 const record = (page: import("@playwright/test").Page) => page.locator(".turntable-spin");
 const arm = (page: import("@playwright/test").Page) => page.locator(".turntable-arm");
@@ -70,4 +70,48 @@ test("on phones, Roll again spans the full column width once the player is ready
   const column = page.getByRole("link", { name: "Back to the crate" }).locator("xpath=ancestor::section[1]");
   const [r, c] = await Promise.all([roll.boundingBox(), column.boundingBox()]);
   expect(Math.round(r!.width)).toBe(Math.round(c!.width));
+});
+
+// Autoplay with listening intent (#67, docs/prd.md › Autoplay).
+test.describe("autoplay", () => {
+  test.beforeEach(async ({ page }) => {
+    await mockCrate(page, sampleCrate);
+    await mockRandom(page, sampleGenre);
+  });
+
+  test("Randomize opens the genre already playing track 01", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Randomize" }).click();
+
+    await expect(page).toHaveURL(/\/acid-jazz$/);
+    await expect(page.getByText("Sample track 02")).toBeVisible(); // ready: the record also spins while loading
+    await expect(embedTrack(page)).toHaveAttribute("src", /track-1$/);
+    await expect(record(page)).toHaveAttribute("data-spinning", "true"); // no track was tapped
+  });
+
+  test("the crate sleeve's Play opens the genre already playing track 01", async ({ page }) => {
+    await page.goto("/");
+    await page.getByRole("button", { name: "Play 10 tracks of Acid Jazz" }).click();
+
+    await expect(page).toHaveURL(/\/acid-jazz$/);
+    await expect(page.getByText("Sample track 02")).toBeVisible(); // ready: the record also spins while loading
+    await expect(record(page)).toHaveAttribute("data-spinning", "true");
+  });
+
+  test("a shared URL or reload never autoplays", async ({ page }) => {
+    await page.goto("/acid-jazz");
+    await expect(embedTrack(page)).toHaveAttribute("src", /track-1$/); // cued
+    await page.waitForTimeout(1000);
+
+    await expect(record(page)).toHaveAttribute("data-spinning", "false");
+  });
+
+  test("when the browser blocks it, the record stays still and asks to press play", async ({ page }) => {
+    await page.addInitScript(() => ((window as unknown as { __fakeEmbed: object }).__fakeEmbed = { blocked: true }));
+    await page.goto("/");
+    await page.getByRole("button", { name: "Randomize" }).click();
+
+    await expect(page.getByText(/press play in the player/i).first()).toBeVisible();
+    await expect(record(page)).toHaveAttribute("data-spinning", "false");
+  });
 });
