@@ -1,2 +1,3 @@
 export { RandomizeShortcut } from "./randomize-shortcut";
-export { useRandomize } from "./use-randomize";
+export { RandomizeFailedNote } from "./randomize-status";
+export { useRandomize, useRandomizeFailed } from "./use-randomize";

@@ -6,7 +6,7 @@ import { ArrowLeft, ArrowUpRight, Shuffle } from "lucide-react";
 import type { Genre } from "@/domain/genre";
 import { toneFor } from "@/features/crate";
 import { RecentFinds, useHistoryState } from "@/features/history";
-import { useRandomize } from "@/features/randomizer";
+import { RandomizeFailedNote, useRandomize, useRandomizeFailed } from "@/features/randomizer";
 import { lastInputWasKeyboard } from "@/lib/input-modality";
 import { clearListenIntent, hasListenIntent } from "@/lib/listen-intent";
 import { blurIfPointer } from "@/lib/utils";
@@ -27,6 +27,7 @@ type ResultViewProps = { genre: Genre };
 export function ResultView({ genre }: ResultViewProps) {
   const history = useHistoryState();
   const randomize = useRandomize();
+  const rollFailed = useRandomizeFailed();
   const { add: addToHistory } = history;
   const onFirstPlay = useCallback(() => addToHistory(genre), [addToHistory, genre]);
   const { status, total, tracks, playlistUrl, playingId, retryAfter, retry, playTrack } = useResult(
@@ -95,6 +96,8 @@ export function ResultView({ genre }: ResultViewProps) {
   // Without the embed (fallback: script failed) there is no playback signal, so the chosen track keeps it spinning.
   const sounding = playing !== null && (player.status === "failed" || !player.paused);
   const ready = status === "ready";
+  // <lg bottom bar content; the page reserves its height (globals.css › scroll-padding-bottom mirrors it).
+  const bar = ready ? "player" : rollFailed ? "roll-failed" : "roll";
   // The genre's "The Sound of …" playlist (from the API); search is only a fallback before it arrives.
   const spotifyUrl =
     playlistUrl ?? `https://open.spotify.com/search/${encodeURIComponent(`The Sound of ${genre.name}`)}`;
@@ -122,7 +125,7 @@ export function ResultView({ genre }: ResultViewProps) {
           everything else full width, a bar fixed to the bottom: the 152px player when ready (Roll again then sits
           beside "Listen more"), Roll again full width otherwise. */}
       <div
-        className={`grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 ${ready ? "max-lg:pb-[calc(244px+env(safe-area-inset-bottom))]" : "max-lg:pb-[calc(120px+env(safe-area-inset-bottom))]"} lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]`}
+        className={`grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 ${barReserve[bar]} lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]`}
       >
         <div className="flex flex-col items-start gap-4 max-lg:contents">
           <Link
@@ -209,6 +212,8 @@ export function ResultView({ genre }: ResultViewProps) {
               {/* <lg: here only while a player fills the bottom bar (152px embed needs the full width), on its own
                   row at full width under "Listen more on Spotify". */}
               <RollAgain onRoll={randomize} className={ready ? "max-lg:w-full" : "max-lg:hidden"} />
+              {/* A failed roll (#53), on its own line under the actions; <lg outside ready it sits over the bottom bar. */}
+              <RandomizeFailedNote className={`basis-full ${ready ? "" : "max-lg:hidden"}`} />
             </div>
           </div>
 
@@ -236,7 +241,7 @@ export function ResultView({ genre }: ResultViewProps) {
         {/* ≥lg: under the deck. <lg: bottom bar (player + Roll again), safe-area aware.
             The player always keeps its slot (hidden outside "ready") so states never change the geometry. */}
         <div
-          data-bottom-bar={ready ? "player" : "roll"}
+          data-bottom-bar={bar}
           className="max-lg:fixed max-lg:inset-x-0 max-lg:bottom-0 max-lg:z-40 max-lg:border-t-[1.5px] max-lg:border-border-strong max-lg:bg-background max-lg:pb-[env(safe-area-inset-bottom)] lg:col-start-1 lg:row-start-2 lg:self-start"
         >
           <div className="max-lg:mx-auto max-lg:flex max-lg:max-w-[720px] max-lg:items-center max-lg:gap-3 max-lg:px-6 max-lg:py-3">
@@ -264,12 +269,22 @@ export function ResultView({ genre }: ResultViewProps) {
               />
             </div>
             {!ready && <RollAgain onRoll={randomize} bar="full" className="lg:hidden" />}
+            {!ready && (
+              <RandomizeFailedNote className="absolute inset-x-0 bottom-full border-t-[1.5px] border-border-strong bg-background px-6 py-2 lg:hidden" />
+            )}
           </div>
         </div>
       </div>
     </section>
   );
 }
+
+/** Bottom padding under the <lg page per bar content: player 244px, Roll again 120px, + 72px failed-roll note (#53). */
+const barReserve = {
+  player: "max-lg:pb-[calc(244px+env(safe-area-inset-bottom))]",
+  roll: "max-lg:pb-[calc(120px+env(safe-area-inset-bottom))]",
+  "roll-failed": "max-lg:pb-[calc(192px+env(safe-area-inset-bottom))]",
+} as const;
 
 /** Secondary on purpose (DESIGN.md › Buttons). `bar="full"`: 56px tall and full width in the bottom bar (outside ready),
  * always labelled ("Roll again"; a bare shuffle icon reads as "shuffle tracks"). */
