@@ -163,3 +163,4 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-16 | [#61](https://github.com/IvanSaNRoD/that-music-is-new/issues/61) | Turntable follows the Spotify Embed's real playback: spins only while Spotify confirms it plays (pause, end or blocked audio → still) |
 | 2026-11-17 | [#55](https://github.com/IvanSaNRoD/that-music-is-new/issues/55) | Player: ⏮ / ⏭ on the turntable plinth (phone: bottom bar row), auto-advance with no loop; full-width Roll again on phones |
 | 2026-11-17 | [#67](https://github.com/IvanSaNRoD/that-music-is-new/issues/67) | Player: track 01 autoplays when a genre is opened to listen (Randomize, Space, Roll again, sleeve Play); a quiet hint when the browser blocks it |
+| 2026-11-17 | [#53](https://github.com/IvanSaNRoD/that-music-is-new/issues/53) | Randomize: a failed roll says so next to the CTA ("Couldn’t reach the crate — try again"), announced once, cleared by the next good roll or a page change |
