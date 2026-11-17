@@ -5,6 +5,7 @@
     transform 0.2s var(--ease-lift),
     opacity 0.15s ease-out;
 }
+
 @media (hover: hover) {
   .recent-finds-entry:hover .recent-finds-item,
   .recent-finds-entry:hover .recent-finds-remove {
@@ -13,23 +14,27 @@
 }
 
 /* ✕ — below lg: a price-tag dot on the sleeve's top-right corner (22px dot, 32px target ≥ WCAG 2.5.8;
-   44px would cover a third of the 76px sleeve). */
+   44px would cover a third of the 76px sleeve). Tucked into the corner (dot at 53–75 × 1–23px) so it keeps
+   ≈ 6px clear of the 40px die-cut hole; the list's 4px top padding leaves room for the target. */
 .recent-finds-remove {
   position: absolute;
-  top: 0;
-  left: 44px; /* 76px sleeve − 32px target */
+  top: -2px;
+  left: 46px;
   display: grid;
   place-items: center;
   width: 32px;
   height: 32px;
   border-radius: 9999px;
   color: var(--foreground);
-  isolation: isolate; /* keeps the ::before dot above the sleeve */
+  isolation: isolate;
+  /* keeps the ::before dot above the sleeve */
 }
+
 .recent-finds-remove > svg {
   width: 12px;
   height: 12px;
 }
+
 .recent-finds-remove::before {
   content: "";
   position: absolute;
@@ -39,8 +44,9 @@
   border: 1.5px solid var(--border-strong);
   background: var(--background);
 }
+
 /* lg: inside the pill's reserved right end (pr-10), in the tone's ink; 44px tall target on touch. */
-@media (width >= 64rem) {
+@media (width >=64rem) {
   .recent-finds-remove {
     inset: 0 2px 0 auto;
     left: auto;
@@ -48,10 +54,12 @@
     height: auto;
     color: var(--find-fg);
   }
+
   .recent-finds-remove > svg {
     width: 14px;
     height: 14px;
   }
+
   .recent-finds-remove::before {
     inset: auto 6px;
     top: 50%;
@@ -60,6 +68,7 @@
     border: 0;
     background: transparent;
   }
+
   .recent-finds-remove:hover::before {
     background: color-mix(in srgb, var(--find-fg) 14%, transparent);
   }
@@ -75,6 +84,7 @@
   background: var(--find-bg);
   box-shadow: 0 2px 6px color-mix(in srgb, var(--foreground) 14%, transparent);
 }
+
 .recent-finds-cover::before,
 .recent-finds-cover::after {
   content: "";
@@ -83,17 +93,21 @@
   border-radius: 9999px;
   transform: translate(-50%, -50%);
 }
+
 .recent-finds-cover::before {
   width: 40px;
   height: 40px;
   border: 1px solid var(--foreground);
   background: var(--find-hole);
 }
+
 .recent-finds-cover::after {
   width: 6px;
   height: 6px;
-  background: var(--foreground); /* spindle hole: always Sumi */
+  background: var(--foreground);
+  /* spindle hole: always Sumi */
 }
+
 [aria-current="page"] > .recent-finds-cover {
   outline: 2px solid var(--border-strong);
   outline-offset: 2px;
@@ -103,6 +117,7 @@
 .recent-finds-new {
   animation: recent-finds-in 0.5s var(--ease-lift) both;
 }
+
 .recent-finds-new .recent-finds-disc {
   animation: recent-finds-roll 0.5s var(--ease-lift) both;
 }
@@ -113,6 +128,7 @@
     transform: translateX(-12px);
   }
 }
+
 @keyframes recent-finds-roll {
   from {
     transform: rotate(-180deg);
@@ -124,6 +140,7 @@
   .recent-finds-new .recent-finds-disc {
     animation: none;
   }
+
   .recent-finds-item,
   .recent-finds-remove,
   .recent-finds-entry:hover .recent-finds-item,
