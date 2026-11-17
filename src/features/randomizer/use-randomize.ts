@@ -22,6 +22,11 @@ function subscribe(listener: () => void) {
   return () => listeners.delete(listener);
 }
 
+/** Forget a failure: a new roll starts, or the listener moved to another page (RandomizeShortcut). */
+export function clearRandomizeFailed() {
+  setFailed(false);
+}
+
 /** True after a roll fails (non-2xx or network error), until the next successful one. */
 export function useRandomizeFailed() {
   return useSyncExternalStore(
@@ -43,6 +48,7 @@ export function useRandomize() {
   return useCallback(async () => {
     if (inFlight.current) return; // double click / held Space: one roll at a time
     inFlight.current = true;
+    setFailed(false); // a retry withdraws the old note, so a second failure shows and is announced again
     const query = current ? `?${new URLSearchParams({ exclude: current })}` : "";
     try {
       const res = await fetch(`/api/genres/random${query}`);

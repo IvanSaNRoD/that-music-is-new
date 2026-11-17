@@ -9,10 +9,13 @@
 }
 
 /* Genre page bottom bar (<lg, fixed): keep focused/scrolled-to elements clear of it (WCAG 2.4.11).
-   Its height: 56px Roll again, or ⏮/⏭ row + 152px player once ready (#55). */
+   Its height: 56px Roll again (+ up to 72px failed-roll note over it, #53), or ⏮/⏭ row + 152px player once ready (#55). */
 @media (width < 64rem) {
   html:has([data-bottom-bar="roll"]) {
     scroll-padding-bottom: calc(120px + env(safe-area-inset-bottom));
+  }
+  html:has([data-bottom-bar="roll-failed"]) {
+    scroll-padding-bottom: calc(192px + env(safe-area-inset-bottom));
   }
   html:has([data-bottom-bar="player"]) {
     scroll-padding-bottom: calc(244px + env(safe-area-inset-bottom));

@@ -77,6 +77,20 @@ describe("useRandomize", () => {
     expect(status.result.current).toBe(true);
   });
 
+  it("withdraws the failure while a retry rolls, so a second failure is told again (#53)", async () => {
+    server.use(http.get("*/api/genres/random", () => new HttpResponse(null, { status: 500 })));
+    const roll = renderHook(() => useRandomize());
+    const seen: boolean[] = [];
+    renderHook(() => {
+      const failed = useRandomizeFailed();
+      if (seen.at(-1) !== failed) seen.push(failed);
+    });
+
+    await act(() => roll.result.current());
+    await act(() => roll.result.current());
+    expect(seen).toEqual([false, true, false, true]);
+  });
+
   it("clears the failure on the next successful roll (#53)", async () => {
     server.use(http.get("*/api/genres/random", () => HttpResponse.error()));
     const roll = renderHook(() => useRandomize());

@@ -127,5 +127,11 @@ test.describe("randomize failure", () => {
     await page.getByRole("button", { name: "Roll again" }).click();
     await expect(page.locator("p:not([role=status])").filter({ hasText: note, visible: true })).toBeVisible();
     await expect(page).toHaveURL("/acid-jazz");
+
+    // The note belongs to the page it happened on: going back to the crate drops it.
+    await mockCrate(page, sampleCrate);
+    await page.getByRole("link", { name: "Back to the crate" }).click();
+    await expect(page).toHaveURL("/");
+    await expect(page.getByText(note)).toHaveCount(0);
   });
 });
