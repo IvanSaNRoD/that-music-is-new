@@ -161,3 +161,4 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-16 | [#62](https://github.com/IvanSaNRoD/that-music-is-new/issues/62) | Research: autoplay track 01 — real-embed experiment + browser policies; rule in the PRD (autoplay only with listening intent), implementation #67 |
 | 2026-11-16 | [#58](https://github.com/IvanSaNRoD/that-music-is-new/issues/58) | Crate: long genre names no longer push the Play pill into the die-cut hole (fixed 44px name block, width-fitted short names, one-line tabs) |
 | 2026-11-16 | [#61](https://github.com/IvanSaNRoD/that-music-is-new/issues/61) | Turntable follows the Spotify Embed's real playback: spins only while Spotify confirms it plays (pause, end or blocked audio → still) |
+| 2026-11-17 | [#55](https://github.com/IvanSaNRoD/that-music-is-new/issues/55) | Player: ⏮ / ⏭ on the turntable plinth (phone: bottom bar row), auto-advance with no loop; full-width Roll again on phones |
