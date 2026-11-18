@@ -16,7 +16,7 @@ A door into rare music genres. One click → a random genre from ~7,000 and a sh
 
 [![CI](https://github.com/IvanSaNRoD/that-music-is-new/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/IvanSaNRoD/that-music-is-new/actions/workflows/ci.yml)
 
-[![Release v0.1.0](https://img.shields.io/github/v/release/IvanSaNRoD/that-music-is-new?include_prereleases&label=release&color=1C1C1C)](https://github.com/IvanSaNRoD/that-music-is-new/releases/tag/v0.1.0)
+[![Latest release](https://img.shields.io/github/v/release/IvanSaNRoD/that-music-is-new?include_prereleases&label=release&color=1C1C1C)](https://github.com/IvanSaNRoD/that-music-is-new/releases/latest)
 
 ## Features (iteration 1)
 
