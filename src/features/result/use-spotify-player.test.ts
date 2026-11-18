@@ -74,6 +74,15 @@ describe("useSpotifyPlayer", () => {
     expect(controller.play).toHaveBeenCalledTimes(1);
   });
 
+  it("names Spotify's untitled iframe so screen readers can announce the player (WCAG 4.1.2)", async () => {
+    const { result, calls, container } = await renderReady();
+    act(() => result.current.cue("abc"));
+    const iframe = document.createElement("iframe"); // what Spotify puts in place of the div, with no title
+    calls[0].el.replaceWith(iframe);
+    act(() => calls[0].cb(fakeController()));
+    expect(container.querySelector("iframe")?.title).toBe("Spotify player");
+  });
+
   it("later plays load the new track on the same controller", async () => {
     const { result, calls } = await renderReady();
     act(() => result.current.play("abc"));
