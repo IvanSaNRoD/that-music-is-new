@@ -100,7 +100,12 @@ export const test = base.extend<{ blockSpotifyEmbed: void }>({
       );
       // Registered last → wins over the catch-all above for the API script.
       await context.route("https://open.spotify.com/embed/iframe-api/**", (route) =>
-        route.fulfill({ status: 200, contentType: "text/javascript", body: FAKE_IFRAME_API }),
+        // Run through eval(), like the real script (a webpack "eval" devtool build): the CSP must allow it (ADR-0008).
+        route.fulfill({
+          status: 200,
+          contentType: "text/javascript",
+          body: `eval(${JSON.stringify(FAKE_IFRAME_API)});`,
+        }),
       );
       await use();
     },
