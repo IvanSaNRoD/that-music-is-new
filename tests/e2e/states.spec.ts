@@ -113,6 +113,17 @@ test.describe("genre page", () => {
     );
   });
 
+  // #30: the inert steps copy keeps the page height on desktop only; below 1024px it left an empty band.
+  test("reserves the steps band's height on desktop only", async ({ page, isMobile }) => {
+    await mockGenre(page, "acid-jazz", sampleGenre);
+    await page.goto("/acid-jazz");
+    await expect(page.getByText("Sample track 02")).toBeVisible();
+
+    const display = await page.locator("section[inert]").evaluate((e) => getComputedStyle(e).display);
+    if (isMobile) expect(display).toBe("none");
+    else expect(display).not.toBe("none");
+  });
+
   test("says so when no track can be played", async ({ page }) => {
     await mockGenre(page, "acid-jazz", { ...sampleGenre, tracks: [] });
     await page.goto("/acid-jazz");
