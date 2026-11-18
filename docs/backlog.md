@@ -98,6 +98,8 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 | **Total** | **65** |
 | + 20% contingency | **78** |
 
+Real hours (≈ 43 h) and what the deviations mean: [retrospective](retrospective.md).
+
 ## Main risks
 - **Spotify closes access** to `thesoundsofspotify` playlists or the listing endpoint → no catalog / no tracks (ADR-0003, no fallback).
 - **Playlist items restriction**: since Feb 2026 Dev Mode docs say `GET /playlists/{id}/items` returns items only for playlists the user owns/collaborates on; Sound-of playlists still worked with Client Credentials in the 2026-11-09 spike.

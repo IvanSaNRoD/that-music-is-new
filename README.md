@@ -168,6 +168,7 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 ## Docs
 
 - [PRD](docs/prd.md) · [Architecture](docs/architecture.md) · [Backlog](docs/backlog.md) · [Changelog](CHANGELOG.md)
+- [Retrospective](docs/retrospective.md): estimated vs real hours and lessons
 - [How a request flows through the app](docs/guides/request-flow.md) — step-by-step guide for humans
 - ADRs: [0001 Playback](docs/adr/0001-playback-spotify-embed.md) · [0002 Auth](docs/adr/0002-auth-spotify-oauth-pkce.md) · [0003 Randomizer strategy](docs/adr/0003-randomizer-search-strategy.md) · [0004 Tech stack](docs/adr/0004-tech-stack.md) · [0005 Feature folders](docs/adr/0005-frontend-feature-folders.md) · [0006 Routing](docs/adr/0006-routing-genre-pages.md) · [0007 API by slug](docs/adr/0007-api-by-slug.md) · [0008 CSP](docs/adr/0008-csp-without-nonces.md)
 - Task board: [GitHub Projects](https://github.com/users/IvanSaNRoD/projects/1)
