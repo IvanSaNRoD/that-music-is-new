@@ -94,7 +94,7 @@ test.describe("autoplay", () => {
 
   test("the crate sleeve's Play opens the genre already playing track 01", async ({ page }) => {
     await page.goto("/");
-    await page.getByRole("button", { name: "Play 10 tracks of Acid Jazz" }).click();
+    await page.getByRole("button", { name: "Acid Jazz, play 10 tracks" }).click();
 
     await expect(page).toHaveURL(/\/acid-jazz$/);
     await expect(page.getByText("Sample track 02")).toBeVisible(); // ready: the record also spins while loading

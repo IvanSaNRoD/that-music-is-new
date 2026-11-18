@@ -8,7 +8,7 @@ test.describe("crate", () => {
     await page.goto("/");
 
     const crate = page.getByRole("region", { name: "Genre crate" });
-    await expect(crate.getByRole("button", { name: "Play 10 tracks of Acid Jazz" })).toBeVisible();
+    await expect(crate.getByRole("button", { name: "Acid Jazz, play 10 tracks" })).toBeVisible();
     await expect(crate.getByRole("button", { name: "Trip Hop" })).toBeAttached();
   });
 
@@ -24,7 +24,7 @@ test.describe("crate", () => {
       await mockCrate(page, [{ genre: name, slug: "long-name-e2e" }, ...sampleCrate]);
       await page.goto("/");
 
-      const sleeve = page.getByRole("button", { name: `Play 10 tracks of ${name}` });
+      const sleeve = page.getByRole("button", { name: `${name}, play 10 tracks` });
       const play = sleeve.locator(".crate-play");
       const hole = sleeve.locator(".crate-hole");
       await expect(play).toBeVisible();
@@ -59,7 +59,7 @@ test.describe("crate", () => {
     await expect(crate.locator(".crate-message").getByText("Digging through the bins…", { exact: true })).toBeVisible();
     await expect(crate.locator("[aria-busy=true]")).toBeAttached();
     release();
-    await expect(crate.getByRole("button", { name: "Play 10 tracks of Acid Jazz" })).toBeVisible();
+    await expect(crate.getByRole("button", { name: "Acid Jazz, play 10 tracks" })).toBeVisible();
     await expect(crate.getByText("Digging through the bins…")).toHaveCount(0);
   });
 
@@ -67,7 +67,7 @@ test.describe("crate", () => {
     await mockCrate(page, sampleCrate);
     await page.goto("/");
     const crate = page.getByRole("region", { name: "Genre crate" });
-    await expect(crate.getByRole("button", { name: "Play 10 tracks of Acid Jazz" })).toBeVisible();
+    await expect(crate.getByRole("button", { name: "Acid Jazz, play 10 tracks" })).toBeVisible();
 
     // The later route wins over mockCrate's (Playwright tries routes newest first).
     const release = await holdCrate(page, [{ genre: "Zydeco", slug: "zydeco" }]);
@@ -75,7 +75,7 @@ test.describe("crate", () => {
     await expect(crate.locator("[aria-busy=true]")).toBeAttached();
     await expect(crate.getByText("Acid Jazz", { exact: true }).first()).toBeVisible(); // still there, dimmed
     release();
-    await expect(crate.getByRole("button", { name: "Play 10 tracks of Zydeco" })).toBeVisible();
+    await expect(crate.getByRole("button", { name: "Zydeco, play 10 tracks" })).toBeVisible();
   });
 
   test("offers a retry when the crate can't be filled", async ({ page }) => {
@@ -86,7 +86,7 @@ test.describe("crate", () => {
     await page.unrouteAll({ behavior: "ignoreErrors" });
     await mockCrate(page, sampleCrate);
     await page.getByRole("button", { name: "Try again" }).click();
-    await expect(page.getByRole("button", { name: "Play 10 tracks of Acid Jazz" })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Acid Jazz, play 10 tracks" })).toBeVisible();
   });
   test("keeps keyboard focus on Restock after Try again (#57)", async ({ page }) => {
     await mockCrate(page, { status: 500 });

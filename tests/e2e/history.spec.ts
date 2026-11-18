@@ -69,18 +69,20 @@ test("the undo line doesn't move the finds under the pointer", async ({ page }) 
   expect(await top()).toBeCloseTo(before, 0);
 });
 
-test("a keyboard ✕ moves focus to Undo", async ({ page }) => {
+test("a keyboard ✕ moves focus to Undo, and a keyboard Undo back to the restored find", async ({ page }) => {
   await page.goto("/acid-jazz");
   await seedHistory(page, ["Zeuhl"]);
 
   await finds(page).getByRole("button", { name: "Remove Zeuhl from your finds" }).focus();
   await page.keyboard.press("Enter");
-
   await expect(finds(page).getByRole("button", { name: "Undo" })).toBeFocused();
+
+  await page.keyboard.press("Enter"); // #29: Undo leaves with its line; focus must not fall to <body>
+  await expect(finds(page).getByRole("link", { name: "Zeuhl", exact: true })).toBeFocused();
 });
 
 // #65: same on the home History panel — the row and its ✕ leave, so focus must not fall to <body>.
-test("a keyboard ✕ in History moves focus to Undo", async ({ page }) => {
+test("a keyboard ✕ in History moves focus to Undo, and a keyboard Undo back to the restored row", async ({ page }) => {
   await page.goto("/");
   await seedHistory(page, ["Zeuhl", "Krautrock"]);
 
@@ -90,6 +92,28 @@ test("a keyboard ✕ in History moves focus to Undo", async ({ page }) => {
   await page.keyboard.press("Enter");
 
   await expect(history(page).getByRole("button", { name: "Undo" })).toBeFocused();
+
+  await page.keyboard.press("Enter"); // #29
+  await expect(history(page).getByRole("button", { name: /^Zeuhl/ })).toBeFocused();
+});
+
+// #29: each step of the clear-all confirmation takes its own button away; keyboard focus follows.
+test("keyboard focus follows Clear all → Cancel → Clear all → Clear", async ({ page }) => {
+  await page.goto("/");
+  await seedHistory(page, ["Zeuhl", "Krautrock"]);
+
+  await history(page).getByRole("button", { name: "Clear all history" }).focus();
+  await page.keyboard.press("Enter");
+  await expect(history(page).getByRole("button", { name: "Cancel" })).toBeFocused(); // the safe choice first
+
+  await page.keyboard.press("Enter");
+  await expect(history(page).getByRole("button", { name: "Clear all history" })).toBeFocused();
+
+  await page.keyboard.press("Enter");
+  await page.keyboard.press("Tab");
+  await expect(history(page).getByRole("button", { name: "Clear", exact: true })).toBeFocused();
+  await page.keyboard.press("Enter");
+  await expect(history(page).getByRole("heading", { name: "History" })).toBeFocused(); // Clear all is now disabled
 });
 
 test("a pointer ✕ in History leaves focus alone (Space still randomizes)", async ({ page }) => {

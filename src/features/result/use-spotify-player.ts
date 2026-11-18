@@ -75,6 +75,9 @@ export function useSpotifyPlayer(
       // Unmounted (or StrictMode cleanup) before Spotify answered: don't leak the iframe.
       if (!mountedRef.current) return created.destroy();
       controllerRef.current = created;
+      // Spotify's iframe comes without a title: name it, or screen readers announce a nameless frame (WCAG 4.1.2).
+      const iframe = container.querySelector("iframe");
+      if (iframe && !iframe.title) iframe.title = "Spotify player";
       created.addListener("playback_update", (e) => {
         const data = (e as PlaybackUpdate).data;
         setPaused(isStopped(data));

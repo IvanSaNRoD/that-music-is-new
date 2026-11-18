@@ -42,22 +42,34 @@ export function HistoryPanel({
 }: HistoryPanelProps) {
   // Inline confirmation for the destructive "Clear all" (PRD: clear all needs confirmation).
   const [confirming, setConfirming] = useState(false);
-  // A keyboard ✕ takes its row (and itself) away: focus moves to Undo instead of falling to <body> (#65,
-  // same as "Your finds", #54). Pointer clicks leave focus alone so Space keeps randomizing.
-  const undoRef = useRef<HTMLButtonElement>(null);
-  const focusUndo = useRef(false);
+  // Every footer action (✕, Undo, Clear all, Cancel, Clear) takes its own button away. With the keyboard,
+  // focus moves to what replaces it instead of falling to <body> (#65, #29); after the next render, see the
+  // effect. Pointer clicks leave focus alone so Space keeps randomizing.
+  const sectionRef = useRef<HTMLElement>(null);
+  const pendingFocus = useRef<string | null>(null); // a [data-focus] value
+  const focusNext = (target: string) => {
+    pendingFocus.current = lastInputWasKeyboard() ? target : null;
+  };
   useEffect(() => {
-    if (focusUndo.current && lastRemoved) undoRef.current?.focus();
-    focusUndo.current = false;
-  }, [lastRemoved]);
+    if (!pendingFocus.current) return;
+    sectionRef.current?.querySelector<HTMLElement>(`[data-focus="${pendingFocus.current}"]`)?.focus();
+    pendingFocus.current = null;
+  });
 
   return (
     <section
+      ref={sectionRef}
       aria-labelledby="history-title"
       className="flex flex-col overflow-hidden rounded-2xl border-[1.5px] border-border-strong bg-card lg:min-h-[500px] lg:w-[27%] lg:flex-none"
     >
       <div className="flex items-center justify-between px-5 pt-5 pb-4">
-        <h2 id="history-title" className="font-display text-[30px] font-extrabold tracking-[-0.02em]">
+        {/* Focus target after Clear: the list and its buttons are gone, "Clear all history" is disabled. */}
+        <h2
+          id="history-title"
+          tabIndex={-1}
+          data-focus="title"
+          className="rounded-sm font-display text-[30px] font-extrabold tracking-[-0.02em] outline-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-ink"
+        >
           History
         </h2>
         <History size={24} strokeWidth={2.25} aria-hidden="true" />
@@ -82,6 +94,7 @@ export function HistoryPanel({
               >
                 <button
                   type="button"
+                  data-focus={`open-${id}`}
                   onClick={(e) => {
                     blurIfPointer(e);
                     onOpen(id);
@@ -106,7 +119,7 @@ export function HistoryPanel({
                 <button
                   type="button"
                   onClick={() => {
-                    focusUndo.current = lastInputWasKeyboard();
+                    focusNext("undo");
                     onRemove(id);
                   }}
                   aria-label={`Remove ${g.name} from history`}
@@ -126,7 +139,15 @@ export function HistoryPanel({
             <span className="truncate text-muted-foreground">
               Removed <span className="font-semibold text-foreground">{lastRemoved.name}</span>
             </span>
-            <button ref={undoRef} type="button" onClick={onUndo} className={linkButton}>
+            <button
+              type="button"
+              data-focus="undo"
+              onClick={() => {
+                focusNext(`open-${lastRemoved.id}`); // back on the restored row
+                onUndo();
+              }}
+              className={linkButton}
+            >
               Undo
             </button>
           </p>
@@ -136,7 +157,11 @@ export function HistoryPanel({
             <span className="flex items-center gap-4">
               <button
                 type="button"
-                onClick={() => setConfirming(false)}
+                data-focus="cancel"
+                onClick={() => {
+                  focusNext("clear-all");
+                  setConfirming(false);
+                }}
                 className="inline-flex items-center rounded text-[15px] font-semibold text-muted-foreground hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-ink touch:min-h-11"
               >
                 Cancel
@@ -144,6 +169,7 @@ export function HistoryPanel({
               <button
                 type="button"
                 onClick={() => {
+                  focusNext("title");
                   onClear();
                   setConfirming(false);
                 }}
@@ -156,7 +182,11 @@ export function HistoryPanel({
         ) : (
           <button
             type="button"
-            onClick={() => setConfirming(true)}
+            data-focus="clear-all"
+            onClick={() => {
+              focusNext("cancel"); // the safe choice, not the destructive one
+              setConfirming(true);
+            }}
             disabled={items.length === 0}
             className={`${linkButton} disabled:cursor-not-allowed disabled:no-underline disabled:opacity-50`}
           >

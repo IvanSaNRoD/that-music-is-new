@@ -99,7 +99,7 @@ export function CrateFlip({ genres, status, selected, onSelect, onRestock, onPla
                 className="crate-sleeve"
                 inert={restocking}
                 aria-expanded={open}
-                aria-label={open ? `Play 10 tracks of ${g.name}` : g.name}
+                aria-label={open ? `${g.name}, play 10 tracks` : g.name} // visible text in the name (WCAG 2.5.3)
                 style={{ "--sleeve-bg": bg, "--sleeve-fg": fg, "--sleeve-hole": hole, "--i": i } as CSSProperties}
                 onClick={(e) => {
                   blurIfPointer(e);

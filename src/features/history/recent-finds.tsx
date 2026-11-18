@@ -19,7 +19,9 @@ export function RecentFinds() {
   const { items, loaded, remove, lastRemoved, undoRemove } = useHistoryState();
   const params = useParams<{ genre?: string }>();
   const undoRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
   const focusUndo = useRef(false); // set by a keyboard ✕
+  const focusRestored = useRef<string | null>(null); // set by a keyboard Undo: the restored find's slug
   // Entries present once History is read don't animate; only a genre added while here drops in.
   const [initial, setInitial] = useState<Set<string> | null>(null);
   if (loaded && !initial) setInitial(new Set(items.map((x) => x.id)));
@@ -29,6 +31,12 @@ export function RecentFinds() {
     if (focusUndo.current && lastRemoved) undoRef.current?.focus();
     focusUndo.current = false;
   }, [lastRemoved]);
+  // Keyboard Undo: Undo leaves with the undo line, so focus moves to the find it brought back (#29).
+  useEffect(() => {
+    if (!focusRestored.current) return;
+    listRef.current?.querySelector<HTMLElement>(`[data-find="${focusRestored.current}"]`)?.focus();
+    focusRestored.current = null;
+  }, [items]);
 
   return (
     <section aria-labelledby="recent-finds-title" className="flex flex-col gap-3">
@@ -43,6 +51,7 @@ export function RecentFinds() {
       ) : (
         // Below lg: one row that scrolls sideways, bleeding to the screen edges (py/px keep the current-pill ring unclipped).
         <ul
+          ref={listRef}
           className="flex gap-2 py-1 max-lg:-mx-6 max-lg:[scrollbar-width:none] max-lg:gap-3 max-lg:overflow-x-auto max-lg:px-6 lg:-m-1 lg:flex-wrap lg:p-1"
           aria-live="polite"
         >
@@ -59,6 +68,7 @@ export function RecentFinds() {
                 {/* Below lg: a mini sleeve (tone + die-cut hole) with the name under it, like the crate. lg+: tone pill. */}
                 <Link
                   href={`/${g.slug}`}
+                  data-find={g.slug}
                   aria-current={current ? "page" : undefined}
                   className={`recent-finds-item flex font-semibold max-lg:w-[76px] max-lg:flex-col max-lg:gap-1.5 max-lg:rounded-lg max-lg:text-[13px] max-lg:leading-tight lg:max-w-[16rem] lg:items-center lg:gap-2 lg:rounded-full lg:border-[1.5px] lg:border-border-strong lg:bg-(--find-bg) lg:py-1 lg:pr-10 lg:pl-1 lg:text-[15px] lg:text-(--find-fg) lg:touch:py-[7px] ${current ? "lg:outline-2 lg:outline-offset-2 lg:outline-border-strong" : ""} focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-ink`}
                 >
@@ -95,7 +105,10 @@ export function RecentFinds() {
             <button
               ref={undoRef}
               type="button"
-              onClick={undoRemove}
+              onClick={() => {
+                focusRestored.current = lastInputWasKeyboard() ? lastRemoved.id : null;
+                undoRemove();
+              }}
               className="inline-flex items-center rounded text-[15px] font-semibold text-primary-ink underline-offset-4 hover:underline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-ink touch:min-h-11"
             >
               Undo
