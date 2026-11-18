@@ -1,8 +1,12 @@
 # That Music Is New
 
-A door into rare music genres. One click → a random genre from ~7,000 and a short list of its tracks to listen to, right in the page. If a genre clicks, keep exploring it on Spotify.
+A door into rare music genres. One click → a random genre from 6,490 real Spotify genres and 10 of its tracks to listen to, right in the page. If a genre clicks, keep exploring it on Spotify.
 
-> Status: **technical foundations** (iteration 1 — Randomizer). Next.js app scaffolded; Randomizer not built yet.
+**[▶ Try it live](https://that-music-is-new-seven.vercel.app/)**
+
+![Randomize a genre, listen on the turntable, roll again, and find both genres in History](docs/img/demo.gif)
+
+> Status: **v1.0.0**: iteration 1 (Randomizer) is complete and live. What changed in each version: [CHANGELOG](CHANGELOG.md).
 
 ## Links
 
@@ -20,12 +24,62 @@ A door into rare music genres. One click → a random genre from ~7,000 and a sh
 
 ## Features (iteration 1)
 
-- **Randomizer**: one button → 1 random genre + up to 10 tracks (no login).
-- **Genre context**: name, track count, link to its "The Sound of X" playlist on Spotify.
-- **Playback** in the page via a single Spotify Embed player.
-- **History** of discovered genres in `localStorage`: reload, delete one, clear all.
+- **Randomizer**: a crate of 8 random genres (Restock for more) and a Randomize button (or Space) → a genre page with up to 10 of its tracks. No login.
+- **Genre page**: its own URL (`/{genre}`) to share, the track count, a link to its "The Sound of X" playlist on Spotify, and Roll again for another genre.
+- **Playback** in the page through one Spotify Embed player. Track 01 starts on its own when you came to listen, ⏮ / ⏭ walk the list, and the turntable spins only while Spotify plays.
+- **History** of the genres you played, kept in `localStorage`: reopen one, delete one with undo, or clear all.
+- **Accessible and responsive**: WCAG 2.2 AA (axe, keyboard, reduced motion), 320–1920px, touch layout on phones.
 
 Full scope: [PRD](docs/prd.md).
+
+## How it works
+
+```mermaid
+flowchart LR
+  subgraph Browser
+    UI["Pages / and /{slug}<br/>Randomize · crate · result · History"]
+    LS[("localStorage<br/>genre history")]
+    EMB["Spotify Embed<br/>(iframe, 1 player)"]
+  end
+  subgraph Next["Next.js server (Vercel)"]
+    API["Route handlers<br/>/api/genres/*"]
+    SVC["Randomizer service"]
+    DOM["Domain (pure)<br/>pick · offset · filter · shuffle"]
+    CAT[("config/genres.json<br/>6,490 genres")]
+    SP["Spotify client<br/>(server-only, token cache)"]
+  end
+  SAPI["Spotify Web API"]
+  SACC["accounts.spotify.com"]
+
+  UI -- fetch --> API --> SVC
+  SVC --> DOM
+  SVC --> CAT
+  SVC --> SP
+  SP -- "playlist items" --> SAPI
+  SP -- "client credentials" --> SACC
+  UI <--> LS
+  UI -- "track id" --> EMB
+```
+
+1. **Randomize** asks our API for a random genre. It is picked from a catalog built offline, so this step never calls Spotify.
+2. The **genre page** asks for that genre's tracks. The server makes one Spotify call, from a random offset in the genre's "The Sound of X" playlist, keeps the tracks playable in your country and shuffles them.
+3. The browser plays a track in the **Spotify Embed** and saves the genre to **History** in `localStorage`. Spotify credentials and tokens never reach the browser.
+
+Step by step, with the files involved: [How a request flows through the app](docs/guides/request-flow.md). Details: [Architecture](docs/architecture.md).
+
+## Key decisions
+
+| Decision | Why | Record |
+|---|---|---|
+| Play tracks with the official Spotify Embed | Works for every listener: full tracks when logged in to Spotify in the browser, 30 s previews otherwise (the Web Playback SDK needs Premium) | [ADR-0001](docs/adr/0001-playback-spotify-embed.md) |
+| No user login; the server uses Client Credentials | Anyone can use it in one click; secrets stay on the server | [ADR-0002](docs/adr/0002-auth-spotify-oauth-pkce.md) |
+| Genres from Spotify's "The Sound of X" playlists, catalog built offline | Spotify's `genre:` search returned too few or wrong tracks (spike); one API call per genre page | [ADR-0003](docs/adr/0003-randomizer-search-strategy.md) |
+| Next.js + TypeScript + Tailwind + shadcn/ui, Vitest + Playwright | One deployable app with a server for the secrets; well-known, tested stack | [ADR-0004](docs/adr/0004-tech-stack.md) |
+| UI organised by feature, pure domain layer, lint-enforced boundaries | Each feature is easy to find; logic tested without React or I/O | [ADR-0005](docs/adr/0005-frontend-feature-folders.md) |
+| Every genre is a page (`/{slug}`) | Shareable, reloadable, Back works, SEO | [ADR-0006](docs/adr/0006-routing-genre-pages.md) |
+| The API takes a genre slug, never free text | No open proxy to Spotify; picking a genre costs no Spotify call | [ADR-0007](docs/adr/0007-api-by-slug.md) |
+| Static CSP without nonces | Keeps pages prerendered and the Spotify Embed working; trade-offs recorded | [ADR-0008](docs/adr/0008-csp-without-nonces.md) |
+| Design in code, Penpot for documentation (2026-11-12) | Screens built blind through Penpot's API lacked polish; in code the see-fix loop is immediate | [Design workflow](#design-workflow) |
 
 ## Tech stack
 
@@ -113,10 +167,10 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 
 ## Docs
 
-- [PRD](docs/prd.md) · [Architecture](docs/architecture.md) · [Backlog](docs/backlog.md)
+- [PRD](docs/prd.md) · [Architecture](docs/architecture.md) · [Backlog](docs/backlog.md) · [Changelog](CHANGELOG.md)
 - [Retrospective](docs/retrospective.md): estimated vs real hours and lessons
 - [How a request flows through the app](docs/guides/request-flow.md) — step-by-step guide for humans
-- ADRs: [0001 Playback](docs/adr/0001-playback-spotify-embed.md) · [0002 Auth](docs/adr/0002-auth-spotify-oauth-pkce.md) · [0003 Randomizer strategy](docs/adr/0003-randomizer-search-strategy.md) · [0004 Tech stack](docs/adr/0004-tech-stack.md) · [0005 Feature folders](docs/adr/0005-frontend-feature-folders.md) · [0006 Routing](docs/adr/0006-routing-genre-pages.md) · [0007 API by slug](docs/adr/0007-api-by-slug.md)
+- ADRs: [0001 Playback](docs/adr/0001-playback-spotify-embed.md) · [0002 Auth](docs/adr/0002-auth-spotify-oauth-pkce.md) · [0003 Randomizer strategy](docs/adr/0003-randomizer-search-strategy.md) · [0004 Tech stack](docs/adr/0004-tech-stack.md) · [0005 Feature folders](docs/adr/0005-frontend-feature-folders.md) · [0006 Routing](docs/adr/0006-routing-genre-pages.md) · [0007 API by slug](docs/adr/0007-api-by-slug.md) · [0008 CSP](docs/adr/0008-csp-without-nonces.md)
 - Task board: [GitHub Projects](https://github.com/users/IvanSaNRoD/projects/1)
 
 ## Progress
