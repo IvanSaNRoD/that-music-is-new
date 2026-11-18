@@ -1,5 +1,6 @@
 import { Fragment } from "react";
 import { Vinyl } from "@/components/brand/vinyl";
+import { cn } from "@/lib/utils";
 
 const STEPS = [
   { title: "Roll", body: "Get a random genre from the catalog." },
@@ -19,7 +20,11 @@ export function HowItWorks({ placeholder = false }: { placeholder?: boolean }) {
       aria-label={placeholder ? undefined : "How it works"}
       aria-hidden={placeholder || undefined}
       inert={placeholder}
-      className={`${placeholder ? "invisible max-lg:hidden" : ""}mx-auto flex w-full max-w-[720px] flex-col gap-8 px-6 pt-6 pb-12 lg:grid lg:max-w-[1440px] lg:grid-cols-[1fr_auto] lg:items-center lg:gap-x-14 lg:gap-y-6 lg:px-12`}
+      // cn(), not a template string: Prettier's Tailwind plugin trimmed the separating space once (#30).
+      className={cn(
+        placeholder && "invisible max-lg:hidden",
+        "mx-auto flex w-full max-w-[720px] flex-col gap-8 px-6 pt-6 pb-12 lg:grid lg:max-w-[1440px] lg:grid-cols-[1fr_auto] lg:items-center lg:gap-x-14 lg:gap-y-6 lg:px-12",
+      )}
     >
       <ol className="flex flex-col items-stretch lg:grid lg:grid-cols-[1fr_32px_1fr_32px_1fr] lg:items-center">
         {STEPS.map((s, i) => (
