@@ -1,6 +1,6 @@
 # Architecture — iteration 1
 
-Related: PRD (`docs/prd.md`), ADR-0001…0007. Human walkthrough of each request: `docs/guides/request-flow.md`.
+Related: PRD (`docs/prd.md`), ADR-0001…0008. Human walkthrough of each request: `docs/guides/request-flow.md`.
 
 ## Components
 
@@ -35,6 +35,12 @@ flowchart LR
 - **Domain** is pure TypeScript with injected randomness → unit-tested without mocks.
 - **Spotify client** is the only code that talks to Spotify; responses validated with zod.
 - **Catalog** is a static JSON generated offline (ADR-0003), read only on the server.
+
+## Security headers (ADR-0008)
+
+- Every response gets a CSP and security headers from `next.config.ts` › `headers()`. The policy is static (no nonces), so prerendering keeps working.
+- Third parties allowed: the Spotify Embed only (iFrame API scripts from `open.spotify.com` and `embed-cdn.spotifycdn.com`, frames from `open.spotify.com`). `'unsafe-eval'` is needed because Spotify ships that script as an eval build.
+- `tests/e2e/security.spec.ts` checks the headers and a violation-free listener flow. A new third-party origin must be added to the policy and the ADR.
 
 ## Routes (ADR-0006)
 
