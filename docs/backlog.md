@@ -73,7 +73,7 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 ### E7 — Polish
 | ID | Task | Est. | Risk | Depends | Notes / assumptions |
 |---|---|---|---|---|---|
-| E7.1 | Accessibility (keyboard, focus, labels, contrast) | 1.5 | L | E4, E5 | |
+| E7.1 | Accessibility (keyboard, focus, labels, contrast) | 1.5 | L | E4, E5 | Possible issue to check (noted 2026-11-18, #65): a keyboard "Undo" removes its own line (History footer and "Your finds"), so focus may fall to `<body>`; restore it to the restored row / find. |
 | E7.2 | Responsive review mobile/desktop | 1 | L | E4, E5 | |
 | E7.3 | SEO/metadata, favicon, 404/500 pages | 1.5 | L | E4 | |
 
