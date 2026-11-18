@@ -82,7 +82,7 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 | ID | Task | Est. | Risk | Depends | Notes / assumptions |
 |---|---|---|---|---|---|
 | F1 | Hardening: CSP (allow `open.spotify.com` frame), security headers, Lighthouse, `/security-review` | 3 | M | E | CSP must not break the Embed. |
-| F2 | Spotify production: prod secrets in Vercel, check Dev Mode limits for anonymous use | 1 | M | D6 | Dev Mode quota for Client Credentials not verified. |
+| F2 | Spotify production: prod secrets in Vercel, check Dev Mode limits for anonymous use | 1 | M | D6 | Checked 2026-11-18: Dev Mode quota is per developer account since 2026-07-23 (all Client IDs share it; no published numbers; exceeded → `429` `QUOTA_EXCEEDED` → our `503`), so one Spotify app serves Production and Preview. Owner needs active Premium or the app stops. 5-user cap applies to user login, not Client Credentials (not stated by Spotify). Extended quota out of reach (~250k MAU). Prod redeployed with the shared secrets and verified 2026-11-18. |
 | F3 | Release v1.0.0: tag, CHANGELOG, GitHub Release | 1 | L | F1 | |
 | F4 | README for portfolio: GIF, diagram, decisions | 3 | L | F3 | |
 | F5 | Retrospective: estimated vs real hours | 1 | L | F4 | |
@@ -100,6 +100,8 @@ Estimates: hours of focused work, AI-assisted, **tests included** (TDD for domai
 
 ## Main risks
 - **Spotify closes access** to `thesoundsofspotify` playlists or the listing endpoint → no catalog / no tracks (ADR-0003, no fallback).
-- **Dev Mode rate limits / quotas** for the catalog script and shared app token.
+- **Playlist items restriction**: since Feb 2026 Dev Mode docs say `GET /playlists/{id}/items` returns items only for playlists the user owns/collaborates on; Sound-of playlists still worked with Client Credentials in the 2026-11-09 spike.
+- **Dev Mode quota** shared per developer account (catalog script, previews and production draw from one pool; limits unpublished).
+- **Premium dependency**: the app stops working if the owner's Spotify Premium lapses.
 - **Embed + CSP** interplay; Embed iFrame API control from React.
 - **Tooling setup** (Penpot MCP, MSW with Next.js) on Windows.
