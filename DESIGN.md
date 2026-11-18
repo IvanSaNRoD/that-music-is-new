@@ -227,6 +227,8 @@ Paper, ink and one celadon green; everything else is a tint of the paper.
 **Body Font:** Inter (with sans-serif)
 **Label/Mono Font:** Space Mono (with monospace)
 
+**Fallbacks (#80):** until the web fonts load, Inter Tight 800 shows as Arial Bold at 99% and Space Mono as Courier New at 102%. Both take the same width and line height as the real font, so the swap does not move the page (no layout shift). Inter keeps next/font’s automatic fallback. Defined in `src/lib/fonts.ts` and `globals.css`.
+
 **Character:** A dense, poster-weight grotesk shouts the one idea per screen; a typewriter mono files everything else like shop labels.
 
 ### Hierarchy

@@ -8,6 +8,38 @@
   }
 }
 
+/* Fallback faces shown until the web fonts arrive (src/lib/fonts.ts, #80), sized to take the same width, so the
+   swap doesn't move the page. Inter Tight is only used at 800 (headings): Arial Bold at 99% matches its words within
+   a few px. Space Mono is monospaced: Courier New at 102% has the same advance (0.612em). Ascent/descent overrides
+   (scaled by size-adjust) give the same line box as the real font: 1.21em Inter Tight, 1.48em Space Mono. */
+@font-face {
+  font-family: "Inter Tight Bold Fallback";
+  src: local("Arial Bold"), local("Arial-BoldMT");
+  font-weight: 800;
+  size-adjust: 99%;
+  ascent-override: 98%;
+  descent-override: 24.2%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Space Mono Courier Fallback";
+  src: local("Courier New"), local("CourierNewPSMT");
+  font-weight: 400;
+  size-adjust: 102%;
+  ascent-override: 109.8%;
+  descent-override: 35.3%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Space Mono Courier Fallback";
+  src: local("Courier New Bold"), local("CourierNewPS-BoldMT");
+  font-weight: 700;
+  size-adjust: 102%;
+  ascent-override: 109.8%;
+  descent-override: 35.3%;
+  line-gap-override: 0%;
+}
+
 /* Genre page bottom bar (<lg, fixed): keep focused/scrolled-to elements clear of it (WCAG 2.4.11).
    Its height: 56px Roll again (+ up to 72px failed-roll note over it, #53), or ⏮/⏭ row + 152px player once ready (#55). */
 @media (width < 64rem) {
