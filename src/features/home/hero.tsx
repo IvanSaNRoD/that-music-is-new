@@ -4,15 +4,16 @@ import { RandomizeFailedNote } from "@/features/randomizer";
 
 export function Hero({ onRandomize }: { onRandomize: () => void }) {
   return (
-    <section className="flex flex-col gap-8 lg:w-[36%] lg:flex-none">
+    <section className="@container flex flex-col gap-8 lg:w-[36%] lg:flex-none">
       <div className="flex items-center gap-4">
         <span className="font-mono text-[15px] tracking-wide uppercase">near 7,000 genres · one click</span>
         <span className="h-px flex-1 bg-border-strong" aria-hidden="true" />
       </div>
 
       {/* Phones: scales with the column (max 56px) so "Hear a genre / you've never / heard of." stays 3 lines down to 320px.
-          Tablets (640–1023): 96px (display max) fills the 720px column; desktop: 80px in the 36% hero column. */}
-      <h1 className="font-display text-[clamp(40px,calc((100vw-48px)/6),56px)] leading-[0.95] font-extrabold tracking-[-0.02em] text-balance sm:text-[96px] lg:text-[80px]">
+          Tablets (640–1023): 96px (display max) fills the 720px column. Desktop: scales with the 36% hero column, max 80px
+          ("you’ve never" is 5.9em wide), so it stays 3 lines and the row never outgrows the crate (#86): ~55px at 1024. */}
+      <h1 className="font-display text-[clamp(40px,calc((100vw-48px)/6),56px)] leading-[0.95] font-extrabold tracking-[-0.02em] text-balance sm:text-[96px] lg:text-[min(80px,16.4cqi)]">
         Hear a{" "}
         <span className="relative inline-block">
           genre

@@ -28,3 +28,38 @@ test("the desktop home doesn't shift when the web fonts arrive late", async ({ p
   const cls = await page.evaluate(() => (window as unknown as { __cls: number }).__cls);
   expect(cls).toBeLessThan(0.1); // Core Web Vitals "good"
 });
+
+// #86: the headline scales with its column on desktop, so it stays 3 lines and the row doesn't grow. A taller
+// row stretched the crate panel and opened an empty band above its bottom-aligned sleeves (200px+ at 1280px).
+const fullCrate = [
+  "Acid Jazz",
+  "Trip Hop",
+  "Zamba",
+  "Afropop",
+  "Brass Band",
+  "Chant Basque",
+  "Westcoast Flow",
+  "Yacht Rock",
+].map((genre) => ({ genre, slug: genre.toLowerCase().replace(/ /g, "-") })); // the API always sends 8
+for (const width of [1024, 1180, 1280, 1366, 1440]) {
+  test(`at ${width}px the headline stays 3 lines and the crate has no empty band`, async ({ page, isMobile }) => {
+    test.skip(isMobile, "desktop layout");
+    await page.setViewportSize({ width, height: 900 });
+    await mockCrate(page, fullCrate);
+    await page.goto("/");
+    await page.evaluate(() => document.fonts.ready);
+    await expect(page.locator(".crate-sleeve").first()).toBeVisible();
+
+    const { lines, band } = await page.evaluate(() => {
+      const h1 = document.querySelector("h1")!;
+      const heading = [...document.querySelectorAll("h2")].find((h) => h.textContent?.trim() === "The crate")!;
+      const sleeve = document.querySelector(".crate-sleeve")!;
+      return {
+        lines: Math.round(h1.getBoundingClientRect().height / parseFloat(getComputedStyle(h1).lineHeight)),
+        band: sleeve.getBoundingClientRect().top - heading.getBoundingClientRect().bottom,
+      };
+    });
+    expect(lines).toBe(3);
+    expect(band).toBeLessThanOrEqual(40); // DESIGN.md: ~40px of air above the stack (26px + the panel gap)
+  });
+}
