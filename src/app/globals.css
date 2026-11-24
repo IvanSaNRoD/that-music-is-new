@@ -53,6 +53,23 @@
     scroll-padding-bottom: calc(244px + env(safe-area-inset-bottom));
   }
 }
+/* Phone in landscape (#89): the ready bar would cover ~70% of a ≤500px-tall screen, so it becomes a fixed column on
+   the right (result-view.css). The page (header included) makes room beside it instead of under it. */
+@media (40rem <= width < 64rem) and (orientation: landscape) and (height <= 31.25rem) {
+  :root {
+    --player-column: calc(336px + env(safe-area-inset-right)); /* 280px Spotify minimum + count row, + 2 × 16px */
+  }
+  html:has([data-bottom-bar="player"]) {
+    scroll-padding-bottom: 0;
+  }
+  html:has([data-bottom-bar="player"]) body {
+    padding-right: var(--player-column);
+  }
+  /* The narrower page would wrap the header (logo and tagline on two lines each): keep the logo only. */
+  html:has([data-bottom-bar="player"]) .site-tagline {
+    display: none;
+  }
+}
 
 /*
  * Design tokens — source of truth: Penpot token set "base" (Seiji–Kinari palette).

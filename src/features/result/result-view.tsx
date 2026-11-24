@@ -125,7 +125,7 @@ export function ResultView({ genre }: ResultViewProps) {
           everything else full width, a bar fixed to the bottom: the 152px player when ready (Roll again then sits
           beside "Listen more"), Roll again full width otherwise. */}
       <div
-        className={`grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 ${barReserve[bar]} lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]`}
+        className={`result-layout grid grid-cols-[clamp(88px,28vw,120px)_minmax(0,1fr)] gap-x-4 gap-y-5 ${barReserve[bar]} lg:grid-cols-[minmax(0,360px)_minmax(0,1fr)] lg:grid-rows-[auto_1fr] lg:gap-x-12 lg:gap-y-4 xl:grid-cols-[minmax(0,440px)_minmax(0,1fr)]`}
       >
         <div className="flex flex-col items-start gap-4 max-lg:contents">
           <Link
