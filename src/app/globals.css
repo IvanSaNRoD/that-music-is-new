@@ -65,6 +65,10 @@
   html:has([data-bottom-bar="player"]) body {
     padding-right: var(--player-column);
   }
+  /* The narrower page would wrap the header (logo and tagline on two lines each): keep the logo only. */
+  html:has([data-bottom-bar="player"]) .site-tagline {
+    display: none;
+  }
 }
 
 /*

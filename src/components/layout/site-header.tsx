@@ -9,7 +9,7 @@ export function SiteHeader() {
         <Link href="/" className="font-mono text-2xl font-bold tracking-tight">
           That Music Is New
         </Link>
-        <p className="hidden items-center gap-3 font-mono text-[15px] text-muted-foreground sm:flex">
+        <p className="site-tagline hidden items-center gap-3 font-mono text-[15px] text-muted-foreground sm:flex">
           Discover rare genres —
           <Vinyl size={28} />
         </p>
