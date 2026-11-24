@@ -217,7 +217,7 @@ Paper, ink and one celadon green; everything else is a tint of the paper.
 
 **The Ink-Readable Rule.** Any accent that is read as text uses Seiji Ink, never Seiji. Every text pair must pass WCAG AA (4.5:1; 3:1 for ≥24px).
 
-**The Sleeve Palette Rule.** Record sleeves rotate through five AA-safe pairs by slug (sum of its character codes % 5, `toneFor`), so a genre keeps its tone everywhere: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper), outlined 1px Sumi, with a Sumi spindle dot.
+**The Sleeve Palette Rule.** Record sleeves rotate through five AA-safe pairs by slug (sum of its character codes % 5, `toneFor`), so a genre keeps its tone everywhere: Seiji/Sumi, Sumi/Kinari, Aged Paper/Sumi, Seiji Ink/Kinari, Faded Ink/Kinari. In the crate, neighbouring sleeves never share a tone when its genres allow it: the crate is reordered (`spreadTones`, #91), never recoloured; repeats remain only if one tone fills more than half the crate. No Card (white) sleeve: it blends into the crate panel. Each open sleeve shows a die-cut hole in a contrasting color (Kinari on Seiji and Seiji Ink, Seiji on Sumi and Faded Ink, Seiji Ink on Aged Paper), outlined 1px Sumi, with a Sumi spindle dot.
 
 **The Genre Tone Rule.** A genre's sleeve tone travels with it: on its genre page the turntable plinth, the playing track row and its "Your finds" pill wear that tone (same AA pair, full-strength foreground for secondary text, never alpha). No new hues: variety comes only from the five sleeve tones.
 

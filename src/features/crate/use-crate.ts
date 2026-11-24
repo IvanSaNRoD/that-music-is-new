@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import type { Genre } from "@/domain/genre";
+import { spreadTones } from "@/domain/tone";
 
 type ApiGenre = { genre: string; slug: string };
 
@@ -22,7 +23,8 @@ export function useCrate() {
         const res = await fetch("/api/genres/crate", { signal: controller.signal });
         if (!res.ok) throw new Error(`Crate request failed: ${res.status}`);
         const body: ApiGenre[] = await res.json();
-        const next = body.map((g) => ({ name: g.genre, slug: g.slug }));
+        // Neighbouring sleeves never share a tone when the crate allows it (#91).
+        const next = spreadTones(body.map((g) => ({ name: g.genre, slug: g.slug })));
         setGenres(next);
         setSelected(next[0]?.slug);
         setStatus("ready");
