@@ -118,3 +118,23 @@ test.describe("autoplay", () => {
     await expect(record(page)).toHaveAttribute("data-spinning", "false");
   });
 });
+
+test("phone in landscape: the player moves to a right column and leaves the tracks the full height (#89)", async ({
+  page,
+}, info) => {
+  test.skip(info.project.name !== "mobile", "phone layout only");
+  await page.setViewportSize({ width: 915, height: 412 });
+  await page.goto("/acid-jazz");
+  const bar = page.locator('[data-bottom-bar="player"]');
+  await expect(page.getByTitle("Spotify Embed")).toBeVisible();
+
+  const box = (await bar.boundingBox())!;
+  expect(box.y).toBe(0); // full height, on the right
+  expect(box.height).toBe(412);
+  expect(box.x + box.width).toBe(915);
+  // The tracks sit beside it, never under it.
+  const track = (await page.getByText("Sample track 01").boundingBox())!;
+  expect(track.x + track.width).toBeLessThanOrEqual(box.x);
+  await expect(page.getByRole("button", { name: "Next track" })).toBeInViewport();
+  if (process.env.SHOT) await page.screenshot({ path: process.env.SHOT });
+});

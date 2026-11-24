@@ -12,6 +12,29 @@
   }
 }
 
+/* Phone in landscape (#89, same query as globals.css): the ready bottom bar becomes a full-height column on the
+   right, behind a 1.5px Sumi rule; ⏮/⏭ row + 152px player centred in it. Plain CSS (unlayered) overrides the
+   bar's max-lg utilities. Other bar states (Roll again, 56px) stay at the bottom. */
+@media (40rem <= width < 64rem) and (orientation: landscape) and (height <= 31.25rem) {
+  .result-layout:has(> [data-bottom-bar="player"]) {
+    padding-bottom: 0;
+  }
+  [data-bottom-bar="player"] {
+    inset: 0 0 0 auto;
+    display: flex;
+    align-items: center;
+    width: var(--player-column);
+    padding: 0 env(safe-area-inset-right) 0 0;
+    border-width: 0 0 0 1.5px;
+  }
+  [data-bottom-bar="player"] > div {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 16px;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .result-body {
     animation: none;
