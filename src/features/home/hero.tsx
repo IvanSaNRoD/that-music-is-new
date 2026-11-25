@@ -29,7 +29,9 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
         Discover a random genre. Listen to 10 tracks. Find your next obsession.
       </p>
 
-      <div className="flex flex-wrap items-center gap-6">
+      {/* Randomize + hint need ~446px on one line: in a narrower hero column (1024–~1340px) the hint sits under the
+          button, without the divider, instead of wrapping by accident (#88). */}
+      <div className="flex flex-wrap items-center gap-6 @max-md:flex-col @max-md:items-start @max-md:gap-4">
         <button
           type="button"
           onClick={onRandomize}
@@ -40,7 +42,7 @@ export function Hero({ onRandomize }: { onRandomize: () => void }) {
         </button>
         {/* Keyboard hint: desktop only (shortcut is disabled on touch devices). */}
         <span className="hidden items-center gap-6 lg:flex">
-          <span className="h-12 w-px bg-border-strong" aria-hidden="true" />
+          <span className="h-12 w-px bg-border-strong @max-md:hidden" aria-hidden="true" />
           <span className="flex items-center gap-2 text-[15px] text-muted-foreground">
             or press
             <kbd className="rounded-md border-[1.5px] border-border-strong px-2.5 py-1 font-mono text-[15px] text-foreground">
