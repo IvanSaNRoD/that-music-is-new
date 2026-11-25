@@ -238,3 +238,4 @@ Design tokens live in [`src/app/globals.css`](src/app/globals.css); the rules th
 | 2026-11-24 | [#91](https://github.com/IvanSaNRoD/that-music-is-new/issues/91) | Crate: neighbouring sleeves never share a tone (the crate is reordered, each genre keeps its colour); documented in Penpot |
 | 2026-11-25 | [#88](https://github.com/IvanSaNRoD/that-music-is-new/issues/88) | Home (1024–~1340px): the "or press Space" hint sits under Randomize, without the divider, instead of wrapping by accident; documented in Penpot |
 | 2026-11-25 | [#59](https://github.com/IvanSaNRoD/that-music-is-new/issues/59) | Research: logging in to Spotify gives full tracks in the player only on desktop browsers other than Safari (phones and Safari always get previews); follow-up #94 |
+| 2026-11-25 | [#60](https://github.com/IvanSaNRoD/that-music-is-new/issues/60) | Research: our open.spotify.com links already open the Spotify app on phones (tested on Android); no change needed |
