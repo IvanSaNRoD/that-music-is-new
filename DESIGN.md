@@ -299,7 +299,7 @@ Generously rounded, ink-outlined objects. Cards 16px; step cards 14px; sleeves 1
 - **Internal Padding:** 20–26px.
 
 ### Keyboard hint (kbd)
-Sumi 1.5px outline, 6px radius, Space Mono 15px, next to "or press". Desktop only (≥1024px): Space = Randomize on hover-capable devices, ignored while focus is on a button, link or field; disabled on touch.
+Sumi 1.5px outline, 6px radius, Space Mono 15px, next to "or press". Desktop only (≥1024px): Space = Randomize on hover-capable devices, ignored while focus is on a button, link or field; disabled on touch. Placement (#88): beside Randomize after a 1px × 48px Sumi divider when the hero column is ≥448px (≥~1366px viewport); in a narrower column (1024–~1340px) it sits 16px under the button, left-aligned, without the divider (container query on the hero).
 
 ### History list
 Last 5 played genres (added on Play, not on open). Rows separated by Pencil Rule hairlines; vinyl icon (44px, 4 grooves), name (Inter 17 bold) over mono meta (13px, Faded Ink), chevron on the right. Selected row = Aged Paper, hover = 50% Aged Paper; on hover/focus the chevron is replaced by a ✕ remove pill; on touch the ✕ (44px) is always shown instead of the chevron. Footer (aria-live): "Clear all history" → inline confirm "Clear all history? Cancel / Clear"; after a ✕, "Removed <name> · Undo" for 6s; a keyboard ✕ moves focus to Undo (#65, as in "Your finds"), a pointer ✕ leaves focus alone. Empty state: "Nothing here yet. Play a genre and it lands here."
